@@ -18,11 +18,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = True
+toserver = False
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
-    DEBUG = False
-    ALLOWED_HOSTS = ['*']
+    DEBUG = True
+    ALLOWED_HOSTS = ['www.cerebrium.kz', 'cerebrium.kz']
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
