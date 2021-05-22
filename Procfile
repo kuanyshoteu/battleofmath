@@ -1,2 +1,1 @@
-web: gunicorn hello:application --preload
-clock: python clock.py
+web: gunicorn cerebriumkz:application --preload
