@@ -1,0 +1,204 @@
+{% load static %}
+{% load static compress %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale = 1">
+    <meta name="description" content="Находите любые курсы в городе Алматы на одном сайте. Записывайтесь на пробный урок в 1 клик, сравнивайте цены, отзывы, местоположение и преподавателей">
+    <meta name="keywords" content="английский,английский язык, английский язык алматы,курсы английского алматы,курсы английского языка в алматы,ниш поступление, поступление в ниш, поступление в ну, поступление в 165, математика, математика алматы, IELTS,айлс, TOEFL, продленка, ЕНТ, КТА, Курсы, курсы алматы, IELTS алматы, TOEFL алматы, SAT, SAT алматы, продленка алматы,продленки алматы,international english test,sat, ент алматы, кта алматы, Bilimtap">
+    <title>{% block head_title %}Cerebrium{%if not request.user.is_authenticated %} – английский язык, поступление, курсы, подготовка к экзаменам в г. Алматы{% endif %}{% endblock head_title %}</title>
+    <!-- CSS -->
+    {% compress css %}
+    <link rel='stylesheet' href='{% static "css/app.css" %}'/>
+    <link rel="stylesheet" href='{% static "css/slider.css" %}'>
+    <link rel="stylesheet" href='{% static "css/style.css" %}'/>
+    <link rel="stylesheet" href='{% static "css/datepicker.min.css" %}'> 
+    {% endcompress %}
+    {% compress js %}   
+    <script src='{% static "js/scripts.js" %}'></script>
+    <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
+    {% endcompress %}
+    {% block head_extra %} {% endblock head_extra %}
+</head>
+<body class="body">
+{% include "modals/confirm_delete.html" %}
+{% if is_manager %}
+    {% include "modals/new_card_crm.html" %}
+{%endif%}
+{% if is_director and school_crnt.version == 'free' %}
+    {% include "modals/get_full_version.html" %}
+{%endif%}
+<div class="ui stackable menu" id="main-menu">
+    <div class="ui container">
+        <div class="menu-title" style="width: calc(25% + 180px);min-width: 180px">
+            <a class="ml15 dflex logo textblue text21 textbold" href="/">
+                <img class="mr5" src="{% static 'images/landing/logo.png' %}" style="width: 150px;">
+            </a> 
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'main:login_page' %}" class="textw pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
+            {% endif %}
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="item not_in_mobile">
+            <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
+                <textarea class="mb0" id="search-input" url="/search/" type="text" placeholder="Поиск"></textarea>
+                <div class="search-bar">
+                    <p class="search-list-title search-list-title-people">Люди</p>
+                    <ul class="search-list-people search-list">
+                    </ul>
+                    <p class="search-list-title search-list-title-subjects">Курсы</p>
+                    <ul class="search-list-subjects search-list">
+                    </ul>
+                </div>
+            </form>
+            <div class="notice_cont">
+                <div class="notice-bar">
+                    <b class="notification_title">Уведомления</b>
+                    <div class="ui divider"></div>
+                    <ul class="notice-list">
+                    </ul>
+                    <div class="text-center">
+                        <a class="full-w">Показать все</a>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="left-main-menu">
+            {% if request.user.is_authenticated %}
+            <div class="item float_right" style="margin-right: 15%;">
+                <a class="change_lang mr30" onclick="$('.change_lang_versions').fadeToggle('fast')">
+                    {{profile.language}}
+                    <i class="icon caret down"></i>
+                </a>
+                <a class="profile_name" status='0'>
+                    {{ profile.first_name }}
+                    {% if profile.image %}
+                        <img class="ui avatar image backwhite" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
+                    {% else %}
+                        <img class="ui avatar image backwhite" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.svg' %}">
+                    {% endif %}
+                </a>
+            </div>
+            {% else %}
+            <div class="item float_right" style="margin-right: 15%;">
+                <span style="margin-right: 30px;height: 30px;"></span>
+                <a style="color: #fff;margin-right: 25px;" href="{% url 'main:sign_up' %}">
+                    Регистрация
+                </a>
+                <a href="{% url 'main:login_page' %}" style="color: #fff;">
+                    Войти
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% if user.is_authenticated %}
+<div class="change_lang_versions drop_menu" style="right: 150px;">
+    <div class="ui segment no_padding mt15" url="{% url 'main:change_lang' %}">
+        <a status="kaz" class="change_lang_do ui button mini white full-w textbold textblue">KAZ</a>
+        <a status="ru" class="change_lang_do ui button mini white full-w textbold textblue">RU</a>
+    </div>    
+</div>
+{% endif %}
+<div class="menu profile_links drop_menu">
+    <div class="ui segment no_padding mt15">
+        {% if user.is_authenticated %}
+        <a class="ui button small full-w white" style="text-align: left;" href='{{ profile.get_absolute_url }}'>
+            <i class="icon user"></i> Моя страница
+        </a>
+        {% endif %}
+        {% if is_moderator %}
+        <div class="ui divider no_margin"></div>
+        <a class="ui button small full-w white" style="text-align: left;" href='/moderator/'>
+            <i class="chess queen icon"></i> Модератор</a>
+        <div class="ui divider no_margin"></div>
+        <a class="ui button small full-w white" style="text-align: left;" href='/blog/'>
+            <i class="newstopic icon"></i>Блог</a>
+        {% endif %}
+        <div class="ui divider no_margin"></div>
+        <a class="ui button small full-w white" style="text-align: left;" href='{% url "logout" %}'>
+            <i class="icon close"></i> Выйти</a>
+    </div>
+</div>
+<br><br>
+<div class='content-container'>
+    <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
+        <div class="eleven wide column no_padding">
+            <div class="ui segment no_padding full-h shadow" style="background-color: #f4f4f4; z-index: 3000;">
+                {% if user.is_authenticated %}
+                    <a class="ui button white full-w bt1" href='{{ profile.get_absolute_url }}'>
+                        <i class="home icon"></i> Моя страница
+                    </a>
+                    {% if is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:info" %}'>
+                        <i class="cog icon"></i>Управление
+                    </a>
+                    {% endif %}
+                    {% if is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "library:main" %}'>
+                        <i class="file alternate icon"></i>База уроков
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="five wide column menu_back no_padding">
+        </div>
+    </div>
+    <div class="block_content" style="padding-top: 10px;min-height: calc(100% - 40px);">
+        {% block content %}{% endblock content %}
+    </div>
+</div>
+<audio id="notification_audio" style="display: none;" controls>
+    <source src='{% static "notification.mp3" %}' type="audio/mpeg">
+</audio>
+{% compress js %}   
+<script src='{% static "js/myscripts.js" %}'></script>
+<script src='{% static "js/OwlCarousel/owl.carousel.min.js" %}'></script>
+<script src='{% static "js/datepicker.min.js" %}'></script>
+<script src='{% static "js/dragAndDrop/Sortable.min.js" %}'></script>
+<script src='{% static "js/faisalIncludes.js" %}'></script>
+<script src='{% static "js/squad.js" %}'></script>
+<script src='{% static "js/library.js" %}'></script>
+<script src='{% static "js/plugins.js" %}'></script>
+<script src='{% static "js/search.js" %}'></script>
+<script src='{% static "js/notice.js" %}'></script>
+{% endcompress %}
+{% if profile.schools.all|length > 0 %}
+<script type="text/javascript">
+    var wsStart = 'ws://'
+    var loc = window.location
+    if (loc.protocol == 'https:'){
+        wsStart = 'wss://'
+    }
+    var endpoint = wsStart + loc.host + '/notifications/'
+    var socket = new WebSocket(endpoint)
+    socket.onmessage = function(e){
+        data = JSON.parse(e.data)
+        $('.notification_exists').show()
+        $('.notification_exists').text('1')
+        $('.bell').attr('style', 'color:#fff;')
+        document.getElementById('notification_audio').play();
+        $('<li class="notice-item"> <div style="display: inline-block;"> <a class="notice-item-link"> '+data.author+' </a> <span class="notice-item-name"> опубликовал новость </span> <a href="">"'+ data.message+'"</a> <br> <div class="notice_time">'+data.time+'</div> </div> </li> <div class="ui divider" style="margin: 10px 0;"></div>').appendTo('.notice-list');
+    }
+    socket.onopen = function(e){
+        $('.create_post').click(function(event) {
+            data = {
+                'action_type':'create_post',
+                'text':$('.new_post_area').val()
+            }
+            socket.send(JSON.stringify(data))
+        })
+    }
+    socket.onerror = function(e){
+        console.log('error', e)
+    }
+    socket.onclose = function(e){
+    }
+
+</script>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% load static %}
+{% load static %}
+<div class="ui segment shadow_small no_margin pb15 pt15">
+    <div class="content">
+        <div class="header">
+            <div class="ui grid stackable">
+                <div class="two wide column pl0">
+                    <div class="avatar-phone">
+                        {% if hisprofile.image %}
+                        <div class="img-responsive br15">
+                            <img src="{{hisprofile.image.url}}" class="full-w br15">
+                        </div>
+                        {% else %}
+                        <div class="img-responsive br15" style="background-image: url();">
+                            <img src="{% static 'images/nophoto.svg' %}" class="full-w">
+                        </div>
+                        {% endif %}
+                    </div>                    
+                </div>
+                <div class="four wide column pr0">
+                    <div class="text21 mr15 mb5">{{ hisprofile.first_name }}</div>
+                    <a class="open_form_status" class="text13">
+                        <span class="hisstatus">
+                            {% if hisprofile.is_student %}
+                                Студент
+                            {% else %}
+                                {% for prof in hisprofile.profession.all %}
+                                    {{prof.title}}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </a>
+                    <div class="mt5">
+                        <span class="dinline mr10 textdg">E-mail:</span>
+                        <b class="textblue">{{ hisprofile.mail }}</b>
+                    </div>
+                    {% if profile == hisprofile %}
+                    <div class="mt10 hint_place1" side="right">
+                        <a href="{%url 'accounts:change_url'%}" class="ui button mini white shadow_small border1 pt5 pb5 textblue">Редактировать</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

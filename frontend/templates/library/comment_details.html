@@ -1,0 +1,24 @@
+{% load ttttags %}
+{% load static %}
+<div class="dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
+	<a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
+		<img src="{% static 'images/nophoto.svg' %}" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
+	</a>
+	<div class="dinline full-w">
+		<div class="full-w dinline">
+			<a class="mr15 textbold comment_author" href="{{ comment.author_profile.get_absolute_url }}">kuanysh</a>
+			<span class="textdg comment_time">15 july</span>
+		</div>
+		<div class="text14 comment_content">yoyoy</div>
+		<div class="dflex">
+			<a class="like_comment" id="{{ comment.id }}" url="{{ comment.like_url }}">
+				<i class="mr0 icon triangle text21 up green" id="likeup{{ comment.id }}"></i>
+			</a>
+			<a class="dislike_comment" id="{{ comment.id }}" url="{{ comment.dislike_url }}">
+				<i class="mr0 icon triangle text21 down red" id="dislikedown{{ comment.id }}"></i>
+			</a>
+			<b id="likes_number{{ comment.id }}" class="mr15 textg">5</b>
+			<a onclick="$('#comment'+$(this).attr('id')).fadeToggle('fast')" id="{{ comment.id }}" class="textdg">Ответить</a>
+		</div>
+	</div>
+</div>

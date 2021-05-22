@@ -1,0 +1,161 @@
+{% load static %}
+<div class="ui modal card_form mt50 large" style="height: calc(100% - 100px);" id="card_formedit">
+    <i class="close icon"></i>
+    <div class="content no_padding">
+        <div class="ui grid stackable no_margin full-h">
+            <div class="sixteen wide column text-center textblue text17">
+                <b>Карточка <span class="crmform_title"></span></b>
+            </div>
+            <div class="eight wide column full-h">
+                <form class="ui form form_cont card_form_update_here mb0">
+                    <span class="wrong_mail_error highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b class="textdg">Пожалуйста введите существующий email или оставьте поле пустым</b></span>
+                    <div class="ui grid stackable card_form_update">
+                        <div class="eight wide column text-center pt5 pr0 pb0 pl0">
+                            <div style="height: 10px;"></div>
+                            <b class="textdg">Имя:</b>
+                            <textarea class="card_nameedit" style="margin-bottom: 8px;" placeholder="Имя"></textarea>
+                            <b class="textdg">Телефон:</b>
+                            <textarea class="mb5 card_phoneedit" style="margin-bottom: 8px;height: 45px;" placeholder="Телефон"></textarea>
+                            {% if is_director %}
+                            <div class="text-center mt15"><b class="textdg">Менеджер:</b></div>
+                            <select onchange="change_manager('')" class="change_manager" id="{{card.id}}">
+                                <option class="cfmanager cfmanager-1" value="-1">Выберите менеджера</option>
+                                {% for manager in managers %}
+                                    <option class="cfmanager cfmanager{{ manager.id }}" value="{{ manager.id }}">{{ manager.first_name }}</option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <div class="mt15">
+                                <a class="ui button mini takecard notm" id="{{card.id}}" url="{{card.take_url}}">Отказаться от карточки</a>
+                                <a class="ui button mini small green full-w takecard" id="{{card.id}}" url="{{card.take_url}}">Взять себе</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="eight wide column text-center pt5 pb0 pr0 pl15">
+                            <div style="height: 10px;"></div>
+                            <b class="textdg">Родители:</b>
+                            <textarea class="card_parentsedit" style="margin-bottom: 8px;" placeholder=""></textarea>
+                            <b class="textdg">Дополнительный телефон:</b>
+                            <textarea class="card_phone_extraedit mb0 pt5 pb0" style="height: 45px;" placeholder="Дополнительный телефон"></textarea>
+                            <div class="mt20">
+                                <div class="text-center"><b class="textdg">День рождения:</b></div>
+                                <input type="date" class="card_birthday">
+                            </div>
+                        </div>
+                        <div class="eight wide column pt0 pb0 pl0 pr0">
+                            {% if hint < 5 and instance.version != 'free' %}
+                            <div class="extra_hint3" style="width: 380px;position: absolute;z-index: 300;top: 10px;left: 250px; text-align: left;">
+                                <div class="backblue help_left shadow_blue br5 pt15 pr15 pb15 pl15">
+                                    <div style="position: absolute;right: 3px;top: 3px;">
+                                        <a onclick="$('.extra_hint3').hide();"><i class="icon x textw mr0 text11"></i></a>
+                                    </div>
+                                    <div class="textw">
+                                        Укажите дни недели, в которые студент хочет посещать курсы
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="mt15 text-center">
+                                <a onclick="card_form_days('cd0')" class="ui button mini mr0 mb5 card_form-dayscd0" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="0">Пн</a>
+                                <a onclick="card_form_days('cd1')" class="ui button mini mr0 mb5 card_form-dayscd1" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="1">Вт</a>
+                                <a onclick="card_form_days('cd2')" class="ui button mini mr0 mb5 card_form-dayscd2" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="2">Ср</a>
+                                <a onclick="card_form_days('cd3')" class="ui button mini mr0 mb5 card_form-dayscd3" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="3">Чт</a>
+                                <a onclick="card_form_days('cd4')" class="ui button mini mr0 mb5 card_form-dayscd4" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="4">Пт</a>
+                                <a onclick="card_form_days('cd5')" class="ui button mini mr0 mb5 card_form-dayscd5" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="5">Сб</a>
+                                <a onclick="card_form_days('cd6')" class="ui button mini mr0 mb5 card_form-dayscd6" style="padding: 7px 7px !important;width: calc(100%/7 - 3px)" card="" id="6">Вс</a>
+                            </div>
+                        </div>
+                        <div class="eight wide column text-center pl15 pr0 pt15 pb0">
+                            <a class="ui button small pt5 pb5 white border1 show_hint_schedule full-w">
+                                <i class="icon info circle blue"></i>
+                                <span>Информация о счетах</span>
+                            </a>
+                            <div class="hint_schedule ui segment backblue textw" style="display: none;position: absolute;margin-top: -30px;margin-left: 50%; width: 400px;height: 200px;z-index: 3000;">
+                                <div class="card_money_sch"></div>
+                            </div>
+                        </div>
+                        <div class="sixteen wide column no_padding mt15">
+                            <div style="height: 10px;"></div>
+                            <div class="mb0" style="height: 84px;">
+                                <div class="text-center"><b class="textdg">Комментарий:</b></div>
+                                <div style="height: 65px;overflow-y: scroll;" contenteditable="true" id="edit" class="card_comment-textarea card_commentedit"
+                                placeholder="Комментарий" url="{% url 'schools:call_helper' %}" status="stop" position="0">
+                                </div>
+                                <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper">
+                                    <a class="card_comment-item ui button mini cardedithelper1" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper2" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper3" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper4" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper5" id="edit"> </a><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sixteen wide column pt10 center aligned">
+                            <a class="ui button blue tiny save_card_form" onclick="edit_card('edit')" id="edit">
+                                Сохранить
+                                <i class="icon check textw card_saved" style="display: none;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="eight wide column full-h no_padding" style="background-image: url( {%static 'images/icons/22sav.png'%});background-size: 150px;">
+                <div class="ui comments pl10 pr10 pt10 pb10 card_dialog">
+                    <div class="empty_dialog" style="position: absolute;top: 45%;color: grey;left: 40%;"><i>Еще ничего нет</i></div>
+                </div>
+                <div class="pt10 pl15 pr15 backwhitelow dflex">
+                    <div class="ui segment mb0 pl10 pr10 pt5 card_mail" style="height: 30px;"></div>
+                    <form class="ui form mb0 half-w card_mail_form dflex" style="display: none;" >
+                        <textarea style="height: 30px;overflow-y: hidden;" class="card_mail_edit mb0" placeholder="Почта"></textarea>
+                        <a url="{%url 'schools:edit_card_mail'%}" class="ui button mini save_card_mail blue pl10 pr10" style="height: 28px;"><i class="textw icon check mr0 text11"></i></a>
+                        <div class="card_mail_loader ui active inverted dimmer ml10" style="display: none;">
+                            <div class="loader_center ui small text loader"></div>
+                        </div>
+                    </form>
+                    <a class="ml5 ui button mini white shadow_small border1 pl5 pr5" onclick="send_login_cl()">
+                        Отправить логин и пароль
+                        <div class="send_login_loading ui active inline tiny loader" style="margin-top: -3px; display: none;">
+                        </div>
+                        <i class="icon check blue sended_login" style="display: none;"></i>
+                    </a>
+                    <div class="vk_dialog_logo ui segment backblue mt0 pt5 pb5 ml15"><i class="icon vk mr0 textw"></i></div>
+                </div>
+                <div class="pt10 pb10 pl15 pr15 backwhitelow dflex">
+<!--                     <div class="pt5" style="width: 26px;">
+                        <a class="">
+                            <i class="smile outline icon mr0" style="font-size: 20px;"></i>
+                        </a>
+                    </div>
+ -->                    <div class="pl0" style="width: calc(100%);">
+                        <form class="ui form mb0 full-w">
+                            <textarea class="mb0 card_mail_text" style="border-radius: 21px;height: 42px;padding-top: 11px;" placeholder="Введите сообщение"></textarea>
+                        </form>
+                    </div>
+                    <div class="pl10" style="width: 26px;padding-top: 12px;">
+                        <a url="{%url 'schools:card_send_mail'%}" class="card_send_mail">
+                            <img src="{%static 'images/icons/send.jpg'%}" style="width: 20px;">
+                        </a>
+                        <div class="card_send_mail_loader ui active inline small loader" style="margin-top: -3px;display: none;">
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist">
+    <i class="close icon"></i>
+    <div class="content no_padding">
+        <div class="card_head">
+            Карточка <span class="card_hist_name"></span>
+        </div>
+        <div class="ui grid stackable no_margin card_form_update">
+            <div class="sixteen wide column pb0">
+                <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений
+                </div>
+            </div>
+            <div class="sixteen wide column cardhistory pt5" style="color: #6b6d72;font-size: 12px;">
+            </div>
+        </div>
+    </div>
+</div>

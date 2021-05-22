@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    {% load static %}
+    {% load static compress %}
+    <head>
+        <meta name="google-signin-client-id" content="157101835696-ooapojlodmuabs2do2vuhhnf90bccmoi.apps.googleusercontent.com" />
+        <meta name="google-signin-scope" content="profile email" />
+        <meta property="og:site_name" content="Cerebrium" />
+        <meta property="og:type" content="website" />
+
+        <meta name="theme-color" content="#ff6f00" />
+
+        <meta charset="utf-8" />
+        <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="manifest" href="/_pwa/tensorflow/manifest.json" crossorigin="use-credentials" />
+        <link rel="preconnect" href="//www.gstatic.com" crossorigin />
+        <link rel="preconnect" href="//fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="//fonts.googleapis.com" crossorigin />
+        <link rel="preconnect" href="//apis.google.com" crossorigin />
+        <link rel="preconnect" href="//www.google-analytics.com" crossorigin />
+
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Google+Sans:400,500|Roboto:400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700|Material+Icons" />
+        {% compress css %}
+        <link rel="stylesheet" href='{% static "css/landing.css" %}'/>
+        {% endcompress %}
+
+        <link rel="shortcut icon" href="" />
+        <link rel="apple-touch-icon" href="" />
+        <link rel="canonical" href="https://www.tensorflow.org/" />
+        <link rel="search" type="application/opensearchdescription+xml" title="Cerebrium" href="https://www.tensorflow.org/s/opensearch.xml" />
+
+        <title>Cerebrium</title>
+        <link rel="apple-touch-icon" sizes="152x152" href="images/favicon_package/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_package/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon_package/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="images/favicon_package/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
+        <meta property="og:title" content="Cerebrium" />
+
+        <meta name="description" content="An end-to-end open source machine learning platform for everyone. Discover   Cerebrium&#39;s flexible ecosystem of tools, libraries and community resources." />
+        <meta property="og:description" content="An end-to-end open source machine learning platform for everyone. Discover    Cerebrium&#39;s flexible ecosystem of tools, libraries and community resources." />
+
+        <meta property="og:url" content="https://www.tensorflow.org/" />
+
+        <meta property="og:image" content="" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="675" />
+
+        <meta property="og:locale" content="en" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, height=device-height" />
+
+        <link href="https://fonts.googleapis.com/css?family=Google+Sans:+400,500,700" rel="stylesheet" data-page-link />
+    </head>
+    <body class="" template="page" theme="tensorflow-theme" type="marketing" layout="full" pending>
+        <devsite-progress type="indeterminate" id="app-progress"></devsite-progress>
+
+        <section class="devsite-wrapper">
+            <devsite-header>
+                <div class="devsite-header--inner nocontent">
+                    <div class="devsite-top-logo-row-wrapper-wrapper">
+                        <div class="devsite-top-logo-row-wrapper">
+                            <div class="devsite-top-logo-row">
+                                <button
+                                    type="button"
+                                    id="devsite-hamburger-menu"
+                                    class="devsite-header-icon-button button-flat material-icons gc-analytics-event"
+                                    data-category="Site-Wide Custom Events"
+                                    data-label="Navigation menu button"
+                                    visually-hidden
+                                    aria-label="Open menu"
+                                ></button>
+                                <div class="devsite-product-name-wrapper">
+                                    <a
+                                        href="/"
+                                        class="full-h pt5 pb5 "
+                                        data-category="Site-Wide Custom Events"
+                                        data-label="Site logo"
+                                        track-type="globalNav"
+                                        track-name="tensorFlow"
+                                        track-metadata-position="nav"
+                                        track-metadata-eventDetail="nav"
+                                    >
+                                        <img src="{% static 'images/landing/logo.png' %}" class="full-h" alt="Cerebrium" />
+                                    </a>
+
+                                    
+                                </div>
+
+                                <devsite-language-selector>
+                                    <devsite-select class="devsite-language-selector-menu">
+                                        <select aria-label="Select your language preference." class="devsite-language-selector-select" name="language" track-name="click" track-type="languageSelector">
+                                            <option value="en" lang="en" track-metadata-original-language="en" track-metadata-selected-language="en" track-name="changed" track-type="languageSelector" selected="selected">
+                                                English
+                                            </option>
+
+                                            <option value="id" lang="id" track-metadata-original-language="en" track-metadata-selected-language="id" track-name="changed" track-type="languageSelector">
+                                                Bahasa Indonesia
+                                            </option>
+
+                                        </select>
+                                    </devsite-select>
+                                </devsite-language-selector>
+
+                                <a class="devsite-header-link devsite-top-button button gc-analytics-event" href="//github.com/tensorflow" data-category="Site-Wide Custom Events" data-label="Site header link">
+                                    Курсы
+                                </a>
+                               <a class="devsite-header-link devsite-top-button button gc-analytics-event" href="//github.com/tensorflow" data-category="Site-Wide Custom Events" data-label="Site header link">
+                                    Пожертвования
+                                </a>
+                                <div class="side-right">
+                                    <a class="devsite-header-link devsite-top-button button gc-analytics-event" href="/login" data-category="Site-Wide Custom Events" data-label="Site header link">
+                                        Войти
+                                    </a>
+                                    <a class="devsite-header-link devsite-top-button button gc-analytics-event" href="/sign_up" data-category="Site-Wide Custom Events" data-label="Site header link">
+                                        Регистрация
+                                    </a>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="devsite-collapsible-section devsite-header-no-lower-tabs">
+                        <div class="devsite-header-background"></div>
+                    </div>
+                </div>
+            </devsite-header>
+            <section id="gc-wrapper">
+                <main role="main" class="devsite-main-content">
+                    <devsite-toc class="devsite-nav" disabled></devsite-toc>
+                    <devsite-content>
+                        <article class="devsite-article">
+
+                            <div class="devsite-banner devsite-banner-announcement">
+                                <div class="devsite-banner-message">
+                                    <div class="devsite-banner-message-text">
+                                        Мы некоммерческая организация, можете поддержать нас в создании бесплатных курсов
+                                        <br>
+                                        <a href="https://events.google.com/io/" data-category="Announcement" data-label="I/O 2021" class="button button-primary button-tfo-announcement">Поддержать</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="devsite-article-meta" role="navigation">
+                                <ul class="devsite-breadcrumb-list">
+                                    <li class="devsite-breadcrumb-item">
+                                        <a
+                                            href="https://www.tensorflow.org/"
+                                            class="devsite-breadcrumb-link gc-analytics-event"
+                                            data-category="Site-Wide Custom Events"
+                                            data-label="Breadcrumbs"
+                                            data-value="1"
+                                            track-type="globalNav"
+                                            track-name="breadcrumb"
+                                            track-metadata-position="1"
+                                            track-metadata-eventdetail="   Cerebrium"
+                                        >
+                                               Cerebrium
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <devsite-toc class="devsite-nav" devsite-toc-embedded disabled> </devsite-toc>
+
+                            <div class="devsite-article-body clearfix devsite-no-page-title" >
+                                <div class="wrapper">
+                                    <section class="blurred tensorsite-group tensorsite-home-hero-wrapper">
+                                        <div class="wrapper2 tensorsite-home-hero">
+                                            <div class="aurora one"></div>
+                                            <div class="aurora three"></div>
+                                            <div class="tensorsite-container">
+                                                <div class="tensorsite-group__header tensorsite-group__header--align-left">
+                                                    <div class="tensorsite-content">
+                                                        <h1 class="tensorsite-content__title tensorsite-content__title--grow">
+                                                            Бесплатные онлайн курсы доступные всем
+                                                        </h1>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tensorsite-top-tab">
+                                                    <input id="tab-1" type="radio" name="tabs" checked="checked" data-tab="" />
+                                                    <input id="tab-2" type="radio" name="tabs" data-tab="" />
+                                                    <input id="tab-3" type="radio" name="tabs" data-tab="" />
+                                                    <input id="tab-4" type="radio" name="tabs" data-tab="" />
+
+                                                    <div class="tensorsite-top-tab__tabs">
+                                                        <label for="tab-1" data-animation-1="">Ученики</label>
+                                                        <label for="tab-2" data-animation-2="">Учителя</label>
+                                                        <label for="tab-3" data-animation-3="">Родители</label>
+                                                    </div>
+
+                                                    <div class="tensorsite-top-tab__contents">
+                                                        <div class="tensorsite-top-tab__content">
+                                                            <div class="tensorsite-top-tab__content__text">
+                                                                <div class="tensorsite-content">
+                                                                    <div class="tensorsite-content__description">
+                                                                        <h5>Объясняем сложное простым языком, не время откладывать саморазвитие!</h5>
+                                                                    </div>
+
+                                                                    <div class="tensorsite-content__cta-wrapper">
+                                                                        <a href="https://www.tensorflow.org/overview/" target="_top" class="tensorsite-content__cta">Начать обучение</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tensorsite-top-tab__content">
+                                                            <div class="tensorsite-top-tab__content__text">
+                                                                <div class="tensorsite-content">
+                                                                    <div class="tensorsite-content__description">
+                                                                        <h5>Большая база задач для учителей и удобные инструменты для сбора данных об успеваемости студентов</h5>
+                                                                    </div>
+
+                                                                    <div class="tensorsite-content__cta-wrapper">
+                                                                        <a href="https://www.tensorflow.org/js/" target="_top" class="tensorsite-content__cta">Попробовать Cerebrium</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tensorsite-top-tab__content">
+                                                            <div class="tensorsite-top-tab__content__text">
+                                                                <div class="tensorsite-content">
+                                                                    <div class="tensorsite-content__description">
+                                                                        <h5>Следите за развитием и победами Вашего ребенка в вашем аккаунте</h5>
+                                                                    </div>
+
+                                                                    <div class="tensorsite-content__cta-wrapper">
+                                                                        <a href="https://www.tensorflow.org/lite/" target="_top" class="tensorsite-content__cta">Присоединиться бесплатно</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tensorsite-top-tab__content">
+                                                            <div class="tensorsite-top-tab__content__text">
+                                                                <div class="tensorsite-content">
+                                                                    <div class="tensorsite-content__description">
+                                                                        <p>TensorFlow Extended is an end-to-end platform for preparing data, training, validating, and deploying models in large production environments.</p>
+                                                                    </div>
+
+                                                                    <div class="tensorsite-content__cta-wrapper">
+                                                                        <a href="https://www.tensorflow.org/tfx/" target="_top" class="tensorsite-content__cta"> Get started with TensorFlow Extended</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </section>
+                                    <section class="tensorsite-group tensorsite-group--3up pt50 pb50">
+                                        <div class="tensorsite-container">
+                                            <div class="tensorsite-group__header">
+                                                <div class="tensorsite-content">
+                                                    <h2 class="tensorsite-content__title" id="solutions-to-common-ml-problems" data-text="       Solutions to common ML problems     ">
+                                                        Наши курсы
+                                                    </h2>
+                                                </div>
+                                            </div>
+
+                                            <div class="tensorsite-group__inner">
+                                                <div class="tensorsite-card tensorsite-card--clip">
+                                                    <div class="tensorsite-content__image-wrapper">
+                                                        <img class="tensorsite-content__image" src="/site-assets/images/marketing/cards/tile_tensorflow_serving.jpg" alt="" />
+                                                    </div>
+
+                                                    <div class="tensorsite-content tensorsite-content--under-image">
+                                                        <div class="tensorsite-content__clip-bg">
+                                                            <svg class="tensorsite-content__clip-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409 132">
+                                                                <path d="M71.2,3.2,0,44v88H409L92.3,1.8A24.1,24.1,0,0,0,71.2,3.2Z" fill="#fff" />
+                                                            </svg>
+                                                        </div>
+                                                        <a class="tensorsite-content__title" href="/tutorials/keras/classification">
+                                                            Your first neural network
+                                                        </a>
+
+                                                        <div class="tensorsite-content__description">
+                                                            <p>Train a neural network to classify images of clothing, like sneakers and shirts, in this fast-paced overview of a complete  Cerebrium program.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tensorsite-card tensorsite-card--clip">
+                                                    <div class="tensorsite-content__image-wrapper">
+                                                        <img class="tensorsite-content__image" src="" alt="" />
+                                                    </div>
+
+                                                    <div class="tensorsite-content tensorsite-content--under-image">
+                                                        <div class="tensorsite-content__clip-bg">
+                                                            <svg class="tensorsite-content__clip-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409 132">
+                                                                <path d="M71.2,3.2,0,44v88H409L92.3,1.8A24.1,24.1,0,0,0,71.2,3.2Z" fill="#fff" />
+                                                            </svg>
+                                                        </div>
+                                                        <a class="tensorsite-content__title" href="/recommenders/examples/basic_retrieval">
+                                                            Recommender systems
+                                                        </a>
+
+                                                        <div class="tensorsite-content__description">
+                                                            <p>Start with building and training a retrieval model to predict a set of movies that a user is likely to watch, and then use a ranking model to create recommendations.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tensorsite-card tensorsite-card--clip">
+                                                    <div class="tensorsite-content__image-wrapper">
+                                                        <img class="tensorsite-content__image" src="/site-assets/images/marketing/cards/text_classification.jpg" alt="" />
+                                                    </div>
+
+                                                    <div class="tensorsite-content tensorsite-content--under-image">
+                                                        <div class="tensorsite-content__clip-bg">
+                                                            <svg class="tensorsite-content__clip-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409 132">
+                                                                <path d="M71.2,3.2,0,44v88H409L92.3,1.8A24.1,24.1,0,0,0,71.2,3.2Z" fill="#fff" />
+                                                            </svg>
+                                                        </div>
+                                                        <a class="tensorsite-content__title" href="/tutorials/generative/dcgan">
+                                                            Generative adversarial networks
+                                                        </a>
+
+                                                        <div class="tensorsite-content__description">
+                                                            <p>Train a generative adversarial network to generate images of handwritten digits, using the Keras Subclassing API.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    
+                                    <section class="tensorsite-group tensorsite-group--single-card pt50 pb50">
+                                        <div class="tensorsite-container">
+                                            <div class="dflex deskpl30">
+                                                <div class="w30">
+                                                    <h1 class="pt100 tensorsite-content__title--grow" id="companies-using-tensorflow" data-text="Companies using    Cerebrium     ">
+                                                        Свой график обучения
+                                                    </h1>
+                                                    <p>Выбирайте удобное время и темп, учитесь не выходя из дома</p>
+                                                </div>
+                                                <div class="w70 text-center pl50">
+                                                    <img class="full-w shadow" src="{% static 'images/landing/fonmin.jpg' %}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tensorsite-container pt50 pb50">
+                                            <div class="dflex deskpl30">
+                                                <div class="w70 text-center pr50">
+                                                    <img class="full-w shadow" src="{% static 'images/landing/fonmin.jpg' %}">
+                                                </div>
+                                                <div class="w30">
+                                                    <h1 class="pt100 tensorsite-content__title--grow" id="companies-using-tensorflow" data-text="Companies using    Cerebrium     ">
+                                                        Видеоуроки <br>и задачи
+                                                    </h1>
+                                                    <p>Короткие видео 3-5 минут, большая база задач для практики</p>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="tensorsite-container pt50 pb50">
+                                            <div class="dflex deskpl30">
+                                                <div class="w30">
+                                                    <h1 class="pt100 tensorsite-content__title--grow" id="companies-using-tensorflow" data-text="Companies using    Cerebrium     ">
+                                                        Инструменты для учителей
+                                                    </h1>
+                                                    <p>Данные о каждом вашем студенте, уровень усваимости тем и <br>готовая база задач</p>
+                                                </div>
+                                                <div class="w70 text-center pl50">
+                                                    <img class="full-w shadow" src="{% static 'images/landing/fonmin.jpg' %}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="tensorsite-group tensorsite-group--logos-small tensorsite-group--show-all">
+                                        <div class="tensorsite-container">
+                                            <div class="tensorsite-group__header">
+                                                <div class="tensorsite-content">
+                                                    <h2 class="tensorsite-content__title tensorsite-content__title--grow" id="companies-using-tensorflow" data-text="       Companies using    Cerebrium     ">
+                                                        Школы пользующиеся Cerebrium
+                                                    </h2>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <!-- <input type="checkbox" class="tensorsite-group__show-all-toggle" id="show-all-toggle" />
+                                            <label class="tensorsite-button" for="show-all-toggle"><span data-show-all-default="Show more" data-show-all-collapse="Show less"></span></label> -->
+
+                                            <div class="tensorsite-group__inner" style="--number-of-rows: 7;">
+                                                <div class="tensorsite-block">
+                                                    <a
+                                                        href="https://www.airbnb.com/"
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        class="tensorsite-block__image"
+                                                        style="background-image: url('images/fon4.jpg');"
+                                                    >
+                                                        <span class="hidden-text">Airbnb</span>
+                                                    </a>
+                                                </div>
+                                                <div class="tensorsite-block">
+                                                    <a
+                                                        href="https://us.coca-cola.com/"
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        class="tensorsite-block__image"
+                                                        style="background-image: url('images/fon4.jpg');"
+                                                    >
+                                                        <span class="hidden-text">Coca Cola</span>
+                                                    </a>
+                                                </div>
+                                                <div class="tensorsite-block">
+                                                    <a
+                                                        href="https://deepmind.com/"
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        class="tensorsite-block__image"
+                                                        style="background-image: url('images/fon4.jpg');"
+                                                    >
+                                                        <span class="hidden-text">Deepmind</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="tensorsite-footer">
+                                        <div class="tensorsite-container tensorsite-footer__container">
+                                            <div class="tensorsite-footer__side tensorsite-footer__side--left"></div>
+                                            <div class="tensorsite-footer__side tensorsite-footer__side--right"></div>
+                                            <div class="tensorsite-footer__content">
+                                                <div class="tensorsite-content">
+                                                    <h2
+                                                        class="tensorsite-content__title tensorsite-content__title--grow"
+                                                        id="build,-deploy,-and-experiment-easily-with-tensorflow"
+                                                        data-text="       Build, deploy, and experiment easily with    Cerebrium     "
+                                                    >
+                                                        Мы хотим каждому дать доступ <br>к качественному образованию 
+                                                    </h2>
+
+                                                    <div class="tensorsite-content__cta-wrapper">
+                                                        <a href="/tutorials" class="tensorsite-content__button tensorsite-button tensorsite-button--white">Поддержать</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tensorsite-footer__lines"></div>
+                                    </section>
+                                    <footer></footer>
+                                </div>
+                            </div>
+                        </article>
+                    </devsite-content>
+                </main>
+                <devsite-footer-promos class="devsite-footer"> </devsite-footer-promos>
+                <devsite-footer-linkboxes class="devsite-footer">
+                    <nav class="devsite-footer-linkboxes nocontent" aria-label="Footer links">
+                        <ul class="devsite-footer-linkboxes-list">
+                            <li class="devsite-footer-linkbox">
+                                <h3 class="devsite-footer-linkbox-heading no-link">Stay connected</h3>
+                                <ul class="devsite-footer-linkbox-list">
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="//blog.tensorflow.org" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+                                            Блог
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="//github.com/tensorflow/" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+                                            Наша команда
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="//twitter.com/tensorflow" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 3)">
+                                            Нас поддержали
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="//youtube.com/tensorflow" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 4)">
+                                            Вакансии
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="devsite-footer-linkbox">
+                                <h3 class="devsite-footer-linkbox-heading no-link">Наши курсы</h3>
+                                <ul class="devsite-footer-linkbox-list">
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+                                            Математика
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="devsite-footer-linkbox">
+                                <h3 class="devsite-footer-linkbox-heading no-link">Наши контакты</h3>
+                                <ul class="devsite-footer-linkbox-list">
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+                                            Instagram
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="//github.com/tensorflow/tensorflow/blob/master/RELEASE.md" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+                                            Facebook
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="//stackoverflow.com/questions/tagged/tensorflow" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 3)">
+                                            LinkedIn
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="/extras/tensorflow_brand_guidelines.pdf" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 4)">
+                                            Twitter
+                                        </a>
+                                    </li>
+
+                                    <li class="devsite-footer-linkbox-item">
+                                        <a href="/about/bib" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 5)">
+                                            Почта
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </devsite-footer-linkboxes>
+            </section>
+        </section>
+        <devsite-sitemask></devsite-sitemask>
+        <devsite-snackbar></devsite-snackbar>
+        <devsite-tooltip></devsite-tooltip>
+        <devsite-heading-link></devsite-heading-link>
+        
+
+       
+        <devsite-a11y-announce></devsite-a11y-announce>
+    </body>
+
+
+
+                           
+                           
+</html>

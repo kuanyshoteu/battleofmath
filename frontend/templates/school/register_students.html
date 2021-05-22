@@ -1,0 +1,72 @@
+{% load tttags %}
+{% load static %}
+{% load ttags %}
+<div class="ui modal large mt50" id="register_students_calendar">
+    <i class="close icon"></i>
+    <div class="content no_padding backdark">
+        <div class="reg_segment ui segment topbr5 no_margin pb0">
+            {% if hint <= 5 %}
+            <div class="extra_hint1" style="width: 400px;position: absolute;z-index: 300;left: calc(50% - 200px);">
+                <div class="backblue shadow_blue br5 pt15 pr15 pb15 pl15">
+                    <div style="position: absolute;right: 3px;top: 3px;">
+                        <a onclick="$('.extra_hint1').hide();"><i class="icon x textw mr0 text11"></i></a>
+                    </div>
+                    <div class="textw">
+                        Нажмите на любой <b style="color: yellow;">квадрат группы</b>, в которую хотите запись студента
+                        <br>
+                        Галочка на квадрате обозначает, что студент уже записан в эту группу
+                    </div>
+                </div>
+            </div>            
+            {% endif %}
+            <div class="text15 textblue no_margin ui grid stackable">
+                <div class="six wide column pl0 pt0 pb0">
+                    <div class="dflex">
+                        <div class="mr10 text15" style="padding-top: 3px;">
+                            Регистрация <b id="current_user_name"></b>
+                        </div>
+                        <form class="ui form predoplata_form mr0 mb0">
+                            <input status="hide" class="predoplata_number" placeholder="Оплата" type="number">
+                        </form>                    
+                        <div class="time_stop textred"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></div>
+                        <div class="textred isalready pt15 pb15" style="display: none;"> <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
+                    </div>
+                </div>
+                <div class="ten wide column pt0 pb0">
+                    <div class="dflex" style="float: right;display: flex;"> 
+                        <div class="textdg mr5 textbold" style="padding-top: 3px;">Индивидуальные занятия</div>  
+                        <div class="filter-element">
+                            <div id="-1" class="mr5 filter-title dflex" style="width: 200px;height: 31px;display: flex;" onclick="$('.individual_subjects').fadeToggle(0.1)">
+                                <div style="width: 190px;" class="textdots individual_subject_filter">Выберите курс</div>
+                                <i class="icon caret down" style="float: right;"></i>
+                            </div>
+                            <div class="bselect backwhite shadow_dark_low individual_subjects" style="display: none;width: 200px;position: absolute;z-index: 3000">
+                                <a class="individual_subject_orig full-w ui button small textblue text-left white pt10 pl5 pr5 pb10" style="display: none;">
+                                </a>
+                            </div>                        
+                        </div>
+                        <a style="height: 30px;display: flex;" url="{%url 'schools:create_individual_group'%}" class="ui button mini blue create_individual_group" onclick="create_individual_group()">
+                            Добавить
+                            <div class="pl5" style="width: 14px;">
+                                <div style="display: none;" class="create_individual_group_load ui loader mini"></div>
+                                <i style="display: none;" class="create_individual_group_success icon check textw"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% include 'modals/schedule_filters.html' %}
+        </div>
+        <div id="calendar" class="shadow_dark bottombr5 pb15" length='7'>
+            <div class="loading" style="display: none;">
+              <div class="animation"><div class="circle one"></div></div>
+              <div class="animation"><div class="circle two"></div></div>
+              <div class="animation"><div class="circle three"></div></div>
+              <div class="animation"><div class="circle four"></div></div>
+              <div class="animation"><div class="circle five"></div></div>
+              <div class="animation"><div class="circle six"></div></div>
+            </div>
+            {% include 'school/crm_classicschedule.html' %}
+        </div>        
+    </div>   
+</div>

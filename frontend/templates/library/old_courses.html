@@ -1,0 +1,130 @@
+{% load tags %}
+{% load static %}
+
+  {% if is_trener %}
+  <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;padding-bottom: 5px;padding-top: 5px;">
+      <i class="rocket icon" style="font-size: 18px;"></i>
+      <span style="display: inline-block;margin-bottom: 0;font-size: 15px;line-height: 40px;font-weight: 600">Онлайн курсы от лучших</span>
+      <div style="float: right;line-height: 40px;">
+          {% if cache.full %}
+              <a class="ui button mini blue pastee" data-href='{{ profile.paste_object_url }}' new_parent='library'>Вставить</a>
+          {% else %}
+              <a class="ui button mini disabled">Вставить</a>
+          {% endif %}                      
+          <a class="ui button mini blue create_course_course" data-href='{{ profile.create_course_course_url }}'>
+            Создать папку
+          </a>
+          <a class="ui button mini blue create_topic" href='{{ profile.create_course_url }}'>
+            Создать курс
+          </a>
+      </div>
+  </div>
+  {% endif %}  
+  <div style="margin-top: 0;margin-bottom: 0;">
+      <div id="topics" class="ui grid stackable" style="margin: 0">
+      {% for course in courses %}
+        <div class="four wide column" id="all_course{{ course.id }}" style="padding-left: 0;padding-right: 20px;">
+          <a id="{{ course.id }}" class="open_topic_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+          <div class="ui segment topic_features{{ course.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+              <a style="cursor: pointer;" class="file_action" object_type='topic' action='copy' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+              <div class="ui divider"></div>
+              <a style="cursor: pointer;" class="file_action" object_type='topic' action='cut' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <div class="ui divider"></div>
+              <a class="delete_course" id="{{ course.id }}" data-href='{{ course.delete_course_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
+          </div>
+          <a href="{{ course.get_absolute_url }}" style="cursor: pointer;padding: 56.2% 0 0 0;position: relative;display: block;">
+              {% if course.image %}
+                  <img src="{{ course.image.url }}" id="topic_image{{ course.id }}" style="width: 100%;border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
+              {% else %}
+                  <img src="{% static 'images/books.png' %}" id="topic_image{{ course.id }}" style="width: 100%;height: 45%; border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
+              {% endif %}
+              <div class="ui segment" style="margin-top: 0;margin-bottom: 0;height: 66px;border-radius: 0">
+                  <span id="topic_title{{ course.id }}" style="color: #56565a;font-size: 13px;"><b>{{ course.title }}</b></span>
+              </div>
+              <div class="ui segment" style="margin-top: 0;margin-bottom: 0;">
+                  <div class="ui grid">
+                      <div class="two wide column" style="padding: 2px;">
+                          <img src="{% static 'images/tenge.png' %}" style="width: 25px;">
+                      </div>
+                      <div class="four wide column" style="padding: 0 0 0 5px;">
+                          <span style="display: block;font-size: 11px;color: #848484;">Цена</span>
+                          <span style="display: block;font-size: 12px;color: #56565a;">
+                              {{ course.cost }} тг.
+                          </span>
+                      </div>
+                      <div class="five wide column" style="padding: 0 0 0 5px;">
+                          <span style="display: block;font-size: 11px;color: #848484;">Отзывы</span>
+                          <span style="display: block;font-size: 12px;color: #56565a;">
+                              {% for star in course.stars %}
+                                  <i class="icon star" style="margin: 0 -3px 0 0;font-size: 9px;"></i>
+                              {% endfor %}
+                              {% for star in course.stars|notstars %}
+                                  <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 9px;"></i>
+                              {% endfor %}
+                          </span>
+                      </div>
+                      <div class="three wide column" style="padding: 0 0 0 10px;">
+                          <span style="display: block;font-size: 11px;color: #848484;">Ученики</span>
+                          <span style="display: block;font-size: 12px;color: #56565a;">
+                              {{ course.students|length }}
+                          </span>
+                      </div>
+                  </div>
+              </div>
+              <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+                <div class="ui grid">
+                      <div class="four wide column" style="padding: 10px;">
+                          {% if course.author_profile.image %}
+                          <img src="{{ course.author_profile.image.url }}" style="width: 30px;">
+                          {% else %}
+                          <img src="{% static 'images/nophoto.svg' %}" style="width: 30px;">
+                          {% endif %}
+                      </div>
+                      <div class="four wide column" style="padding: 7px 10px 10px 0;">
+                          <span style="display: block;font-size: 12px;color: #848484;">{{ course.author_profile.first_name }}</span>
+                          <span style="display: block;font-size: 11px;color: #848484;line-height: 11px;"><i>{{ course.author_profile.school }}</i></span>
+                      </div>
+                  </div>
+              </div>
+          </a>
+          <form class="ui form rename_topic{{ course.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+              <textarea style="padding: 0; height: 60px;" id='change_topic_name{{ course.id }}' type="text">{{ course.title }}</textarea>
+              <a class="ui button mini blue change_topic_name" id="{{ course.id }}" data-href='{{ course.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+          </form>
+        </div>
+        <div class="ui modal" id="course_details{{ course.id }}" style="padding: 14px;">
+            <i class="close icon"></i>
+        </div>
+      {% endfor %}
+      </div>
+  </div>
+  {% if course_courses|length > 0 %}
+  <div class="ui segment" style="margin-top: 0;">
+      <div id="course_courses" class="ui grid stackable" style="margin: 0">
+      {% for course_course in course_courses %}
+        <div class="two wide column" id="all_course_course{{ course_course.id }}">
+          <a id="{{ course_course.id }}" class="open_course_course_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+
+          <div class="ui segment course_course_features{{ course_course.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+              <a style="cursor: pointer;" class="rename_course_course" id="{{ course_course.id }}"><i class="icon pencil alternate"></i> Переименовать</a>
+              <div class="ui divider"></div>
+              <a style="cursor: pointer;" class="file_action" object_type='course_course' action='copy' data-href='{{ profile.file_action_url }}' id="{{ course_course.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+              <div class="ui divider"></div>
+              <a style="cursor: pointer;" class="file_action" object_type='course_course' action='cut' data-href='{{ profile.file_action_url }}' id="{{ course_course.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <div class="ui divider"></div>
+              <a class="delete_course_course" id="{{ course_course.id }}" data-href='{{ course_course.delete_course_course_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
+          </div>
+          <a href="{{ course_course.get_absolute_url }}">
+              <img src="{% static 'images/nophoto.svg' %}" id="course_course_image{{ course_course.id }}" style="height: 50px;">
+              <br>
+              <span id="course_course_title{{ course_course.id }}">{{ course_course.title }}</span>
+          </a>
+          <form class="ui form rename_form{{ course_course.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+              <textarea style="padding: 0; height: 60px;" id='change_course_course_name{{ course_course.id }}' type="text">{{ course_course.title }}</textarea>
+              <a class="ui button mini blue change_course_course_name" id="{{ course_course.id }}" data-href='{{ course_course.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+          </form>
+        </div>
+      {% endfor %}
+      </div>
+  </div>
+  {% endif %}

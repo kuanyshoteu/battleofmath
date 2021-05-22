@@ -1,0 +1,8 @@
+{% if unit.task_list.all|length > 0 %}
+    <div class="tasksl{{ module.id }}p{{ topic.id }}s{{ unit.id }}" id='tasksl{{ module.id }}p{{ topic.id }}s{{ unit.id }}' last='{{ unit.task_list.all|length }}'>
+        {% for task in unit.task_list.all %}
+	        {% include 'library/task_detail.html' %}
+        {% endfor %}
+    </div>
+{% endif %}
+

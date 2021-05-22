@@ -1,0 +1,64 @@
+<div class="text-center mb15 add_task_buttons">
+    <a class="change_task ui button small textbold white textblue shadow_small">Новая задача</a>
+    <a class="tasks_base_show ui button small textbold white textblue shadow_small">Выбрать из Базы задач</a>
+</div>
+<div class="ui modal large tasks_base_modal mt50" style="height: 100%;">
+    <i class="icon close"></i>
+    <div class="content">
+        <div class="text-center">
+            <div class="tasks_base_load ui inline active loader small"></div>
+        </div>
+        <div class="task_list_box"></div>
+    </div>
+</div>
+<div class="ui modal large change_task_modal mt50" style="height: 100%;">
+    <i class="icon close"></i>
+    <div class="content">
+        <div class="pb15 add_task">
+            <form class="ui form">
+                <div class="change_task_head text-center text17 textbold textdg mb10">Добавить задачу</div>
+                <div class="ui grid stackable no_margin">
+                    <div class="eight wide column pl5 pr5 pt0 pb15">
+                        <div class="add_problem mt5 full-h">
+                            <div class="textdg textbold text13">Условие задачи</div>
+                            <div style="min-height: 70px;" contenteditable="true" class="task_problem_ru br5 pt5 pl10 pr10 pb5 full-h"></div>
+                        </div>
+                    </div>
+                    <div class="eight wide column pl5 pr5 pt0 pb15">
+                        <div class="add_problem mt5 full-h">
+                            <div class="textdg textbold text13">Есептің шарты</div>
+                            <div style="min-height: 70px;" contenteditable="true" class="task_problem_kz br5 pt5 pl10 pr10 pb5 full-h"></div>
+                        </div>
+                    </div>
+                    <div class="eight wide column pl5 pr5 pt0 pb15">
+                        <div class="add_ans mt5">
+                            <div class="textdg textbold text13">Ответ</div>
+                            <div style="min-height: 40px" contenteditable="true" class="task_ans_ru br5 pt5 pl10 pr10 pb5"></div>
+                        </div>
+                    </div>
+                    <div class="eight wide column pl5 pr5 pt0 pb15">
+                        <div class="add_ans mt5">
+                            <div class="textdg textbold text13">Есептің жауабы</div>
+                            <div style="min-height: 40px" contenteditable="true" class="task_ans_kz br5 pt5 pl10 pr10 pb5"></div>
+                        </div>
+                    </div>
+                    <div class="eight wide column pl5 pr5 pt0 pb15">
+                        <div class="add_solve mt5">
+                            <div class="textdg textbold text13">Решение</div>
+                            <div style="min-height: 70px" contenteditable="true" class="task_solve_ru br5 pt5 pl10 pr10 pb5"></div>
+                        </div>
+                    </div>
+                    <div class="eight wide column pl5 pr5 pt0 pb15">
+                        <div class="add_solve mt5">
+                            <div class="textdg textbold text13">Шешімі</div>
+                            <div style="min-height: 70px" contenteditable="true" class="task_solve_kz br5 pt5 pl10 pr10 pb5"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a id="-1" class="save_task ui button small blue shadow_blue textbold">Сохранить</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

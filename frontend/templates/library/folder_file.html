@@ -1,0 +1,22 @@
+{% load static %}
+<div class="two wide column" id="all_course{{ course.id }}">
+  <div class="ui segment course_features course_features{{ course.id }}" style="display: none;">
+      <a  class="rename_course" id="{{ course.id }}"><i class="icon pencil alternate"></i> Переименовать</a>
+      <div class="ui divider"></div>
+      <a  class="file_action" object_type='course' action='copy' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='{% if course.parent %}{{course.parent.id}}{%else%}-1{% endif %}'><i class="icon copy outline"></i> Копировать</a>
+      <div class="ui divider"></div>
+      <a  class="file_action" object_type='course' action='cut' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='{% if course.parent %}{{course.parent.id}}{%else%}-1{% endif %}'><i class="icon cut"></i> Вырезать</a>
+      <div class="ui divider"></div>
+      <a class="delete_course" id="{{ course.id }}" data-href='{{ course.delete_course_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
+  </div>
+  <a href="{{ course.get_absolute_url }}">
+      <img src="{% static 'images/course.png' %}" id="course_image{{ course.id }}" style="height: 50px;">
+      <br>
+      <span id="course_title{{ course.id }}">{{ course.title }}</span>
+  </a>
+  <a id="{{ course.id }}" class="open_course_features" style="cursor: pointer;position: absolute;top: 0"><i class="ui icon ellipsis horizontal"></i></a>
+  <form class="ui form rename_course_form rename_form{{ course.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+      <textarea style="padding: 0; height: 60px;" id='change_course_name{{ course.id }}' type="text">{{ course.title }}</textarea>
+      <a class="ui button mini blue change_course_name" id="{{ course.id }}" data-href='{{ course.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+  </form>
+</div>

@@ -1,0 +1,210 @@
+{% load static %}
+{% load ttags %}
+<script src="{% static 'js/voronka.js' %}"></script>
+<script src="{% static 'js/voronka2.js' %}"></script>
+<script src="{% static 'js/voronka3.js' %}"></script>
+<div class="ui segment mb0">
+    <div class="textdg textbold text15">Воронка продаж</div>
+    <div style="display: flex;">
+        <span class="mr5" style="padding: 15px 0px;">Показать за последнюю</span>
+        <div style="padding: 10px 0 0 0;">
+            <a class="ui button mini green update_voronka week_vrnk mb5" status="get_here" value="week" style="height: 29px;">Неделю</a>
+            <a class="ui button mini update_voronka month_vrnk mb5" status="get_here" value="month" style="height: 29px;">Месяц</a>
+            <a class="ui button mini update_voronka year_vrnk mb5" status="get_here" value="year" style="height: 29px;">Год</a>
+        </div>
+    </div>
+    <div style="display: flex;">
+        <form class="ui form no_margin" style="padding: 10px 0 0 0;">
+            <input type="date" class="first_vrnk" style="width: 175px;height: 30px;" value="{{ weekago }}">
+        </form>
+        <span style="padding: 15px 5px;">—</span>
+        <form class="ui form no_margin" style="padding: 10px 0 0 0;">
+            <input type="date" class="second_vrnk" style="width: 175px;height: 30px;" value="{{ today }}">
+        </form>
+        <div style="padding: 10px 0 0 10px;">
+            <a class="ui button mini blue update_voronka" status="get_input" style="height: 29px;">Показать</a>      
+        </div>
+    </div>
+    <div style="display: flex;">
+        <div style="padding: 10px 0 0 0px;display: flex;">
+            <form class="ui form">
+                <select id="change_manager_vrnk">
+                    <option value="-1">Менеджера</option>
+                    {% for manager in managers %}
+                        <option value="{{ manager.id }}">{{ manager.first_name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            <a class="ui button mini blue update_voronka" status="get_input" style="height: 29px;margin-left: 15px;">Показать</a>
+        </div>
+    </div>
+    <div class="ui grid stackable mt0">
+        <div class="nine wide column no_padding">
+            <div class="ui pointing below label no_margin nocards" style="display: none;">
+                Нет работы с карточками в этот период
+            </div>
+            <div id="chartdiv"></div>
+            <div class="container-fluid">
+                <div class="row text-center" style="overflow:hidden;">
+                </div>
+            </div>          
+        </div>
+        <div class="seven wide column no_padding_side">
+            <table class="ui celled striped table br5 shadow_small">
+                <thead>
+                    <tr style="color: #222;">
+                        <th>Название</th>
+                        <th>Количество</th>
+                        <th>Проценты</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {% for item2 in voronka2 %}
+                    <tr style="color: #222;">
+                        <td>{{item2.0}}</td>
+                        <td id="tablecolumn{{ forloop.counter }}number">{{item2.1}}</td>
+                        <td id="tablecolumn{{ forloop.counter }}percent">{{item2.2}}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<span style="display: none;" class="voronka_url" number_of_all="{{number_of_all}}" url="{{ instance.update_voronka }}"></span>
+<script type="text/javascript">
+    $('.update_voronka').click(function(e) {
+        url = $('.voronka_url').attr('url');
+        status = $(this).attr('status');
+        value = $(this).attr('value');
+        first_vrnk = $('.first_vrnk').val();
+        second_vrnk = $('.second_vrnk').val();
+        id = "change_manager_vrnk";
+        select = document.getElementById(id);
+        manager_id = select.options[select.selectedIndex].value;
+        $('.nocards').hide()
+        $('#chartdiv').show()
+        $.ajax({
+            url: url,
+            data: {
+                'status':status,
+                'value':value,
+                'first_vrnk':first_vrnk,
+                'second_vrnk':second_vrnk,
+                'manager_id':manager_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.number == 0) {
+                  $('.nocards').show()
+                  $('#chartdiv').hide()
+                }
+                arr = []
+                for (var i = data.res.length-1; i >= 0 ; i--) {
+                    arr.push({"title": data.res[i][0], "value":data.res[i][1]})
+                    $("#tablecolumn"+(5-i)+"number").text(data.res[i][1])
+                    $("#tablecolumn"+(5-i)+"percent").text(data.res[i][2]+'%')
+                }
+                var chart = AmCharts.makeChart( "chartdiv", {
+                  "type": "funnel",
+                  "theme": "light",
+                  "dataProvider": arr,
+                  "balloon": {
+                    "fixedPosition": true
+                  },
+                  "valueField": "value",
+                  "titleField": "title",
+                  "marginRight": 240,
+                  "marginLeft": 50,
+                  "startX": -500,
+                  "depth3D": 100,
+                  "angle": 40,
+                  "outlineAlpha": 1,
+                  "outlineColor": "#FFFFFF",
+                  "outlineThickness": 2,
+                  "labelPosition": "right",
+                  "balloonText": "[[title]]: {%if number_of_all == 0 %}0{%else%}[[value]]{%endif%}",
+                  "export": {
+                    "enabled": true
+                  }
+                } );
+                jQuery( '.chart-input' ).off().on( 'input change', function() {
+                  var property = jQuery( this ).data( 'property' );
+                  var target = chart;
+                  var value = Number( this.value );
+                  chart.startDuration = 0;
+
+                  if ( property == 'innerRadius' ) {
+                    value += "%";
+                  }
+
+                  target[ property ] = value;
+                  chart.validateNow();
+                } );
+                if (status == 'get_here') {
+                    $('.update_voronka').removeClass('green')                    
+                    $('.'+value+'_vrnk').addClass('green')
+                    $('.first_vrnk').val(data.timeago)
+                }
+                else{
+                    $('.update_voronka').removeClass('green')
+                    if (data.is_ago){
+                        $('.'+data.is_ago).addClass('green')
+                    }
+                }
+            }
+        })
+    })
+var chart = AmCharts.makeChart( "chartdiv", {
+  "type": "funnel",
+  "theme": "light",
+  "dataProvider": [ 
+  {% for item in voronka_array %}
+  {
+    "title": "{{ item.0 }}",
+    "value": "{% if item.1 == 0 %}1{%else%}{{ item.1 }}{%endif%}"
+  },
+  {% endfor %}
+  ],
+  "balloon": {
+    "fixedPosition": true
+  },
+  "valueField": "value",
+  "titleField": "title",
+  "marginRight": 240,
+  "marginLeft": 50,
+  "startX": -500,
+  "depth3D": 100,
+  "angle": 40,
+  "outlineAlpha": 1,
+  "outlineColor": "#FFFFFF",
+  "outlineThickness": 2,
+  "labelPosition": "right",
+  "balloonText": "[[title]]: {%if number_of_all == 0 %}0{%else%}[[value]]{%endif%}",
+  "export": {
+    "enabled": true
+  }
+} );
+jQuery( '.chart-input' ).off().on( 'input change', function() {
+  var property = jQuery( this ).data( 'property' );
+  var target = chart;
+  var value = Number( this.value );
+  chart.startDuration = 0;
+
+  if ( property == 'innerRadius' ) {
+    value += "%";
+  }
+
+  target[ property ] = value;
+  chart.validateNow();
+} );
+</script>
+<style type="text/css">
+    #chartdiv {
+        width: 100%;
+        max-width: 580px;
+        height: 300px;
+        font-size: 13px;
+        min-width: 400px;
+    }
+</style>

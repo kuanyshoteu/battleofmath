@@ -1,0 +1,69 @@
+{% load static %}
+<div style="display: none;">
+    <div class="course_orig br5 ui segment shadow_small full-w no_padding">
+        <a href="{{school.landing}}" class="backwhite full-w landbox br5">
+            <div class="course_img land_box1 topbr5 text-center full-w">
+                <span class="not_in_mobile"></span>
+            </div>
+            <div class="text-left pl15 pr15 pb15 pt15">
+                <div style="height: 98px;">
+                    <div class="text21 textb course_title">yoyo</div>
+                    <div class="mt5 text14 textdg course_slogan">
+                        slogan
+                    </div>                    
+                </div>
+                <div class="mt10" style="color: #646464;">
+                    <span style="color: #D4C14A;">
+                        <b class="course_rating">{{school.rating}}</b>   
+                    </span>
+                    <span class="course_stars"></span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <i class="icon star star_origin" style="color: #D4C14A;margin-right: -3px;"></i>
+    <i class="icon star star_outl_origin" style="margin-right: -3px;"></i>
+</div>
+<script type="text/javascript">
+    get_course_list(1)
+    function get_course_list(page){
+        url = '{% url "schools:get_course_list" %}'
+        $.ajax({
+            url: url,
+            data: {
+                'page':page,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.res.length; i++) {
+                    id = data.res[i][0]
+                    title = data.res[i][1]
+                    img = data.res[i][2]
+                    slogan = data.res[i][3]
+                    rating = data.res[i][4]
+                    course = $('.course_orig').clone(true)
+                    course.removeClass('course_orig')
+                    course.find('.course_title').text(title)
+                    course.find('.course_slogan').text(slogan)
+                    if (img == '') {
+                        img = "{% static 'images/fon4.jpg' %}"
+                    }
+                    course.find('.course_img').attr("style","background-image: url("+img+")")
+                    course_box = $('.course_box').clone(true)
+                    course_box.removeClass('course_box')
+                    course.appendTo(course_box)
+                    course_box.appendTo('.course_list')
+                    // course.find('course_rating').text(course_rating)
+                    // for (var i = 1; i <= course_rating; i++) {
+                    //     star = $('.star_origin').clone(true)
+                    //     star.appendTo('.course_stars')
+                    // }
+                    // for (var i = 0; i <= 5-course_rating; i++) {
+                    //     star_outl = $('.star_outl_origin').clone(true)
+                    //     star_outl.appendTo('.course_stars')
+                    // }
+                }
+            }
+        })
+    }
+</script>

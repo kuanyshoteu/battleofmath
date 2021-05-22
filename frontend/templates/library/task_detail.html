@@ -1,0 +1,143 @@
+{% load tagss %}
+{% load static %}
+<div class="ui grid stackable">
+    <div class="eleven wide column">
+        {% if is_trener == False %}
+            {% if task|is_correct:profile == True %}
+                <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px; ">{{ forloop.counter }}.</span>
+            {% else %}
+                <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
+            {% endif %}
+            {% if task|is_correct:profile == True and task.is_test %}
+                <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+            {% else %}
+                <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+            {% endif %}
+        {% endif %}
+        {% if is_trener %}
+            <a class="" onclick="$('#modal_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="add_problem" id="l{{ module.id }}p{{ topic.id }}s{{unit.id}}" unit_id='{{ unit.id }}' task_id='{{ task.id }}' url="{{ unit.add_task_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Убрать</a>
+            <br>
+            <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
+            <div class="ui small modal" id="modal_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}">
+                <i class="close icon"></i>
+                <div class="header text-center">
+                    Изменить задачу
+                </div>
+                <div class="content">
+                    <form class="ui form {{ task.id }}edit_text_form" method='POST' enctype='multipart/form-data' style="margin-bottom: 0;">{% csrf_token %}
+                        <b>Условие: </b>
+                        <textarea type="text" class='change_task_textlandl{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}' style="width: 100%; height: 100px; margin-bottom: 5px;">{{ task.text }}</textarea>
+                        {% if task.is_test %}
+                            <b>Варианты:</b>
+                            <br>
+                            {% for variant in task.variants %}
+                                <div style="display: flex;">
+                                    <label class="test_variant" style="width: 35px !important; height: 35px;" for="option_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}v{{ variant }}">
+                                        {% load tags %}
+                                        <input {% if task.is_mult_ans %}type="checkbox"{% else %}type="radio"{% endif %}
+                                         class="option_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" id="option_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}v{{ variant }}" value="{{ variant }}" name="selector" 
+                                            {% if variant in task.answer %}checked{% endif %}
+                                        >
+                                    </label>
+                                    <textarea style="width: 200px;" class="mb10 variant_value_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}v{{ variant }}">{{ variant }}</textarea>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <b>Ответ:</b>
+                            <br>
+                            <textarea type="text" class='mb10 change_task_answer_landl{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}' style="width: 100%; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
+                        {% endif %}
+                        <b>Возможное колличество баллов: </b>
+                        <br>
+                        <textarea type="text" class='mb15 change_task_costlandl{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}' style=" height: 40px; padding: 5px;">{{ task.cost }}</textarea>
+                        <div class="text-center">
+                            <a class="ui button mini blue change_task" topic_id="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" id="{{ task.id }}" data-href='{{ task.change_text_url }}'>Сохранить</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        <span style="font-size: 14px;">{{ task.text }}</span>
+        {% if task.image %}
+        <img style="height: 50px;" src="{{ task.image.url }}">
+        {% endif %}
+        <div style="margin-top: 10px;">
+            <a class="ui label">
+              <img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 15px !important;">
+              {{ task.cost }}
+            </a>        
+            {% for tag in task.tags.all %}
+                <a class="ui label problem_tag_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" tag_id="{{ tag.id }}">
+                    {{ tag.title }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="five wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            {% if task.is_test %}
+                <span class="task_type_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" type="test" style="display: none;"></span>
+                {% for variant in task.variants %}
+                <div style="display: flex;">
+                    <label class="test_variant" for="option_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}v{{ variant }}">
+                        {% load tags %}
+                        <input {% if task.is_mult_ans %}type="checkbox"{% else %}type="radio"{% endif %}
+                        {% if is_trener == False %}
+                            class="option_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" id="option_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}v{{ variant }}" value="{{ variant }}" name="selector" 
+                            {% if variant in task|hisanswers:profile %}checked{% endif %}
+                        {% elif is_trener %}
+                            {% if variant in task.answer %}checked{% endif %}
+                        {% endif %}
+                        > {{ variant }}
+                    </label>
+                </div>
+                <br>
+                {% endfor %}
+            {% else %}
+                <span class="task_type_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" type="input" style="display: none;"></span>
+                {% for ans in task.answer %}
+                    <b>Ответ {% if task.answer|length > 1 %}{{ forloop.counter }}{% endif %}:</b>
+                    <br>
+                    {% if is_trener %}
+                        <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
+                    {% else %}
+                    <div style="display: flex;" class="mb15">
+                        <textarea class="mb0 ans_textarea check_task_answer_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}">{{ task|hisanswer:profile }}</textarea>
+                        {% if task|is_correct:profile == True %}
+                            <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+                        {% else %}
+                            <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if is_trener == False and task|is_correct:profile == False %}
+                <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' topic='clsw' topic_id='l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}'>Отправить</a>
+                <div id='coins_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}' class="" style="display: none;">
+                    <div class="ui grid" style="width: 100px;">
+                        <div class="four wide column" style="padding: 0;line-height: 30px;">
+                            <h4>+{{ task.cost }}</h4>                                        
+                        </div>
+                        <div class="twelve wide column" style="padding: 0">
+                            <img style="width: 30px;" src="{% static 'images/coins_gold.png'%}">                
+                        </div>
+                    </div>
+                </div> 
+            {% endif %}
+        </form>
+        <div class="ui segment wrong_answer_alert_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}" style="display: none;">
+            {% if is_trener == False %}
+            <span style="color: #DB2828;">
+                Упс! Неверно, попробуйте еще раз!
+            </span>
+            {% else %}
+            <span style="color: #32CD32;">
+                Ответ изменен
+            </span>
+            {% endif %}  
+        </div>
+    </div>
+</div>

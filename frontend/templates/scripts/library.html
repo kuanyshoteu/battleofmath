@@ -1,0 +1,1488 @@
+{% load static %}
+<div style="display: none;">
+    <div class="course_orig">
+        <div class="dflexx">
+            <a class="pt0 pb0 pl0 pr5 br5 mb15 course_button ui button white shadow_small small" style="width: calc(100% - 25px)">
+                <div class="dflexx">
+                    <div class="ui grid no_margin full-w text14 text-left">
+                        <div class="four wide column no_padding">
+                            <img style="z-index: 0" class="course_img full-w leftbr5" src="{% static 'images/fon4.jpg' %}">
+                        </div>
+                        <div class="twelve wide column">
+                            <div style="line-height: 17px;" class="course_title textbold mr5"></div>
+                            <div style="line-height: 15px;" class="text13 course_slogan textbold mr5"></div>
+                            <span class="text13 len_modules"></span>
+                        </div>
+                    </div>
+                    {% if not profile.is_student %}            
+                    <div class="pt10 open_features open_course_features"><i class="ui icon ellipsis horizontal textllg"></i></div>
+                    {% endif %}
+                </div>
+            </a>
+            {% if not profile.is_student %}            
+            <a class="course_shown pl5 pr5 dinline br5" >
+                <i class="icon eye textblue text12"></i>
+            </a>
+            {% endif %}
+        </div>
+        <div class="pl15 course_children" style="display: none;"></div>
+    </div>
+    <div class="module_file_orig dflex">
+        {% if not profile.is_student %}
+        <div class="pt7 pl5 dflex" style="width: 55px">
+            <a class="module_shown open_features_dark">
+                <i class="ui icon eye textblue"></i>
+            </a>
+            <a class="open_module_features open_features_dark">
+                <i class="ui icon ellipsis horizontal"></i>
+            </a>
+        </div>
+        {% endif %}
+        <a style="width: calc(100% - 55px);" class="module_file pl10 pr10 pt5 pb10 ui button small shadow_small mb10 text-left white dflexx">
+            <div class="ui grid stackable no_margin full-w">
+                <div class="six wide column pt5 pb0 pl0 pr15">
+                    <div class="dflex full-w">
+                        <div style="width: 25px" class="module_order textg"></div>
+                        <i class="icon file text15 texttile mr5"></i>
+                        <div class="module_title textblue textbold text15"></div>
+                    </div>
+                </div>
+                <div class="three wide column pt5 pb0 pl0 pr15">
+                    <span class="author_name"></span>
+                </div>
+                <div class="four wide column pt5 pb0 pl0 pr15">
+                    <span class="done_by textdg text12 mr5">
+                    </span>
+                    /
+                    <span class="try_by textdg text12 mr5">
+                    </span>                    
+                    <span>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                </span>
+                </div>
+                <div class="three wide column no_padding">
+                    <!-- <div class="ui button mini pl5 pt5 pb5 pr5 white shadow_small">Опубликовать</div> -->
+                </div>
+            </div>
+        </a>
+    </div>
+    <form class="ui form shadow_small rename_module_form rename_module{{ module.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+        <textarea class="mb0" style="height: 60px;" id='change_module_name{{ module.id }}' type="text">{{ module.title }}</textarea>
+        <a class="ui button mini blue change_module_name full-w" id="{{ module.id }}" data-href='{{ module.change_name_url }}'>Сохранить</a>
+    </form>
+</div>
+<script type="text/javascript">
+    fill_library()
+    function fill_library(){
+        hash = document.location.hash
+        if (hash.length > 0) {
+            module_id = hash.split('p')[0].replace('#l', '')
+            topic_id = hash.split('p')[1].replace('#p', '')
+            show_module(module_id, topic_id)
+        }
+        url = '{% url "library:get_library" %}'
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                courses = data.courses
+                for (var i = 0; i < courses.length; i++) {
+                    course = courses[i]
+                    fill_courses(course)
+                }
+                open_course(courses[0][0])
+            }
+        })
+    }
+    function fill_cache(object_type, title){
+        if (object_type == 'module') {
+            object_type = 'file'
+        }
+        $('.cache_show').show()
+        $('.cache_icon').addClass(object_type)
+        $('.cache_title').text(title)        
+    }
+    $('.edit_topic_title').click(function(event){
+        $('.topic_title_box').hide()
+        $('.topic_title_form').show()
+        $('.topic_title_val').val($('.crnt_topic_title').text())
+    })    
+    $('.save_topic_title').click(function(event){
+        title = $('.topic_title_val').val()
+        topic_id = $('.module_data').attr('topic_id')
+        $('.crnt_topic_title').text(title)
+        $('.topic_title_box').show()
+        $('.topic_title_form').hide()
+        $('.show_topic'+topic_id).text(title)
+        $.ajax({
+            url: '{%url "library:save_topic_title"%}',
+            data: {
+                'title':title,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                data.name
+            }
+        })
+    })    
+    $('.add_topic_module').click(function(event){
+        hash = document.location.hash
+        module_id = hash.split('p')[0].replace('#l', '')
+        $(this).addClass('disabled')
+        status = $(this).attr('status')
+        $.ajax({
+            url: '{%url "papers:add_topic_url"%}',
+            data: {
+                'module_id':module_id,
+                'status':status,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.add_topic_module').removeClass('disabled')
+                topic_id = data.topic_id
+                show_module(module_id, topic_id)
+            }
+        })
+    })
+    $('.show_library').click(function(event){
+        show_library()
+    })
+    function show_library(){
+        $('.module_page').hide()
+        $('.library_page').fadeIn(400)
+        document.location.hash = "";        
+        let stateObj = { id: "100" }; 
+        window.history.replaceState(stateObj, 
+                    "", "#");
+    }
+    $('.module_file').click(function(){
+        this_ = $(this)
+        id = this_.attr('id')
+        show_module(id, '-1')
+    })
+    $('.next_topic').click(function(){
+        hash = document.location.hash
+        module_id = hash.split('p')[0].replace('#l', '')
+        topic_id = hash.split('p')[1].replace('#p', '')
+        next_topic = $('.show_topic' + topic_id).parent().next()
+        found = false
+        if (next_topic.length == 0) {
+            if ($('.crnt_topic_title').attr('is_task') == 'false') {
+                next_topic = $('.all_tasks').find('.show_topic')
+                if (next_topic.length > 0) {
+                    found = true
+                    next_topic_id = next_topic.eq(0).attr('id')
+                }
+            }
+        }
+        else{
+            next_topic_id = next_topic.find('.show_topic').attr('id')
+            found = true
+        }
+        if (found) {
+            show_module(module_id, next_topic_id)
+        }
+        else{
+            $('.congrats').modal('show')
+        }
+    })
+    function show_module(module_id, topic_id){
+        if ($('.catchmob').width() == 1) {
+            module_pages_orig = $('.module_pages')
+            module_pages = module_pages_orig.clone(true)
+            parent = module_pages_orig.parent()
+            module_pages.prependTo(parent)
+            module_pages_orig.remove()
+        }
+        $('.catchmob')
+        $('.show_module_load').show()
+        $('.library_page').hide()
+        $.ajax({
+            url: '{%url "library:show_module"%}',
+            data: {
+                'module_id':module_id,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.module_page').fadeIn(400)
+                $('.show_module_load').hide()
+                title = data.title
+                topic_res = data.topic_res
+                console.log('xxx', data)
+                $('.crnt_module_title').text(title)
+                if (topic_res.length > 0) {
+                    fill_topic(topic_res, module_id)
+                }
+                topic_id = topic_res[0]
+                $('.all_topics').empty()
+                all_topics = data.all_topics
+                $('.all_tasks').empty()
+                $('.all_topics').empty()
+                for (var i = 0; i < all_topics.length; i++) {
+                    id = all_topics[i][0]
+                    title = all_topics[i][1]
+                    is_task = all_topics[i][2]
+                    is_done = all_topics[i][3]
+                    topic_box = $('.topic_origin').clone(true)
+                    topic_box.removeClass('topic_origin')
+                    if (is_task) {
+                        topic_box.appendTo('.all_tasks')
+                        title = 'Задача #' + id
+                    }
+                    else{
+                        topic_box.appendTo('.all_topics')
+                    }
+                    if (is_done) {
+                        topic_box.find('.textred').hide()
+                        topic_box.find('.textgreen').show()
+                    }
+                    else{
+                        topic_box.find('.textgreen').hide()
+                        topic_box.find('.textred').show()                        
+                    }
+                    topic_box.find('.topic_list_title').text(title)
+                    topic_box.find('.show_topic').attr('id', id)
+                    topic_box.find('.show_topic').addClass('show_topic' + id)
+                    if (topic_id == id) {
+                        topic_box.find('.show_topic').addClass('shadow_small')
+                    }
+                }
+            }
+        }) 
+    }
+    $('.show_topic').click(function(e){
+        topic_id = $(this).attr('id')
+        hash = document.location.hash
+        module_id = hash.split('p')[0].replace('#l', '')
+        show_module(module_id, topic_id)
+    })
+    $(window).on('hashchange', function(e){
+        hash = document.location.hash
+        if (hash.length > 1) {
+            module_id = hash.split('p')[0].replace('#l', '')
+            topic_id = hash.split('p')[1].replace('#p', '')
+            show_module(module_id, topic_id)            
+        }
+        else{
+            show_library()
+        }
+    });    
+    function fill_topic(topic_res, module_id){
+        console.log('5555', topic_res)
+        topic_id = topic_res[0]
+        $('.module_data').attr('topic_id', topic_id)
+        document.location.hash = "l"+module_id+"p"+topic_id;
+        let stateObj = { id: "100" }; 
+        window.history.replaceState(stateObj, "", "#l"+module_id+"p"+topic_id);
+        title = topic_res[1]
+        $('.crnt_topic_title').text(title)
+        units = topic_res[2]
+        crnt_topic_box = $('.crnt_topic_box')
+        crnt_topic_box.empty()
+        task_number = 0
+        is_new = true
+        is_task = topic_res[3]
+        $('.crnt_topic_title').attr('is_task', is_task)
+        $('.task_problem_ru').html('')
+        $('.task_problem_kz').html('')
+        $('.task_ans_ru').html('')
+        $('.task_ans_kz').html('')
+        $('.task_solve_ru').html('')
+        $('.task_solve_kz').html('')
+        if (is_task) {
+            $('.add_content').hide()
+            if (units.length == 0) {
+                $('.save_task').attr('id', '-1')
+                $('.change_task_head').text('Добавить задачу')
+                $('.add_task_buttons').show()
+            }
+            else{
+                $('.add_task_buttons').hide()
+                $('.change_task_head').text('Изменить задачу')
+            }
+        }
+        else{
+            $('.add_task_buttons').hide()
+        }
+        $('.task_list_box').empty()
+        for (var i = 0; i < units.length; i++) {
+            unit = units[i]
+            fill_unit(unit, task_number, is_new)
+        }
+    }
+    $('.tasks_base_show').click(function(){
+        $('.tasks_base_modal').modal('show')
+        $('.tasks_base_load').show()        
+        $.ajax({
+            url: "{% url 'library:get_all_tasks' %}",
+            data: {
+                'id':id,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.res.length; i++) {
+                    task = data.res[i]
+                    id = task[0]
+                    problem = task[1]
+                    ans = task[2]
+                    solve = task[3]
+                    image = task[4]
+                    cost = task[5]
+                    solver_correctness = task[6]
+                    right_answers = task[7]
+                    unit = false
+                    toalltask = true
+                    fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, unit, right_answers)
+                }
+                number_tasks()
+                $('.tasks_base_load').hide()
+                $('.solve_text_val').hide()
+            }
+        })
+    })
+    $('.delete_unit_open').click(function(){
+        $('.delete_unit_sure').hide()
+        $(this).parent().find('.delete_unit_sure').show('fast')
+    })
+    $('.delete_unit').click(function(){
+        id = $(this).parent().parent().parent().parent().attr('id')
+        topic_id = $('.module_data').attr('topic_id')
+        $.ajax({
+            url: "{% url 'library:delete_unit' %}",
+            data: {
+                'id':id,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.unit'+id).remove()
+                number_tasks()
+            }
+        })
+    })
+    function fill_unit(unit, task_number, is_new){
+        origins = $('.module_origins')
+        crnt_topic_box = $('.crnt_topic_box')
+        id = unit[0]
+        content = unit[1]
+        content_box = origins.find('.unit_content').clone(true)
+        content_box.removeClass('unit_content')
+        if (is_new) {
+            content_box.appendTo(crnt_topic_box)
+        }
+        else{
+            old_unit = $('.unit'+id)
+            content_box.insertBefore(old_unit)
+            old_unit.remove()
+        }
+        content_box.attr('id', id)
+        content_box.addClass('unit'+id)
+        if (content) {
+            if (content.length > 0) {
+                content_box.find('.change_unit').attr('status', 'text')
+                content_box.find('.change_unit').attr('id',id)
+                content_box.find('.unit_content_edit').attr('id',id)
+                content_box.find('.unit_content_text_box').html(content)
+            }
+        }
+        file_url = unit[2]
+        if (file_url.length > 0) {
+            content_box.find('.change_unit').attr('status', 'file')
+            content_box.find('.change_unit').attr('id',id)
+            file_name = unit[3]
+            file_box = origins.find('.module_file').clone(true)
+            file_box.removeClass('module_file')
+            file_box.find('.button').attr('href', file_url)
+            file_box.find('.file_name').text(file_name)
+            file_box.appendTo(content_box)                
+        }
+        youtube = unit[4]
+        if (youtube.length > 0) {
+            content_box.find('.change_unit').attr('status', 'video')
+            content_box.find('.change_unit').attr('id',id)
+            youtube_box = origins.find('.youtube_video').clone(true)
+            youtube_box.removeClass('youtube_video')
+            youtube_box.find('.yt').attr('src', youtube)
+            youtube_box.appendTo(content_box.find('.unit_youtube_box'))
+        }
+        video_link = unit[5]
+        if (video_link.length > 0) {
+            content_box.find('.change_unit').attr('status', 'video')
+            content_box.find('.change_unit').attr('id',id)
+            video_box = origins.find('.module_video').clone(true)
+            video_box.removeClass('module_video')
+            video_box.find('.video_source').attr('src', video_link)
+            video_box.appendTo(content_box)
+        }
+        task_list = unit[6]
+        if (task_list.length > 0) {
+            content_box.find('.change_unit').hide()
+            unit_content_box = content_box.find('.unit_content_box')
+            for (var j = 0; j < task_list.length; j++) {
+                task = task_list[j]
+                id = task[0]
+                problem = task[1]
+                ans = task[2]
+                solve = task[3]
+                image = task[4]
+                cost = task[5]
+                solver_correctness = task[6]
+                right_answers = task[7]
+                is_new = true
+                toalltask = false
+                fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, unit_content_box, right_answers)
+            }
+            number_tasks()
+        }        
+    }
+    $('.task_edit_type').click(function(e){
+        $('.task_edit_type').removeClass('green shadow_green')
+        $('.task_edit_type').addClass('white shadow_small')
+        if ($(this).attr('status') == 'test') {
+            $('.task_edit_type_radio').removeClass('white shadow_small')
+            $('.task_edit_type_radio').addClass('green shadow_small')
+            $('.task_edit_test').show()
+            $('.variants_extra').show()
+            $('.task_edit_multans').hide()
+            $('.task_edit_ans_text').hide()
+            $('.edit_variant_input').attr('type', 'radio')
+        }
+        else if($(this).attr('status') == 'multans'){
+            $('.task_edit_type_checkbox').removeClass('white shadow_small')
+            $('.task_edit_type_checkbox').addClass('green shadow_small')
+            $('.task_edit_multans').show()
+            $('.variants_extra').show()
+            $('.task_edit_test').hide()
+            $('.task_edit_ans_text').hide()
+            $('.edit_variant_input').attr('type', 'checkbox')
+        }
+        else{
+            $('.task_edit_type_input').removeClass('white shadow_small')
+            $('.task_edit_type_input').addClass('green shadow_small')
+            $('.task_edit_ans_text').show()
+            $('.variants_extra').hide()
+            $('.task_edit_test').hide()
+            $('.task_edit_multans').hide()
+        }
+    })
+    $('.remove_variant').click(function(e){
+        variant_box = $(this).parent().parent()
+        variant_box.remove()
+    })
+    $('.add_variant').click(function(e){
+        parent = $(this).parent().parent()
+        input = parent.find('.edit_variant_input')
+        type = input.attr('type')
+        if (type == 'radio' && input.is(':checked')) {
+            $('.task_edit_test').find('.edit_variant_input').each(function(){
+                $(this).prop('checked', false)
+            })
+        }
+        variant = $('.task_edit_test_variant').clone(true)
+        variant.removeClass('task_edit_test_variant')
+        type = $('.task_edit_type.green').attr('status')
+        variant.find('.add_variant').remove()
+        variant.find('.remove_variant').attr('style', 'display:block')
+        variant.appendTo('.task_edit_'+type)
+        input.prop('checked', false)
+        $('.variants_extra').find('.edit_variant_text').val('')
+    })
+    $('.change_task').click(function(e){
+        $('.change_task_modal').modal('show')
+        task_box = $(this).parent().parent()
+        id = task_box.attr('id')
+        task_number = $(this).attr('task_number')
+        $('.save_task').attr('task_number', task_number)
+        $('.save_task').attr('id', id)
+        text = task_box.find('.task_text').text()
+        $('.task_edit_text').val(text)
+        answer_box = task_box.find('.answer_box')
+        textarea = $('.task_edit_ans_text')
+        task_edit_multans = $('.task_edit_multans')
+        task_edit_test = $('.task_edit_test')
+    })
+    $('.show_task_list').click(function(e){
+        $('.show_task_list').removeClass('white shadow_small textblue ')
+        $('.show_task_list').addClass('blue shadow_blue')
+        $('.show_new_task').removeClass('blue shadow_blue')
+        $('.show_new_task').addClass('white shadow_small textblue ')
+        $('.task_edit_form').hide()
+        $('.task_list_box').show()
+    })
+    $('.show_new_task').click(function(e){
+        $('.show_new_task').removeClass('white shadow_small textblue ')
+        $('.show_new_task').addClass('blue shadow_blue')
+        $('.show_task_list').removeClass('blue shadow_blue')
+        $('.show_task_list').addClass('white shadow_small textblue ')
+        $('.task_edit_form').show()
+        $('.task_list_box').hide()
+    })
+    function number_tasks(){
+        i = 1
+        $('.task_list_box').find('.task_number').each(function(){
+            $(this).text(i + '. ')
+            i+=1
+            if (i % 2 == 1) {
+                $(this).parent().parent().parent().addClass('backwhitelow')
+            }            
+        })
+    }
+    $('.save_task').click(function(e){
+        id = $(this).attr('id')
+        task_number = $(this).attr('task_number')
+        module_box = $('.module_task'+id)
+        task_problem_ru = $('.task_problem_ru').html()
+        task_problem_kz = $('.task_problem_kz').html()
+        task_ans_ru = $('.task_ans_ru').html()
+        task_ans_kz = $('.task_ans_kz').html()
+        task_solve_ru = $('.task_solve_ru').html()
+        task_solve_kz = $('.task_solve_kz').html()
+        content = task_problem_ru + task_problem_kz + task_ans_ru + task_ans_kz + task_solve_ru + task_solve_kz
+        lengths = [task_problem_ru.length, task_problem_kz.length, task_ans_ru.length, task_ans_kz.length, task_solve_ru.length, task_solve_kz.length]
+        $('.save_task').addClass('disabled')
+        $('.save_task_load').show()
+        $('.save_task_done').hide()
+        texts = []
+        cnt = 0
+        len = content.length
+        if (len % 500 == 0) {len -= 1}
+        while(cnt <= parseInt(len/500)){
+            cnt += 1
+            ptext = content.substr(0, 500)
+            texts.push(ptext)
+            content = content.substr(500)
+        }
+        if (texts.length == 0) {texts = ['']}
+        sendTextsTask(0, texts, id, "{% url 'library:save_task' %}", lengths)
+    })
+    function sendTextsTask(i, texts, id, url, lengths){
+        console.log('send', i)
+        if (id == '-1') {
+            topic_id = $('.module_data').attr('topic_id')
+        }
+        text = texts[i];
+        if (i == texts.length - 1) {is_last = 'yes'}else{is_last = 'no'}
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'text':text,
+                'lengths0':lengths[0],
+                'lengths1':lengths[1],
+                'lengths2':lengths[2],
+                'lengths3':lengths[3],
+                'lengths4':lengths[4],
+                'lengths5':lengths[5],
+                'i':i,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (is_last == 'yes'){
+                    location.reload()
+                }
+                else if (i < texts.length - 1) {
+                    i += 1
+                    sendTextsTask(i, texts, data.tid, url, lengths)
+                }
+            }
+        })
+    }
+    function fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, unit, right_answers){
+        $('.save_task').attr('id', id)
+        origins = $('.module_origins')
+        task_box = origins.find('.module_task').clone(true)
+        task_box.removeClass('module_task')
+        if (solver_correctness) {
+            task_box.find('.task_solved').show()
+        }
+        task_box.attr('id', id)
+        task_box.find('.check_task_answer').attr('id', id)
+        answer_box = task_box.find('.answer_box')
+        if (image.length > 0) {
+            task_box.find('.task_img').attr('src', image)
+        }
+        if ($('.data').attr('is_student') == 'False') {
+            $('.task_problem_ru').html(problem[0])
+            $('.task_problem_kz').html(problem[1])
+            $('.task_ans_ru').html(ans[0])
+            $('.task_ans_kz').html(ans[1])
+            $('.task_solve_ru').html(solve[0])
+            $('.task_solve_kz').html(solve[1])
+            if ($('.data').attr('lang') == 'ru') {
+                problem = problem[0]
+                ans = ans[0]
+                solve = solve[0]
+            }
+            else{
+                problem = problem[1]
+                ans = ans[1]
+                solve = solve[1]
+            }
+        }
+        $('.right_answers').empty()
+        right_answers_len = 0
+        for (var i = 0; i < right_answers.length; i++) {
+            right_answer_link = $('.right_answer_orig').clone(true)
+            right_answer_link.removeClass('right_answer_orig')
+            right_answer_link.find('.right_answer_name').text(right_answers[i][0])
+            if (right_answers[i][1]) {
+                right_answers_len += 1
+                right_answer_link.find('.textgreen').show()
+                right_answer_link.find('.textred').hide()
+            }
+            else{
+                right_answer_link.find('.textgreen').hide()
+                right_answer_link.find('.textred').show()                
+            }
+            right_answer_link.attr('solution', right_answers[i][2])
+            right_answer_link.appendTo('.right_answers')
+        }
+        $('.right_answers_len').text(right_answers_len + '/' + right_answers.length)
+        task_box.find('.task_problem').html(problem)
+        answer_text = $('.answer_text').clone(true)
+        answer_text.find('.answer_text_val').html(ans)
+        answer_text.removeClass('answer_text')
+        answer_text.appendTo(answer_box)
+        solve_text = $('.solve_text').clone(true)
+        solve_text.find('.solve_text_val').html(solve)
+        solve_text.removeClass('solve_text')
+        solve_text.appendTo(answer_box)
+            console.log(task_box)
+        if (toalltask) {
+            task_box.addClass('pl15 pr15 br5')
+            task_box.find('.add_task_to_unit').show()
+            task_box.appendTo('.task_list_box')
+        }
+        else{
+            task_box.appendTo(unit)
+            task_box.find('.add_task_to_unit').hide()
+            task_box.insertBefore('.module_task'+id)
+            $('.module_task'+id).remove()
+        }
+        task_box.addClass('module_task'+id)
+    }    
+    $('.show_solution').click(function(e){
+        if ($('.data').attr('is_student') == 'False') {
+            $('.student_solution').modal('show')
+            name = $(this).find('.right_answer_name').text()
+            $('.solution_student_name').text(name)
+            solution = $(this).attr('solution')
+            if (solution.length == 0) {
+                solution = 'Без решения'
+            }
+            $('.student_solution_box').html(solution)
+        }
+    })
+    $('.add_task_to_unit').click(function(e){
+        this_ = $(this)
+        task_box = this_.parent().parent()
+        id = task_box.attr('id')
+        topic_id = $('.module_data').attr('topic_id')
+        this_.addClass('disabled')
+        $.ajax({
+            url: "{% url 'library:add_task_to_unit' %}",
+            data: {
+                'id':id,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })
+    })
+    $('.edit_variant_input').click(function(e){
+        input = $(this)
+        if (input.attr('type') == 'radio') {
+            $('.task_edit_test').find('.edit_variant_input').each(function(){
+                $(this).prop('checked', false)
+            })
+            input.prop('checked', true)            
+        }
+    })
+    {% if not is_trener %}
+    $('.test_variant').click(function(e){
+        input = $(this).find('.ans_input')
+        if (input.attr('type') == 'radio') {
+            parent = $(this).parent()
+            parent.find('.test_variant').each(function(){
+                o_input = $(this).find('.ans_input')
+                o_input.prop('checked', false)
+            })
+            input.prop('checked', true)            
+        }
+    })
+    {% endif %}
+    function fill_courses(course){
+        id = course[0]
+        title = course[1]
+        parent = course[2]
+        len_modules = course[3]
+        shown = course[4]
+        slogan = course[5]
+        img = course[6]
+        if (img == '') {
+            img = '{% static "images/fon4.jpg" %}'
+        }
+        course = $('.course_orig').clone()
+        course.addClass('course'+id)
+        course.attr('id', id)
+        course.removeClass('course_orig')
+        course.find('.course_title').text(title)
+        course.find('.course_slogan').text(slogan)
+        course.find('.course_img').attr('src', img)
+        course.find('.button').attr('onclick', 'open_course('+id+')')
+        course.find('.course_children').addClass('course_children'+id)
+        course.addClass('course'+id)
+        course.find('.len_modules').text(len_modules)
+        course.find('.open_course_features').attr('onclick', 'open_course_features(event, '+id+')')
+        course.find('.course_shown').attr('onclick', 'course_shown('+id+')')
+        if (shown) {
+            course.find('.eye').removeClass('slash')
+        }
+        else{
+            course.find('.eye').addClass('slash')            
+        }
+        if (parent == -1) {
+            course.appendTo('.courses_box')
+        }
+        else{
+            course.appendTo($('.course'+parent).eq(0).find('.course_children').eq(0))
+        }
+    }
+    function fill_one_module(module){
+        id = module[0]
+        title = module[1]
+        author = module[2]
+        author_link = module[3]
+        rating = module[4]
+        try_by = module[5]
+        done_by = module[6]
+        access_to_everyone = module[7]
+        url = module[8]
+        modul = $('.module_file_orig').clone(true)
+        modul.removeClass('module_file_orig')
+        modul.find('.module_title').text(title)
+        modul.find('.module_file').attr('id', id)
+        modul.find('.author_name').text(author)
+        modul.find('.done_by').text(done_by)
+        modul.find('.try_by').text(try_by)
+        modul.find('.module_file').addClass('module_file'+id)
+        if (access_to_everyone) {
+            modul.find('.eye').removeClass('slash')
+        }
+        else{
+            modul.find('.eye').addClass('slash')            
+        }
+        modul.appendTo('.modules_box')
+    }
+    function fill_lectures(modules){
+        for (var i = 0; i < modules.length; i++) {
+            one_module = modules[i]
+            fill_one_module(one_module)
+        }
+        update_module_numbers()
+    }
+    function update_module_numbers(){
+        i = 1
+        $('.module_order').each(function(){
+            $(this).text(i)
+            i += 1
+        })
+    }
+    function hide_children(id){
+        course = $('.course'+id)
+        course_children = course.find('.course_children').eq(0)
+        course_children.hide('fast')
+        course.find('.hide_children').eq(0).hide()
+    }
+    function open_course(id){
+        course = $('.course'+id)
+        $('.data').attr('opened_course', id)
+        $('.course_button').removeClass('backlightblue textw')
+        $('.course_button').addClass('white')
+        course.find('.course_button').eq(0).addClass('backlightblue textw')
+        course.find('.course_button').eq(0).removeClass('white')
+        course.find('.icon.caret.right').eq(0).hide()
+        course.find('.icon.caret.down').eq(0).show()
+        course.find('.hide_children').eq(0)
+        course_children = course.find('.course_children').eq(0)
+        course_children.show('fast')
+        $('.modules_box').empty()
+        $('.get_modules_load').show()
+        if (course_children.children().length > 0) {
+            course.find('.hide_children').eq(0).show()
+        }
+        course_title = course.find('.course_title').eq(0).text()
+        $('.crnt_course_name').text(course_title)
+        $.ajax({
+            url: "{% url 'library:get_course_files' %}",
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.get_modules_load').hide()
+                modules = data.modules
+                if (modules.length > 0) {
+                    $('.no_modules').hide()
+                    fill_lectures(modules)
+                }
+                else{
+                    $('.no_modules').show()
+                }
+            }
+        })
+    }
+    $('.open_module_features').click(function(e){
+        id = $(this).parent().parent().find('.module_file').attr('id')
+        $('.data').attr('crnt_module', id)
+        h = $('.module_file'+id).position().top
+        $('.module_features2').css('margin-top', h +37)
+        $('.course_form').hide()
+        $('.module_features2').show()
+        e.stopPropagation();
+    })
+    $('.rename_module').click(function(event){
+        id = $('.data').attr('crnt_module')
+        modul = $('.module_file'+id)
+        h = modul.position().top + 37
+        title = modul.find('.module_title').eq(0).text()
+        $('.crnt_module_title').text(title)
+        $('.module_rename_form').css('margin-top', h)
+        $('.course_form').hide()
+        $('.module_rename_form').show()
+        event.stopPropagation()
+    }) 
+    $('.delete_course').click(function(event){
+        event.stopPropagation()
+        id = $('.data').attr('crnt_course')
+        course = $('.course'+id)
+        h = course.position().top
+        title = course.find('.course_title').eq(0).text()
+        $('.crnt_course_title').text(title)
+        $('.delete_course_sure').css('margin-top', h)
+        $('.course_form').hide()
+        $('.delete_course_sure').show()
+    })
+    $('.go_delete_course').click(function(event){
+        id = $('.data').attr('crnt_course')
+        course = $('.course'+id)
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_course_load').show()
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "library:delete_course_url"%}',
+                data: {
+                    'title':title,
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    if (data.ok) {
+                        $('.course_form').hide()
+                        course.hide('fast')
+                        $('.modules_box').empty()
+                        $('.no_modules').show()
+                    }
+                }
+            })
+        }
+    })
+    $('.rename_course_save').click(function(event){
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_course_load').show()
+        id = $('.data').attr('crnt_course')
+        course = $('.course'+id)
+        title = $('.change_course_title_text').val()
+        if (title.length > 0) {
+            slogan = $('.change_course_slogan_text').val()
+            add_data = '?id='+id+'&title='+title+'&slogan='+slogan
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            file = $('.course_banner')[0].files[0]
+            formData.append('file' , file);
+            url = '{%url "library:rename_course"%}'
+            $.ajax({
+                url: url+add_data,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    $('.rename_course_load').hide()
+                    if (data.ok) {
+                        img = data.file_url
+                        if (img == '') {
+                            img = '{% static "images/fon4.jpg" %}'
+                        }
+                        $('.course_form').hide()
+                        course.find('.course_title').eq(0).text(title)
+                        course.find('.course_slogan').eq(0).text(slogan)
+                        course.find('.course_img').eq(0).attr('src', img)
+                        $('.crnt_course_name').text(title)
+                        $('.change_course_title_text').val('')
+                    }
+                }
+            });              
+        }
+    })
+    $('.delete_module').click(function(event){
+        event.stopPropagation()
+        id = $('.data').attr('crnt_module')
+        modul = $('.module_file'+id)
+        h = modul.position().top + 37
+        title = modul.find('.module_title').eq(0).text()
+        $('.crnt_module_title').text(title)
+        $('.delete_module_sure').css('margin-top', h)
+        $('.course_form').hide()
+        $('.delete_module_sure').show()
+    })
+    $('.go_delete_module').click(function(event){
+        id = $('.data').attr('crnt_module')
+        modul = $('.module_file'+id).parent()
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_module_load').show()
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "papers:delete_module_url"%}',
+                data: {
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    if (data.ok) {
+                        $('.course_form').hide()
+                        modul.hide('fast')
+                    }
+                }
+            })
+        }
+    })
+    $('.rename_module_save').click(function(event){
+        id = $('.data').attr('crnt_module')
+        modul = $('.module_file'+id)
+        title = $('.change_module_title_text').val()
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_module_load').show()
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "papers:rename_module"%}',
+                data: {
+                    'title':title,
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    $('.rename_module_load').hide()
+                    if (data.ok) {
+                        $('.course_form').hide()
+                        modul.find('.module_title').eq(0).text(title)
+                        $('.change_module_title_text').val('')
+                    }
+                }
+            });              
+        }
+    })
+    function open_course_features(event, id){
+        $('.data').attr('crnt_course', id)
+        h = $('.course'+id).position().top
+        $('.course_features').css('margin-top', h - 37)
+        $('.course_form').hide()
+        $('.course_features').show()
+        open_course(id)
+        event.stopPropagation();
+    }
+    function show_new_module_form(event){
+        event.stopPropagation()
+        $('.course_form').hide()
+        $('.new_module_title').show()
+    }
+    function create_course_form(event){
+        event.stopPropagation()
+        id = $('.data').attr('opened_course')
+        $('.new_course_title_text').val('')
+        course = $('.course'+id)
+        h = course.position().top
+        title = course.find('.course_title').eq(0).text()
+        $('.create_course_title').text(title)
+        $('.new_course_title').css('margin-top', h)
+        $('.course_form').hide()
+        $('.new_course_title').show()
+    }
+    $('.rename_course').click(function(event){
+        id = $('.data').attr('crnt_course')
+        course = $('.course'+id)
+        h = course.position().top + 70
+        title = course.find('.course_title').eq(0).text()
+        $('.crnt_course_title').text(title)
+        $('.change_course_title_text').val(title)
+        slogan = course.find('.course_slogan').eq(0).text()
+        $('.change_course_slogan_text').val(slogan)
+        $('.course_form').hide()
+        $('.course_rename_form').css('margin-top', h)
+        $('.course_rename_form').show()
+        event.stopPropagation()
+    })
+    function close_module(){
+        $('.module_page').hide()
+        $('.library_page').show('fast')
+    }
+    $('.create_course').click(function (event) {
+        title = $('.new_course_title_text').val()
+        parent = $('.data').attr('crnt_course')
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "library:create_course_url"%}',
+                data: {
+                    'title':title,
+                    'parent_id':parent,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    course = [data.id, title, parent, 0, '', '']
+                    fill_courses(course)
+                    open_course(data.id)
+                    $('.new_course_title').hide()
+                }
+            });              
+        }
+    })
+    $('.create_module').click(function (event) {
+        title = $('.new_module_title_text').val()
+        parent = $('.data').attr('opened_course')
+        this_ = $(this)
+        $('.new_module_title').val('')
+        this_.addClass('disabled')
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "library:create_module"%}',
+                data: {
+                    'title':title,
+                    'parent':parent,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    this_.removeClass('disabled')
+                    modul = data.modules[0]
+                    fill_one_module(module)
+                    update_module_numbers()
+                    $('.course_form').hide()
+                }
+            });              
+        }
+    })
+    $(".check_task_answer").click(function () {
+        var this_ = $(this)
+        var id = this_.attr("id")
+        ans = answer_box.find('.answer_text_val').html()
+        solve = answer_box.find('.solve_text_val').html()
+        task_box.find('.check_task_load').show()
+        task_box.find('.wrong_ans').hide()
+        task_box.find('.correct_ans').hide()
+        $.ajax({
+            url: "{% url 'tasks:change_answer_url' %}",
+            data: {
+                'id':id,
+                'ans':ans,
+                'solve':solve,
+            },
+            dataType: 'json',
+            success: function (data) {
+                //$('.hiscoins').text(data.hiscoins)
+                task_box.find('.check_task_load').hide()
+                if (data.solved == true){
+                    task_box.find('.wrong_ans').hide()
+                    task_box.find('.correct_ans').show()
+                    task_box.find('.task_solved').show()
+                    if(data.action == 'plus'){
+                        task_box.find('.coin_box').toggleClass('bubble');
+                    }
+                }
+                else{
+                    task_box.find('.task_solved').hide()
+                    task_box.find('.wrong_ans').show()
+                    task_box.find('.correct_ans').hide()
+                }
+            }
+        });
+    });
+    $('.change_unit').click(function(e){
+        status = $(this).attr('status')
+        if (status == 'text') {
+            topic_add_text_open($(this))
+        }
+        else if (status == 'video') {
+            add_video_open($(this))
+        }
+        else if (status == 'file') {
+            add_file_open($(this))
+        }
+    })
+    function add_video_open(this_){
+        $('.add_video_modal').modal('show')
+        id = this_.attr('id')
+        youtube_link = $('.unit'+id).find('iframe').attr('src')
+        $('.youtube_link_edit').val(youtube_link)
+        $('.add_video').attr('id', id)
+        $('.add_video_done').hide()
+        $('.add_video_load').hide()
+    }
+    $('.add_video').click(function(e){
+        $('.add_video_done').hide()
+        $('.add_video_load').show()
+        $('.add_video').addClass('disabled')
+        unit_id = $(this).attr('id')
+        is_new = 'no'
+        if (unit_id == '-1') {
+            is_new = 'yes'
+        }
+        topic_id = $('.module_data').attr('topic_id')
+        youtube_link = $('.youtube_link_edit').val()
+        add_data = '?&youtube_link='+youtube_link+'&topic_id='+topic_id+'&unit_id='+unit_id+'&is_new='+is_new
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        file = $('.topic_video_input')[0].files[0]
+        formData.append('video' , file);
+        url = '{% url "topics:add_unit_url" %}'
+        $.ajax({
+            url: url+add_data,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('.add_video_done').show()
+                $('.add_video_load').hide()
+                $('.add_video').removeClass('disabled')
+                if (is_new == 'yes') {
+                    is_new = true
+                }
+                else{
+                    is_new = false
+                }
+                fill_unit(data.unit_res, 0, is_new)
+            }
+        })
+    })
+    function add_file_open(this_){
+        $('.add_file_modal').modal('show')
+        id = this_.attr('id')
+        $('.add_file').attr('id', id)
+        $('.add_file_done').hide()
+        $('.add_file_load').hide()
+    }
+    $('.add_file').click(function(e){
+        $('.add_file_done').hide()
+        $('.add_file_load').show()
+        $('.add_file').addClass('disabled')
+        unit_id = $(this).attr('id')
+        is_new = 'no'
+        if (unit_id == '-1') {
+            is_new = 'yes'
+        }
+        topic_id = $('.module_data').attr('topic_id')
+        add_data = '?topic_id='+topic_id+'&unit_id='+unit_id+'&is_new='+is_new
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        file = $('.topic_file_input')[0].files[0]
+        formData.append('file' , file);
+        url = '{% url "topics:add_unit_url" %}'
+        $.ajax({
+            url: url+add_data,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('.add_file_done').show()
+                $('.add_file_load').hide()
+                $('.add_file').removeClass('disabled')
+                if (is_new == 'yes') {
+                    is_new = true
+                }
+                else{
+                    is_new = false
+                }
+                fill_unit(data.unit_res, 0, is_new)
+            }
+        })
+    })
+    function topic_add_text_open(this_){
+        $('.fill_unit_done').hide()
+        $('.fill_unit_load').hide()
+        id = this_.attr('id')
+        $('.topic_add_text_box').modal('show')
+        $('.topic_add_text').attr('id', id)
+        if (id != '-1') {
+            text = this_.parent().parent().parent().find('.unit_content_text_box').html()
+            $('.topic_add_text_val').html(text)
+        }
+        else{
+            $('.topic_add_text_val').html('')            
+        }
+    }
+    $('.topic_add_text').click(function(e){
+        unit_id = $(this).attr('id')        
+        content = $('.topic_add_text_val').html()
+        len = content.length
+        $('.fill_unit_load').show()
+        $('.topic_add_text').addClass('disabled')
+        if (len > 0) {
+            texts = []
+            cnt = 0
+            if (len % 500 == 0) {len -= 1}
+            while(cnt <= parseInt(len/500)){
+                cnt += 1
+                ptext = content.substr(0, 500)
+                texts.push(ptext)
+                content = content.substr(500)
+            }
+            is_new_c = false
+            if (unit_id == '-1') {
+                is_new_c = true
+            }
+            if (texts.length == 0) {texts = ['']}
+            sendTexts(0, texts, unit_id, 'no', is_new_c)
+        }
+    })
+    function sendTexts(i, texts, unit_id, is_several, is_new_c){
+        is_new = 'no'
+        if (unit_id == '-1') {
+            is_new = 'yes'
+        }
+        content = texts[i]
+        topic_id = $('.module_data').attr('topic_id')
+        $.ajax({
+            url: '{%url "papers:add_unit_url"%}',
+            data: {
+                'unit_id':unit_id,
+                'is_new':is_new,
+                'content':content,
+                'topic_id':topic_id,
+                'is_several':is_several,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (i < texts.length - 1) {
+                    i += 1
+                    sendTexts(i, texts, data.id, 'yes', is_new_c)
+                }
+                else{
+                    unit = data.unit_res
+                    fill_unit(unit, task_number, is_new_c)
+                    $('.fill_unit_done').show()
+                    $('.fill_unit_load').hide()
+                    $('.topic_add_text').removeClass('disabled')
+                }
+            }
+        });        
+    }
+    $('.file_action').click(function(e){
+        object_type = $(this).attr('object_type')
+        action = $(this).attr('action')
+        if (object_type == 'module') {
+            parent = $('.data').attr('opened_course')
+            object_id = $('.data').attr('crnt_module')
+            title = $('.module_file' + object_id).find('.module_title').text()
+        }
+        else{
+            object_id = $('.data').attr('crnt_course')
+            parent = $('.course'+object_id).parent().parent().attr('id')
+            title = $('.course'+object_id).find('.course_title').text()
+        }
+        url = $('.data').attr('file_action_url')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+                'object_type':object_type,
+                'action':action,
+                'parent':parent,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.course_form').hide()
+                fill_cache(object_type, title)
+            }
+        })
+    })
+    $('.paste_to_course').click(function(e){
+        new_course = $('.data').attr('opened_course')
+        url = $('.data').attr('paste_to_course')
+        $.ajax({
+            url: url,
+            data: {
+                'new_course':new_course,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.course_form').hide()
+                if (data.module_res.length > 0) {
+                    console.log(data.module_res)
+                    fill_one_module(data.module_res)
+                }
+                else{
+                    course = data.course_res
+                    course[2] = new_course
+                    console.log(course)
+                    fill_courses(data.course_res)
+                }
+            }
+        })
+    })
+    $('.move_unit').click(function(){
+        this_ = $(this)
+        unit = this_.parent().parent().parent()
+        status = this_.attr('status')
+        id = unit.attr('id')
+        url = $('.data').attr('move_unit_url')
+        topic_id = $('.module_data').attr('topic_id')
+        this_.addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'status':status,
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    this_.removeClass('disabled')
+                    if (status == 'up') {
+                        unit_prev = unit.prev()
+                        unit.insertBefore(unit_prev)
+                    }
+                    else{
+                        unit_prev = unit.next()
+                        unit.insertAfter(unit_prev)
+                    }
+                    number_tasks()
+                }                       
+            }
+        })
+    })
+    $('.show_topic_features').click(function(event){
+        id = $(this).parent().prev().attr('id')
+        $('.data').attr('crnt_topic_features', id)
+        h = $(this).position().top
+        $('.topic_features').css('margin-top', h - 20)
+        $('.topic_features').show()
+        event.stopPropagation();
+    })
+    $('.move_topic').click(function(event){
+        this_ = $(this)
+        status = this_.attr('status')
+        event.stopPropagation();
+        hash = document.location.hash
+        module_id = hash.split('p')[0].replace('#l', '')
+        topic_id = $('.data').attr('crnt_topic_features')
+        url = $('.data').attr('move_topic')
+        show_topic = $('.show_topic'+topic_id).parent()
+        $.ajax({
+            url: url,
+            data: {
+                'module_id':module_id,
+                'topic_id':topic_id,
+                'status':status,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.topic_features').hide()
+                    this_.removeClass('disabled')
+                    if (status == 'up') {
+                        show_topic_prev = show_topic.prev()
+                        show_topic.insertBefore(show_topic_prev)
+                    }
+                    else{
+                        show_topic_prev = show_topic.next()
+                        show_topic.insertAfter(show_topic_prev)
+                    }
+                }                       
+            }
+        })
+    })
+    $('.delete_topic').click(function(){
+        topic_id = $('.data').attr('crnt_topic_features')
+        url = $('.data').attr('delete_topic')
+        $.ajax({
+            url: url,
+            data: {
+                'topic_id':topic_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.topic_features').hide()
+                $('.show_topic'+topic_id).parent().hide('fast')
+                show_module(module_id, '-1')
+            }
+        })
+    })
+    $('.postfile').change(function() {
+        this_ = $(this)
+        input = this
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('.'+this_.attr("id") + '_preview').text(input.files[0].name)
+            }
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+    })
+    function course_shown(id){
+        $.ajax({
+            url: "{% url 'library:course_shown' %}",
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.shown) {
+                    $('.course'+id).find('.eye').removeClass('slash')
+                }
+                else{
+                    $('.course'+id).find('.eye').addClass('slash')
+                }
+            }
+        })        
+    }
+    $('.module_shown').click(function(){
+        parent = $(this).parent().parent()
+        id = parent.find('.module_file').attr('id')
+        $.ajax({
+            url: "{% url 'library:module_shown' %}",
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.shown) {
+                    parent.find('.eye').removeClass('slash')
+                }
+                else{
+                    parent.find('.eye').addClass('slash')
+                }
+            }
+        })        
+    })
+</script>
