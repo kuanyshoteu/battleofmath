@@ -1,1 +1,1 @@
-web: gunicorn cerebriumkz:application --preload
+web: gunicorn hello:application --preload
