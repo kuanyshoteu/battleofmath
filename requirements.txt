@@ -20,7 +20,6 @@ Pillow==5.0.0
 product==0.1.1.1
 prompt-toolkit==1.0.15
 protobuf==3.1.0
-psycopg2==2.7.7
 psycopg2-binary==2.7.7
 pydatalog==0.17.1
 Pygments==2.2.0
@@ -28,6 +27,8 @@ pyparsing==2.2.0
 python-dateutil==2.6.1
 python-mnist==0.3
 pytz==2019.1
+pyyaml==3.12
+pyzmq==16.0.2
 qtconsole==4.3.1
 requests==2.9.1
 s3transfer==0.1.11
