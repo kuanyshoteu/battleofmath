@@ -1,1 +1,1 @@
-web: gunicorn cerebrium.asgi --preload
+web: gunicorn cerebriumkz:application --preload
