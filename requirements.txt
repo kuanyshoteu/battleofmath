@@ -9,7 +9,7 @@ django-pagedown==1.0.4
 django-storages==1.6.6
 jsonschema==2.6.0
 markdown2==2.3.5
-MarkupSafe==2.0.1
+MarkupSafe==1.0.1
 mpmath==1.0.0
 numpy==1.17.3
 pandas==0.25.2
