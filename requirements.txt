@@ -45,7 +45,6 @@ protobuf==3.6.1
 psutil==5.5.1
 psycopg2-binary==2.8.6
 pycairo==1.16.2
-pycups==1.9.73
 pyDatalog==0.17.1
 Pygments==2.2.0
 PyGObject==3.36.0
