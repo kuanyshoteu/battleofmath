@@ -1,1 +1,1 @@
-web: gunicorn cerebrium.asgi:application --log-file
+web: gunicorn cerebrium.asgi --log-file
