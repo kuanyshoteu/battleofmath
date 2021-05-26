@@ -199,7 +199,7 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 if toserver:
-    STATIC_URL = '/static/'      
+    STATIC_URL = '/frontend/static/'      
 else:
     STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
     STATIC_URL = STATIC_HOST + '/frontend/static/'
