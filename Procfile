@@ -1,1 +1,1 @@
-web: gunicorn cerebrium.wsgi --log-file -
+web: gunicorn hello:application --preload
