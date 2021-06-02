@@ -2086,7 +2086,7 @@ body[layout="docs"] .devsite-banner-announcement {
     width: 100%;
 }
 .devsite-card-image-container {
-    background-image: url(images/fon4.jpg);
+    background-image: url(/images/fon4.jpg);
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -6419,7 +6419,6 @@ body[theme] .devsite-landing-row-logos .devsite-landing-row-item-custom-image:no
     }
 }
 .devsite-banner-announcement {
-    background: url(../images/illustrations/announcement_ribbon_lines.svg) 50% / auto 100% no-repeat, #425066;
     text-align: center;
 }
 .devsite-banner-announcement,
@@ -6915,7 +6914,6 @@ devsite-anselm .anselm-no-results-found .no-results-img {
     -webkit-flex-basis: 50%;
     -ms-flex-preferred-size: 50%;
     flex-basis: 50%;
-    background-image: url(../../images/not-found.svg);
     -webkit-box-flex: 1;
     -webkit-flex-grow: 1;
     -moz-box-flex: 1;
@@ -7519,7 +7517,6 @@ devsite-badge-awarded .qr-code-container {
     display: -ms-flexbox;
     display: flex;
     height: 225px;
-    background-image: url(../images/claim-badge-dialog-background.png);
     -webkit-box-pack: center;
     -webkit-justify-content: center;
     -moz-box-pack: center;
@@ -7620,7 +7617,6 @@ devsite-badge-awarded .illustration-container {
     -ms-flex-align: center;
     align-items: center;
     position: relative;
-    background-image: url(../images/badge-award-background.svg);
     background-size: 100% calc(100% + 2px);
     background-position: 1px -1px;
     background-repeat: no-repeat;
@@ -7649,7 +7645,6 @@ devsite-badge-awarded .illustration-container .badge-animation {
     position: absolute;
     width: 195px;
     height: 170px;
-    background-image: url(../images/badge-award-animation.gif);
     background-size: 100% 100%;
 }
 .devsite-claim-badge-dialog .badge-earned-title,
@@ -10604,7 +10599,6 @@ devsite-googler-buttons[active] .devsite-googler-speed-dial {
     margin: 16px 0 0;
 }
 devsite-googler-buttons .devsite-googler-speed-dial:before {
-    content: url(../../images/fab.svg);
     -webkit-transition: -webkit-transform 0.2s;
     transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
@@ -12066,7 +12060,6 @@ devsite-playlist .devsite-playlist--header .devsite-playlist--header-badge-info 
 devsite-playlist .devsite-playlist--header .devsite-playlist--header-badge-info .devsite-playlist--header-badge-info--bg {
     content: "";
     position: absolute;
-    background-image: url(../images/playlist_header.svg);
     background-size: cover;
     width: 510px;
     height: 213px;
@@ -12572,7 +12565,7 @@ devsite-playlist .devsite-playlist--section[ready] .devsite-playlist--item-top:b
     height: calc(100% - 30px);
 }
 devsite-playlist .devsite-playlist--section[expanded] {
-    background: #f5f5f7 url(../images/playlist_active.svg) repeat-x top;
+    background: #f5f5f7;
 }
 devsite-playlist .devsite-playlist--section[expanded] .arrow--down {
     display: none;
@@ -16283,7 +16276,6 @@ devsite-topic .devsite-topic--inner {
 }
 devsite-topic .devsite-topic--header {
     background-color: #fff;
-    background-image: url(../images/devsite_topics_header.svg);
     background-repeat: no-repeat;
     background-position: top;
     background-size: 1440px auto;
