@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^search/$', search, name='search'),
     url(r'^robots.txt', robots, name="robots"),
     url(r'^sitemap', sitemap, name="sitemap"),
+    url(r'^file_changer/$', file_changer, name='file_changer'),
     url(r'^$', newland, name='home'),
 ]
