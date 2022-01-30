@@ -1912,7 +1912,7 @@ body[template="landing"][layout="docs"] .devsite-banner-message {
 .devsite-banner-announcement,
 .devsite-banner-announcement :link,
 .devsite-banner-announcement :visited {
-    background: var(--devsite-banner-background, #e1f5fe);
+    background: var(--devsite-banner-background, #077a9f);
 }
 body[layout="docs"] .devsite-banner-announcement {
     border-radius: 10px 10px 0 0;
@@ -20381,14 +20381,14 @@ google-codelab-survey .option-text {
                                     }
                                 }
                                 .tensorsite-card--clip .tensorsite-content__clip-bg {
-                                    padding-top: 40%;
+                                    padding-top: 57%;
                                 }
                                 .tensorsite-card--clip .tensorsite-content__clip-bg + .tensorsite-content__title {
                                     padding-top: 7%;
                                 }
                                 .tensorsite-card--clip .tensorsite-content__title {
                                     font-family: "Google Sans", sans-serif;
-                                    font-size: 24px;
+                                    font-size: 21px;
                                     font-weight: 700;
                                     line-height: 32px;
                                     max-width: 81%;

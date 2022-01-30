@@ -59,7 +59,8 @@
         <link href="https://fonts.googleapis.com/css?family=Google+Sans:+400,500,700" rel="stylesheet" data-page-link />
     </head>
     <body class="" template="page" theme="tensorflow-theme" type="marketing" layout="full" pending>
-        <devsite-progress type="indeterminate" id="app-progress"></devsite-progress>
+        <devsite-progress type="indeterminate" id="app-progress">
+        </devsite-progress>
 
         <section class="devsite-wrapper">
             <devsite-header>
@@ -75,7 +76,8 @@
                                     data-label="Navigation menu button"
                                     visually-hidden
                                     aria-label="Open menu"
-                                ></button>
+                                >
+                            </button>
                                 <div class="devsite-product-name-wrapper">
                                     <a
                                         href="/"
@@ -93,20 +95,7 @@
                                     
                                 </div>
 
-                                <devsite-language-selector>
-                                    <devsite-select class="devsite-language-selector-menu">
-                                        <select aria-label="Select your language preference." class="devsite-language-selector-select" name="language" track-name="click" track-type="languageSelector">
-                                            <option value="en" lang="en" track-metadata-original-language="en" track-metadata-selected-language="en" track-name="changed" track-type="languageSelector" selected="selected">
-                                                English
-                                            </option>
-
-                                            <option value="id" lang="id" track-metadata-original-language="en" track-metadata-selected-language="id" track-name="changed" track-type="languageSelector">
-                                                Bahasa Indonesia
-                                            </option>
-
-                                        </select>
-                                    </devsite-select>
-                                </devsite-language-selector>
+                                
 
                                 <a class="devsite-header-link devsite-top-button button gc-analytics-event" href="//github.com/tensorflow" data-category="Site-Wide Custom Events" data-label="Site header link">
                                     Курсы
@@ -127,13 +116,15 @@
                     </div>
 
                     <div class="devsite-collapsible-section devsite-header-no-lower-tabs">
-                        <div class="devsite-header-background"></div>
+                        <div class="devsite-header-background">
+                        </div>
                     </div>
                 </div>
             </devsite-header>
             <section id="gc-wrapper">
                 <main role="main" class="devsite-main-content">
-                    <devsite-toc class="devsite-nav" disabled></devsite-toc>
+                    <devsite-toc class="devsite-nav" disabled>
+                    </devsite-toc>
                     <devsite-content>
                         <article class="devsite-article">
 
@@ -174,8 +165,10 @@
                                 <div class="wrapper">
                                     <section class="blurred tensorsite-group tensorsite-home-hero-wrapper">
                                         <div class="wrapper2 tensorsite-home-hero">
-                                            <div class="aurora one"></div>
-                                            <div class="aurora three"></div>
+                                            <div class="aurora one">
+                                            </div>
+                                            <div class="aurora three">
+                                            </div>
                                             <div class="tensorsite-container">
                                                 <div class="tensorsite-group__header tensorsite-group__header--align-left">
                                                     <div class="tensorsite-content">
@@ -237,19 +230,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tensorsite-top-tab__content">
-                                                            <div class="tensorsite-top-tab__content__text">
-                                                                <div class="tensorsite-content">
-                                                                    <div class="tensorsite-content__description">
-                                                                        <p>TensorFlow Extended is an end-to-end platform for preparing data, training, validating, and deploying models in large production environments.</p>
-                                                                    </div>
-
-                                                                    <div class="tensorsite-content__cta-wrapper">
-                                                                        <a href="https://www.tensorflow.org/tfx/" target="_top" class="tensorsite-content__cta"> Get started with TensorFlow Extended</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -269,61 +249,59 @@
                                             <div class="tensorsite-group__inner">
                                                 <div class="tensorsite-card tensorsite-card--clip">
                                                     <div class="tensorsite-content__image-wrapper">
-                                                        <img class="tensorsite-content__image" src="/site-assets/images/marketing/cards/tile_tensorflow_serving.jpg" alt="" />
+                                                        <img alt="" class="tensorsite-content__image" src="{% static 'images/landing/web.png' %}">
                                                     </div>
-
                                                     <div class="tensorsite-content tensorsite-content--under-image">
-                                                        <div class="tensorsite-content__clip-bg">
-                                                            <svg class="tensorsite-content__clip-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409 132">
-                                                                <path d="M71.2,3.2,0,44v88H409L92.3,1.8A24.1,24.1,0,0,0,71.2,3.2Z" fill="#fff" />
-                                                            </svg>
-                                                        </div>
-                                                        <a class="tensorsite-content__title" href="/tutorials/keras/classification">
-                                                            Your first neural network
-                                                        </a>
-
+                                                        <br>
+                                                        <a class="text-center tensorsite-content__title" href="/tutorials/keras/classification">WEB Devolopment</a>
                                                         <div class="tensorsite-content__description">
-                                                            <p>Train a neural network to classify images of clothing, like sneakers and shirts, in this fast-paced overview of a complete  Cerebrium program.</p>
+                                                            <ul>
+                                                                <li>
+                                                                    <p>Создайте свой первый сайт с помощью HTML, CSS и Javasctipt</p>
+                                                                </li>
+                                                                <li>
+                                                                    <p>Создайте свою версию игры PacMan</p>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="tensorsite-card tensorsite-card--clip">
                                                     <div class="tensorsite-content__image-wrapper">
-                                                        <img class="tensorsite-content__image" src="" alt="" />
+                                                        <img alt="" class="tensorsite-content__image" src="{% static 'images/landing/math.png' %}">
                                                     </div>
-
                                                     <div class="tensorsite-content tensorsite-content--under-image">
-                                                        <div class="tensorsite-content__clip-bg">
-                                                            <svg class="tensorsite-content__clip-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409 132">
-                                                                <path d="M71.2,3.2,0,44v88H409L92.3,1.8A24.1,24.1,0,0,0,71.2,3.2Z" fill="#fff" />
-                                                            </svg>
-                                                        </div>
-                                                        <a class="tensorsite-content__title" href="/recommenders/examples/basic_retrieval">
-                                                            Recommender systems
-                                                        </a>
-
+                                                        <br>
+                                                        <a class="tensorsite-content__title" href="/recommenders/examples/basic_retrieval">Олимпиадная математика</a>
                                                         <div class="tensorsite-content__description">
-                                                            <p>Start with building and training a retrieval model to predict a set of movies that a user is likely to watch, and then use a ranking model to create recommendations.</p>
+                                                            <ul>
+                                                                <li>
+                                                                    <p>Подготовка к международным олимпиадам</p>
+                                                                </li>
+                                                                <li>
+                                                                    <p>Для чемпионов и просто любителей</p>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="tensorsite-card tensorsite-card--clip">
                                                     <div class="tensorsite-content__image-wrapper">
-                                                        <img class="tensorsite-content__image" src="/site-assets/images/marketing/cards/text_classification.jpg" alt="" />
+                                                        <img alt="" class="tensorsite-content__image" src="{% static 'images/landing/smath.png' %}">
                                                     </div>
-
                                                     <div class="tensorsite-content tensorsite-content--under-image">
                                                         <div class="tensorsite-content__clip-bg">
-                                                            <svg class="tensorsite-content__clip-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 409 132">
-                                                                <path d="M71.2,3.2,0,44v88H409L92.3,1.8A24.1,24.1,0,0,0,71.2,3.2Z" fill="#fff" />
-                                                            </svg>
                                                         </div>
-                                                        <a class="tensorsite-content__title" href="/tutorials/generative/dcgan">
-                                                            Generative adversarial networks
-                                                        </a>
-
+                                                        <a class="text-center tensorsite-content__title" href="/tutorials/generative/dcgan">Школьная математика</a>
                                                         <div class="tensorsite-content__description">
-                                                            <p>Train a generative adversarial network to generate images of handwritten digits, using the Keras Subclassing API.</p>
+                                                            <ul>
+                                                                <li>
+                                                                <p>Школьная программа простым понятным языком</p>
+                                                                </li>
+                                                                    <li>
+                                                                        <p>5-11 классы</p>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -341,14 +319,14 @@
                                                     <p>Выбирайте удобное время и темп, учитесь не выходя из дома</p>
                                                 </div>
                                                 <div class="w70 text-center pl50">
-                                                    <img class="full-w shadow" src="{% static 'images/landing/fonmin.jpg' %}">
+                                                    <img style="width: 75%;" class="shadow" src="{% static 'images/landing/time.png' %}">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tensorsite-container pt50 pb50">
                                             <div class="dflex deskpl30">
                                                 <div class="w70 text-center pr50">
-                                                    <img class="full-w shadow" src="{% static 'images/landing/fonmin.jpg' %}">
+                                                    <img class="full-w shadow" src="{% static 'images/landing/video.png' %}">
                                                 </div>
                                                 <div class="w30">
                                                     <h1 class="pt100 tensorsite-content__title--grow" id="companies-using-tensorflow" data-text="Companies using    Cerebrium     ">
@@ -368,7 +346,7 @@
                                                     <p>Данные о каждом вашем студенте, уровень усваимости тем и <br>готовая база задач</p>
                                                 </div>
                                                 <div class="w70 text-center pl50">
-                                                    <img class="full-w shadow" src="{% static 'images/landing/fonmin.jpg' %}">
+                                                    <img class="full-w shadow" src="{% static 'images/landing/interface.png' %}">
                                                 </div>
                                             </div>
                                         </div>
@@ -385,7 +363,10 @@
                                             </div>
 
                                             <!-- <input type="checkbox" class="tensorsite-group__show-all-toggle" id="show-all-toggle" />
-                                            <label class="tensorsite-button" for="show-all-toggle"><span data-show-all-default="Show more" data-show-all-collapse="Show less"></span></label> -->
+                                            <label class="tensorsite-button" for="show-all-toggle">
+                                            <span data-show-all-default="Show more" data-show-all-collapse="Show less">
+                                            </span>
+                                        </label> -->
 
                                             <div class="tensorsite-group__inner" style="--number-of-rows: 7;">
                                                 <div class="tensorsite-block">
@@ -426,8 +407,10 @@
                                     </section>
                                     <section class="tensorsite-footer">
                                         <div class="tensorsite-container tensorsite-footer__container">
-                                            <div class="tensorsite-footer__side tensorsite-footer__side--left"></div>
-                                            <div class="tensorsite-footer__side tensorsite-footer__side--right"></div>
+                                            <div class="tensorsite-footer__side tensorsite-footer__side--left">
+                                            </div>
+                                            <div class="tensorsite-footer__side tensorsite-footer__side--right">
+                                            </div>
                                             <div class="tensorsite-footer__content">
                                                 <div class="tensorsite-content">
                                                     <h2
@@ -444,9 +427,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tensorsite-footer__lines"></div>
+                                        <div class="tensorsite-footer__lines">
+                                        </div>
                                     </section>
-                                    <footer></footer>
+                                    <footer>
+                                    </footer>
                                 </div>
                             </div>
                         </article>
@@ -534,14 +519,19 @@
                 </devsite-footer-linkboxes>
             </section>
         </section>
-        <devsite-sitemask></devsite-sitemask>
-        <devsite-snackbar></devsite-snackbar>
-        <devsite-tooltip></devsite-tooltip>
-        <devsite-heading-link></devsite-heading-link>
+        <devsite-sitemask>
+        </devsite-sitemask>
+        <devsite-snackbar>
+        </devsite-snackbar>
+        <devsite-tooltip>
+        </devsite-tooltip>
+        <devsite-heading-link>
+        </devsite-heading-link>
         
 
        
-        <devsite-a11y-announce></devsite-a11y-announce>
+        <devsite-a11y-announce>
+        </devsite-a11y-announce>
     </body>
 
 

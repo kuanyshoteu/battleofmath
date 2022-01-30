@@ -542,7 +542,7 @@ def file_changer(request):
         writer.save()
         output.seek(0)
         response = HttpResponse(output,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % 'Download'
+        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % 'NomadFiles'
         return response
     context = {   
     }
