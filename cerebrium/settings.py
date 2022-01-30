@@ -102,7 +102,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-ASGI_APPLICATION = "cerebrium.routing.application"
 #WSGI_APPLICATION = 'cerebrium.wsgi.application'
 #REDIS_URL='redis://h:p04805ed78b5ba825c92c34d209a538835bbbb5eddce36ec7a904974cc76fcbd4@ec2-108-129-69-107.eu-west-1.compute.amazonaws.com:14599'
 CHANNEL_LAYERS = {
