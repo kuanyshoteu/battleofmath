@@ -23,16 +23,13 @@ from main.views import(loaderio, handler404)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("__reload__/", include("django_browser_reload.urls")),
     url(r'^logout/', logout_view, name='logout'),
-    url(r'^teacher/profile/', include("accounts.urls", namespace='accounts')),
-    url(r'^teacher/schools/', include("schools.urls", namespace='schools')),
-    url(r'^teacher/papers/', include("papers.urls", namespace='papers')),
-    url(r'^teacher/tasks/', include("tasks.urls", namespace='tasks')),
-    url(r'^teacher/library/', include("library.urls", namespace='library')),
-    url(r'^loaderio-c10fbfa327821a1063a562c197571027', loaderio, name='loaderio'),
+    url(r'^home/', include("accounts.urls", namespace='accounts')),
+    url(r'^papers/', include("papers.urls", namespace='papers')),
+    url(r'^tasks/', include("tasks.urls", namespace='tasks')),
+    url(r'^library/', include("library.urls", namespace='library')),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
-    url(r'^courses/', include("frontend.urls", namespace='frontend')),
-    url(r'^api/', include("courses.urls", namespace='api')),
     url(r'^confirm/', confirm_email, name="confirm_email"),
     url(r'^', include("main.urls", namespace='main')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

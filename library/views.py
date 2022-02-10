@@ -19,13 +19,12 @@ from django.http import JsonResponse
 def course_details(request, course_id=None):
     profile = get_profile(request)
     only_teachers(profile)
-    course = Folder.objects.get(id=course_id)
+    course = Course.objects.get(id=course_id)
     context = {
         "profile": profile,
         'course':course,
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
-        'modules':course.module_list.all(),
-        'courses':course.children.all(),
+        'modules':course.modules.all(),
         "page":'library',        
     }
     return render(request, 'library/library.html', context=context)

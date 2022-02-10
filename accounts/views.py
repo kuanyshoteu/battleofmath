@@ -40,7 +40,7 @@ def account_view(request, user = None):
         "hisprofile": hisprofile,
         "courses":courses,
     }
-    return render(request, "profile.html", context)
+    return render(request, "profile/profile.html", context)
 
 def check_confirmation(request):
     profile = get_profile(request)  

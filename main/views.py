@@ -39,7 +39,7 @@ def loaderio(request):
     }
     return render(request, "loaderio-c10fbfa327821a1063a562c197571027.txt", context)
 
-def newland(request):
+def landing(request):
     profile = None
     if request.user.is_authenticated:
         profile = get_profile(request)
@@ -48,7 +48,7 @@ def newland(request):
         "profile":profile,
         "land_type":"land_form",
     }
-    return render(request, "newland.html", context)
+    return render(request, "landing/landing.html", context)
 
 def help_page(request):
     is_trener = False
@@ -107,7 +107,7 @@ def login_page(request):
         return redirect(profile.get_absolute_url())
     context = {
     }
-    return render(request, "login_page.html", context)
+    return render(request, "landing/login_page.html", context)
 def sign_up(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)

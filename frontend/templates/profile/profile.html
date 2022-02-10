@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block head_title %}
+    Курс | {{ block.super }}
+{% endblock head_title %}
+{% load static %}
+{% block content %}
+<div class="">
+       <div class="container mx-auto my-5 p-5">
+           <div class="md:flex no-wrap md:-mx-2 ">
+               <!-- Left Side -->
+               <div class="w-full md:w-3/12 md:mx-2">
+                   <!-- Profile Card -->
+                   <div class="flex">
+                       <div class="pr-2 w-4/12 image overflow-hidden">
+                           <img class="h-auto w-full mx-auto"
+                               src="{% static 'images/mascot_circle.png' %}"
+                               alt="">
+                       </div>
+                       <div class="w-8/12 p-5">
+                            <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">Jane Doe</h1>
+                       </div>
+                   </div>
+                   <ul
+                   class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+                        <li class="flex items-center py-3">
+                            <span>Status</span>
+                            <span class="ml-auto"><span
+                                    class="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span></span>
+                        </li>
+                        <li class="flex items-center py-3">
+                            <span>Member since</span>
+                            <span class="ml-auto">Nov 07, 2016</span>
+                        </li>
+                    </ul>
+
+                   <div class="my-4"></div>
+                   <!-- Friends card -->
+                   <div class="bg-white p-3 hover:shadow">
+                  
+                   </div>
+                   <!-- End of friends card -->
+               </div>
+               <!-- Right Side -->
+               <div class="w-full md:w-9/12 mx-2 h-64">
+                   <!-- Profile tab -->
+                   <!-- About Section -->
+                   <div class="">
+                   </div>
+                   <!-- End of about section -->   
+               </div>
+           </div>
+       </div>
+</div>
+{% endblock content %}

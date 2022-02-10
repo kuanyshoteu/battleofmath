@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = True
+toserver = False
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
     DEBUG = False
@@ -35,11 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',
-    'corsheaders',
-    'crispy_forms',
-    'markdown_deux',
-    'pagedown',
     'accounts',
     'django.contrib.postgres',
     'papers',
@@ -50,9 +45,16 @@ INSTALLED_APPS = [
     'social_django',
     'channels',
     'compressor',
+    'tailwind',
     'frontend',
-    'courses',
+    'django_browser_reload',
 ]
+# Frontend css framework
+TAILWIND_APP_NAME = 'frontend'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 if toserver:
     PIPELINE_ENABLED = True
@@ -74,6 +76,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'htmlmin.middleware.HtmlMinifyMiddleware',
     'htmlmin.middleware.MarkRequestMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 HTML_MINIFY = True
 ROOT_URLCONF = 'cerebrium.urls'
