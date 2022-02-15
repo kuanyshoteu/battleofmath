@@ -5,6 +5,7 @@ from .views import *
 
 app_name = 'topics'
 urlpatterns = [
+    url(r'^api/get_topic_units/$', get_topic_units, name='get_topic_units'),
     url(r'^api/addgroup/$', AddGroup, name='add-group-toggle'),
     url(r'^api/rename_module/$', rename_module, name = 'rename_module'),
     url(r'^api/delete_topic_url/$', delete_topic, name = 'delete_topic_url'),

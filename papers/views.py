@@ -40,41 +40,10 @@ def topic_details(request, topic_id = None):
     profile = get_profile(request)
     topic = Topic.objects.get(id=topic_id)
     module = topic.modules.first()           
-    unit_text_form = UnitTextForm(request.POST or None)
-    if unit_text_form.is_valid():
-        unit = unit_text_form.save(commit=False)
-        unit.save()
-        topic_id = request.POST.get('topic_id')
-        topic = Topic.objects.get(id = int(topic_id))
-        topic.units.add(unit)
-        return redirect(topic.get_absolute_url())
-
-    unit_file_form = UnitFileForm(request.POST or None, request.FILES or None)
-    if unit_file_form.is_valid():
-        unit = unit_file_form.save(commit=False)
-        unit.save()
-        topic_id = request.POST.get('topic_id')
-        topic = Topic.objects.get(id = int(topic_id))
-        topic.units.add(unit)
-        return redirect(topic.get_absolute_url())
-
-    unit_video_form = UnitVideoForm(request.POST or None, request.FILES or None)
-    if unit_video_form.is_valid():
-        unit = unit_video_form.save(commit=False)
-        unit.youtube_video_link = unit.youtube_video_link.replace('watch?v=', 'embed/')
-        unit.save()
-        topic_id = request.POST.get('topic_id')
-        topic = Topic.objects.get(id = int(topic_id))
-        topic.units.add(unit)
-        return redirect(topic.get_absolute_url())
+ 
     context = {
         "profile": profile,
-        'module':module,
-        'topic':topic,
-        'unit_text_form':unit_text_form,
-        'unit_file_form':unit_file_form,
-        'unit_video_form':unit_video_form,
-        'tasks':Task.objects.all(),
+        'topic_id':topic.id,
         "page":'library',
     }
     return render(request, "library/module_details.html", context)
@@ -84,6 +53,42 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
+
+def get_topic_units(request):
+    profile = Profile.objects.get(user = request.user.id)
+    data = []
+    if request.GET.get('topic_id'):
+        topic = Topic.objects.get(id = int(request.GET.get('topic_id')))
+        module = topic.modules.first()
+        other_topics = module.topics.all()
+        done_by = []
+        for student in topic.done_by.all():
+            img = ''
+            if student.image:
+                img = student.image.url
+            done_by.append([student.first_name, img])
+        units = []
+        for unit in topic.units.all():
+            units.append([unit.content])
+            tasks = []
+            if unit.task:
+                task = unit.task
+                solutions = task.solver_checks.filter(author_profile=profile)
+                solved_number = solutions.filter(solver_correctness=True)
+                is_solved = False
+                if len(solved_number) > 0:
+                    is_solved = True
+                tasks = [task.task_problem_ru, task.cost, is_solved]
+            file = ''
+            if unit.file:
+                file = unit.file.url
+            units.append([unit.content, file, tasks])
+        data = [topic.title, done_by, units]
+    data = {
+        'data':data,
+    }
+    return JsonResponse(data)
+
 
 def AddTopic(request):
     profile = Profile.objects.get(user = request.user.id)

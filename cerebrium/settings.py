@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'tasks',
     'library',
     'main',
-    'schools',
     'social_django',
     'channels',
     'compressor',

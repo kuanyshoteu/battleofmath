@@ -3,12 +3,13 @@
     Курс | {{ block.super }}
 {% endblock head_title %}
 {% load static %}
+{% load static compress %}
 {% block content %}
-<div class="">
-       <div class="container mx-auto my-5 p-5">
+<div class="min-h-screen" id="profile">
+       <div class="container mx-auto my-5 p-5 sm:p-0">
            <div class="md:flex no-wrap md:-mx-2 ">
                <!-- Left Side -->
-               <div class="w-full md:w-3/12 md:mx-2">
+               <div id="avatar" class="w-full md:w-3/12 md:mx-2">
                    <!-- Profile Card -->
                    <div class="flex">
                        <div class="pr-2 w-4/12 image overflow-hidden">
@@ -20,8 +21,7 @@
                             <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">Jane Doe</h1>
                        </div>
                    </div>
-                   <ul
-                   class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+                   <ul class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                         <li class="flex items-center py-3">
                             <span>Status</span>
                             <span class="ml-auto"><span
@@ -34,21 +34,21 @@
                     </ul>
 
                    <div class="my-4"></div>
-                   <!-- Friends card -->
                    <div class="bg-white p-3 hover:shadow">
-                  
                    </div>
-                   <!-- End of friends card -->
                </div>
-               <!-- Right Side -->
+               <!-- End Left Side -->
                <div class="w-full md:w-9/12 mx-2 h-64">
-                   <!-- Profile tab -->
-                   <!-- About Section -->
-                   <div class="">
-                   </div>
-                   <!-- End of about section -->   
-               </div>
+                {% include 'profile/map.html' %}
+                <div class="hidden lesson_info">
+                {% include 'profile/lesson_info.html' %}
+                </div>
+            </div>
            </div>
        </div>
 </div>
+<span class="hidden" id="get_profile_courses" url="{% url 'accounts:profile_courses' %}"></span>
+{% compress js %} 
+<script src='{% static "js/map.js" %}'></script>
+{% endcompress %}
 {% endblock content %}

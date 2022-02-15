@@ -70,10 +70,6 @@
             </div>
         </a>
     </div>
-    <form class="ui form shadow_small rename_module_form rename_module{{ module.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-        <textarea class="mb0" style="height: 60px;" id='change_module_name{{ module.id }}' type="text">{{ module.title }}</textarea>
-        <a class="ui button mini blue change_module_name full-w" id="{{ module.id }}" data-href='{{ module.change_name_url }}'>Сохранить</a>
-    </form>
 </div>
 <script type="text/javascript">
     fill_library()

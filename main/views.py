@@ -16,7 +16,6 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from constants import *
 from accounts.models import *
-from schools.views import register_user_work
 from papers.models import Course, Module
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -125,7 +124,7 @@ def sign_up(request):
         'title':title,
         'cost':cost,
     }
-    return render(request, "sign_up.html", context)
+    return render(request, "landing/sign_up.html", context)
 
 def team(request):
     profile = None
