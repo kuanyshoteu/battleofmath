@@ -9,7 +9,7 @@
         
                 <!-- Mobile menu button -->
                 <div class="lg:hidden">
-                    <button type="button" class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400" aria-label="Toggle menu">
+                    <button id="mobMenuBtn" type="button" class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400" aria-label="Toggle menu">
                         <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
                             <path d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
                         </svg>
@@ -18,11 +18,11 @@
             </div>
         
             <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
-            <div style="display:none" class="flex flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:block">
-                <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">Premium</a>
-                <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">Battles</a>
-                <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">Courses</a>
-                <a href="{% url 'main:login_page' %}" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">Login</a>
+            <div id="mobMenu" class="hidden flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:block">
+                <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Premium</a>
+                <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Battles</a>
+                <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Courses</a>
+                <a href="{% url 'main:login_page' %}" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Login</a>
             </div>
         </div>
     </nav>

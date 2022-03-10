@@ -77,8 +77,8 @@
         hash = document.location.hash
         if (hash.length > 0) {
             module_id = hash.split('p')[0].replace('#l', '')
-            topic_id = hash.split('p')[1].replace('#p', '')
-            show_module(module_id, topic_id)
+            page_id = hash.split('p')[1].replace('#p', '')
+            show_module(module_id, page_id)
         }
         url = '{% url "library:get_library" %}'
         $.ajax({
@@ -104,23 +104,23 @@
         $('.cache_icon').addClass(object_type)
         $('.cache_title').text(title)        
     }
-    $('.edit_topic_title').click(function(event){
-        $('.topic_title_box').hide()
-        $('.topic_title_form').show()
-        $('.topic_title_val').val($('.crnt_topic_title').text())
+    $('.edit_page_title').click(function(event){
+        $('.page_title_box').hide()
+        $('.page_title_form').show()
+        $('.page_title_val').val($('.crnt_page_title').text())
     })    
-    $('.save_topic_title').click(function(event){
-        title = $('.topic_title_val').val()
-        topic_id = $('.module_data').attr('topic_id')
-        $('.crnt_topic_title').text(title)
-        $('.topic_title_box').show()
-        $('.topic_title_form').hide()
-        $('.show_topic'+topic_id).text(title)
+    $('.save_page_title').click(function(event){
+        title = $('.page_title_val').val()
+        page_id = $('.module_data').attr('page_id')
+        $('.crnt_page_title').text(title)
+        $('.page_title_box').show()
+        $('.page_title_form').hide()
+        $('.show_page'+page_id).text(title)
         $.ajax({
-            url: '{%url "library:save_topic_title"%}',
+            url: '{%url "library:save_page_title"%}',
             data: {
                 'title':title,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
@@ -128,22 +128,22 @@
             }
         })
     })    
-    $('.add_topic_module').click(function(event){
+    $('.add_page_module').click(function(event){
         hash = document.location.hash
         module_id = hash.split('p')[0].replace('#l', '')
         $(this).addClass('disabled')
         status = $(this).attr('status')
         $.ajax({
-            url: '{%url "papers:add_topic_url"%}',
+            url: '{%url "papers:add_page_url"%}',
             data: {
                 'module_id':module_id,
                 'status':status,
             },
             dataType: 'json',
             success: function (data) {
-                $('.add_topic_module').removeClass('disabled')
-                topic_id = data.topic_id
-                show_module(module_id, topic_id)
+                $('.add_page_module').removeClass('disabled')
+                page_id = data.page_id
+                show_module(module_id, page_id)
             }
         })
     })
@@ -163,33 +163,33 @@
         id = this_.attr('id')
         show_module(id, '-1')
     })
-    $('.next_topic').click(function(){
+    $('.next_page').click(function(){
         hash = document.location.hash
         module_id = hash.split('p')[0].replace('#l', '')
-        topic_id = hash.split('p')[1].replace('#p', '')
-        next_topic = $('.show_topic' + topic_id).parent().next()
+        page_id = hash.split('p')[1].replace('#p', '')
+        next_page = $('.show_page' + page_id).parent().next()
         found = false
-        if (next_topic.length == 0) {
-            if ($('.crnt_topic_title').attr('is_task') == 'false') {
-                next_topic = $('.all_tasks').find('.show_topic')
-                if (next_topic.length > 0) {
+        if (next_page.length == 0) {
+            if ($('.crnt_page_title').attr('is_task') == 'false') {
+                next_page = $('.all_tasks').find('.show_page')
+                if (next_page.length > 0) {
                     found = true
-                    next_topic_id = next_topic.eq(0).attr('id')
+                    next_page_id = next_page.eq(0).attr('id')
                 }
             }
         }
         else{
-            next_topic_id = next_topic.find('.show_topic').attr('id')
+            next_page_id = next_page.find('.show_page').attr('id')
             found = true
         }
         if (found) {
-            show_module(module_id, next_topic_id)
+            show_module(module_id, next_page_id)
         }
         else{
             $('.congrats').modal('show')
         }
     })
-    function show_module(module_id, topic_id){
+    function show_module(module_id, page_id){
         if ($('.catchmob').width() == 1) {
             module_pages_orig = $('.module_pages')
             module_pages = module_pages_orig.clone(true)
@@ -204,89 +204,89 @@
             url: '{%url "library:show_module"%}',
             data: {
                 'module_id':module_id,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
                 $('.module_page').fadeIn(400)
                 $('.show_module_load').hide()
                 title = data.title
-                topic_res = data.topic_res
+                page_res = data.page_res
                 console.log('xxx', data)
                 $('.crnt_module_title').text(title)
-                if (topic_res.length > 0) {
-                    fill_topic(topic_res, module_id)
+                if (page_res.length > 0) {
+                    fill_page(page_res, module_id)
                 }
-                topic_id = topic_res[0]
-                $('.all_topics').empty()
-                all_topics = data.all_topics
+                page_id = page_res[0]
+                $('.all_pages').empty()
+                all_pages = data.all_pages
                 $('.all_tasks').empty()
-                $('.all_topics').empty()
-                for (var i = 0; i < all_topics.length; i++) {
-                    id = all_topics[i][0]
-                    title = all_topics[i][1]
-                    is_task = all_topics[i][2]
-                    is_done = all_topics[i][3]
-                    topic_box = $('.topic_origin').clone(true)
-                    topic_box.removeClass('topic_origin')
+                $('.all_pages').empty()
+                for (var i = 0; i < all_pages.length; i++) {
+                    id = all_pages[i][0]
+                    title = all_pages[i][1]
+                    is_task = all_pages[i][2]
+                    is_done = all_pages[i][3]
+                    page_box = $('.page_origin').clone(true)
+                    page_box.removeClass('page_origin')
                     if (is_task) {
-                        topic_box.appendTo('.all_tasks')
+                        page_box.appendTo('.all_tasks')
                         title = 'Задача #' + id
                     }
                     else{
-                        topic_box.appendTo('.all_topics')
+                        page_box.appendTo('.all_pages')
                     }
                     if (is_done) {
-                        topic_box.find('.textred').hide()
-                        topic_box.find('.textgreen').show()
+                        page_box.find('.textred').hide()
+                        page_box.find('.textgreen').show()
                     }
                     else{
-                        topic_box.find('.textgreen').hide()
-                        topic_box.find('.textred').show()                        
+                        page_box.find('.textgreen').hide()
+                        page_box.find('.textred').show()                        
                     }
-                    topic_box.find('.topic_list_title').text(title)
-                    topic_box.find('.show_topic').attr('id', id)
-                    topic_box.find('.show_topic').addClass('show_topic' + id)
-                    if (topic_id == id) {
-                        topic_box.find('.show_topic').addClass('shadow_small')
+                    page_box.find('.page_list_title').text(title)
+                    page_box.find('.show_page').attr('id', id)
+                    page_box.find('.show_page').addClass('show_page' + id)
+                    if (page_id == id) {
+                        page_box.find('.show_page').addClass('shadow_small')
                     }
                 }
             }
         }) 
     }
-    $('.show_topic').click(function(e){
-        topic_id = $(this).attr('id')
+    $('.show_page').click(function(e){
+        page_id = $(this).attr('id')
         hash = document.location.hash
         module_id = hash.split('p')[0].replace('#l', '')
-        show_module(module_id, topic_id)
+        show_module(module_id, page_id)
     })
     $(window).on('hashchange', function(e){
         hash = document.location.hash
         if (hash.length > 1) {
             module_id = hash.split('p')[0].replace('#l', '')
-            topic_id = hash.split('p')[1].replace('#p', '')
-            show_module(module_id, topic_id)            
+            page_id = hash.split('p')[1].replace('#p', '')
+            show_module(module_id, page_id)            
         }
         else{
             show_library()
         }
     });    
-    function fill_topic(topic_res, module_id){
-        console.log('5555', topic_res)
-        topic_id = topic_res[0]
-        $('.module_data').attr('topic_id', topic_id)
-        document.location.hash = "l"+module_id+"p"+topic_id;
+    function fill_page(page_res, module_id){
+        console.log('5555', page_res)
+        page_id = page_res[0]
+        $('.module_data').attr('page_id', page_id)
+        document.location.hash = "l"+module_id+"p"+page_id;
         let stateObj = { id: "100" }; 
-        window.history.replaceState(stateObj, "", "#l"+module_id+"p"+topic_id);
-        title = topic_res[1]
-        $('.crnt_topic_title').text(title)
-        units = topic_res[2]
-        crnt_topic_box = $('.crnt_topic_box')
-        crnt_topic_box.empty()
+        window.history.replaceState(stateObj, "", "#l"+module_id+"p"+page_id);
+        title = page_res[1]
+        $('.crnt_page_title').text(title)
+        sections = page_res[2]
+        crnt_page_box = $('.crnt_page_box')
+        crnt_page_box.empty()
         task_number = 0
         is_new = true
-        is_task = topic_res[3]
-        $('.crnt_topic_title').attr('is_task', is_task)
+        is_task = page_res[3]
+        $('.crnt_page_title').attr('is_task', is_task)
         $('.task_problem_ru').html('')
         $('.task_problem_kz').html('')
         $('.task_ans_ru').html('')
@@ -295,7 +295,7 @@
         $('.task_solve_kz').html('')
         if (is_task) {
             $('.add_content').hide()
-            if (units.length == 0) {
+            if (sections.length == 0) {
                 $('.save_task').attr('id', '-1')
                 $('.change_task_head').text('Добавить задачу')
                 $('.add_task_buttons').show()
@@ -309,9 +309,9 @@
             $('.add_task_buttons').hide()
         }
         $('.task_list_box').empty()
-        for (var i = 0; i < units.length; i++) {
-            unit = units[i]
-            fill_unit(unit, task_number, is_new)
+        for (var i = 0; i < sections.length; i++) {
+            section = sections[i]
+            fill_section(section, task_number, is_new)
         }
     }
     $('.tasks_base_show').click(function(){
@@ -321,7 +321,7 @@
             url: "{% url 'library:get_all_tasks' %}",
             data: {
                 'id':id,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
@@ -335,9 +335,9 @@
                     cost = task[5]
                     solver_correctness = task[6]
                     right_answers = task[7]
-                    unit = false
+                    section = false
                     toalltask = true
-                    fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, unit, right_answers)
+                    fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, section, right_answers)
                 }
                 number_tasks()
                 $('.tasks_base_load').hide()
@@ -345,84 +345,84 @@
             }
         })
     })
-    $('.delete_unit_open').click(function(){
-        $('.delete_unit_sure').hide()
-        $(this).parent().find('.delete_unit_sure').show('fast')
+    $('.delete_section_open').click(function(){
+        $('.delete_section_sure').hide()
+        $(this).parent().find('.delete_section_sure').show('fast')
     })
-    $('.delete_unit').click(function(){
+    $('.delete_section').click(function(){
         id = $(this).parent().parent().parent().parent().attr('id')
-        topic_id = $('.module_data').attr('topic_id')
+        page_id = $('.module_data').attr('page_id')
         $.ajax({
-            url: "{% url 'library:delete_unit' %}",
+            url: "{% url 'library:delete_section' %}",
             data: {
                 'id':id,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
-                $('.unit'+id).remove()
+                $('.section'+id).remove()
                 number_tasks()
             }
         })
     })
-    function fill_unit(unit, task_number, is_new){
+    function fill_section(section, task_number, is_new){
         origins = $('.module_origins')
-        crnt_topic_box = $('.crnt_topic_box')
-        id = unit[0]
-        content = unit[1]
-        content_box = origins.find('.unit_content').clone(true)
-        content_box.removeClass('unit_content')
+        crnt_page_box = $('.crnt_page_box')
+        id = section[0]
+        content = section[1]
+        content_box = origins.find('.section_content').clone(true)
+        content_box.removeClass('section_content')
         if (is_new) {
-            content_box.appendTo(crnt_topic_box)
+            content_box.appendTo(crnt_page_box)
         }
         else{
-            old_unit = $('.unit'+id)
-            content_box.insertBefore(old_unit)
-            old_unit.remove()
+            old_section = $('.section'+id)
+            content_box.insertBefore(old_section)
+            old_section.remove()
         }
         content_box.attr('id', id)
-        content_box.addClass('unit'+id)
+        content_box.addClass('section'+id)
         if (content) {
             if (content.length > 0) {
-                content_box.find('.change_unit').attr('status', 'text')
-                content_box.find('.change_unit').attr('id',id)
-                content_box.find('.unit_content_edit').attr('id',id)
-                content_box.find('.unit_content_text_box').html(content)
+                content_box.find('.change_section').attr('status', 'text')
+                content_box.find('.change_section').attr('id',id)
+                content_box.find('.section_content_edit').attr('id',id)
+                content_box.find('.section_content_text_box').html(content)
             }
         }
-        file_url = unit[2]
+        file_url = section[2]
         if (file_url.length > 0) {
-            content_box.find('.change_unit').attr('status', 'file')
-            content_box.find('.change_unit').attr('id',id)
-            file_name = unit[3]
+            content_box.find('.change_section').attr('status', 'file')
+            content_box.find('.change_section').attr('id',id)
+            file_name = section[3]
             file_box = origins.find('.module_file').clone(true)
             file_box.removeClass('module_file')
             file_box.find('.button').attr('href', file_url)
             file_box.find('.file_name').text(file_name)
             file_box.appendTo(content_box)                
         }
-        youtube = unit[4]
+        youtube = section[4]
         if (youtube.length > 0) {
-            content_box.find('.change_unit').attr('status', 'video')
-            content_box.find('.change_unit').attr('id',id)
+            content_box.find('.change_section').attr('status', 'video')
+            content_box.find('.change_section').attr('id',id)
             youtube_box = origins.find('.youtube_video').clone(true)
             youtube_box.removeClass('youtube_video')
             youtube_box.find('.yt').attr('src', youtube)
-            youtube_box.appendTo(content_box.find('.unit_youtube_box'))
+            youtube_box.appendTo(content_box.find('.section_youtube_box'))
         }
-        video_link = unit[5]
+        video_link = section[5]
         if (video_link.length > 0) {
-            content_box.find('.change_unit').attr('status', 'video')
-            content_box.find('.change_unit').attr('id',id)
+            content_box.find('.change_section').attr('status', 'video')
+            content_box.find('.change_section').attr('id',id)
             video_box = origins.find('.module_video').clone(true)
             video_box.removeClass('module_video')
             video_box.find('.video_source').attr('src', video_link)
             video_box.appendTo(content_box)
         }
-        task_list = unit[6]
+        task_list = section[6]
         if (task_list.length > 0) {
-            content_box.find('.change_unit').hide()
-            unit_content_box = content_box.find('.unit_content_box')
+            content_box.find('.change_section').hide()
+            section_content_box = content_box.find('.section_content_box')
             for (var j = 0; j < task_list.length; j++) {
                 task = task_list[j]
                 id = task[0]
@@ -435,7 +435,7 @@
                 right_answers = task[7]
                 is_new = true
                 toalltask = false
-                fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, unit_content_box, right_answers)
+                fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, section_content_box, right_answers)
             }
             number_tasks()
         }        
@@ -563,7 +563,7 @@
     function sendTextsTask(i, texts, id, url, lengths){
         console.log('send', i)
         if (id == '-1') {
-            topic_id = $('.module_data').attr('topic_id')
+            page_id = $('.module_data').attr('page_id')
         }
         text = texts[i];
         if (i == texts.length - 1) {is_last = 'yes'}else{is_last = 'no'}
@@ -579,7 +579,7 @@
                 'lengths4':lengths[4],
                 'lengths5':lengths[5],
                 'i':i,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
@@ -593,7 +593,7 @@
             }
         })
     }
-    function fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, unit, right_answers){
+    function fill_task(id, problem, ans, solve, image, solver_correctness, toalltask, section, right_answers){
         $('.save_task').attr('id', id)
         origins = $('.module_origins')
         task_box = origins.find('.module_task').clone(true)
@@ -656,12 +656,12 @@
             console.log(task_box)
         if (toalltask) {
             task_box.addClass('pl15 pr15 br5')
-            task_box.find('.add_task_to_unit').show()
+            task_box.find('.add_task_to_section').show()
             task_box.appendTo('.task_list_box')
         }
         else{
-            task_box.appendTo(unit)
-            task_box.find('.add_task_to_unit').hide()
+            task_box.appendTo(section)
+            task_box.find('.add_task_to_section').hide()
             task_box.insertBefore('.module_task'+id)
             $('.module_task'+id).remove()
         }
@@ -679,17 +679,17 @@
             $('.student_solution_box').html(solution)
         }
     })
-    $('.add_task_to_unit').click(function(e){
+    $('.add_task_to_section').click(function(e){
         this_ = $(this)
         task_box = this_.parent().parent()
         id = task_box.attr('id')
-        topic_id = $('.module_data').attr('topic_id')
+        page_id = $('.module_data').attr('page_id')
         this_.addClass('disabled')
         $.ajax({
-            url: "{% url 'library:add_task_to_unit' %}",
+            url: "{% url 'library:add_task_to_section' %}",
             data: {
                 'id':id,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
@@ -1121,10 +1121,10 @@
             }
         });
     });
-    $('.change_unit').click(function(e){
+    $('.change_section').click(function(e){
         status = $(this).attr('status')
         if (status == 'text') {
-            topic_add_text_open($(this))
+            page_add_text_open($(this))
         }
         else if (status == 'video') {
             add_video_open($(this))
@@ -1136,7 +1136,7 @@
     function add_video_open(this_){
         $('.add_video_modal').modal('show')
         id = this_.attr('id')
-        youtube_link = $('.unit'+id).find('iframe').attr('src')
+        youtube_link = $('.section'+id).find('iframe').attr('src')
         $('.youtube_link_edit').val(youtube_link)
         $('.add_video').attr('id', id)
         $('.add_video_done').hide()
@@ -1146,19 +1146,19 @@
         $('.add_video_done').hide()
         $('.add_video_load').show()
         $('.add_video').addClass('disabled')
-        unit_id = $(this).attr('id')
+        section_id = $(this).attr('id')
         is_new = 'no'
-        if (unit_id == '-1') {
+        if (section_id == '-1') {
             is_new = 'yes'
         }
-        topic_id = $('.module_data').attr('topic_id')
+        page_id = $('.module_data').attr('page_id')
         youtube_link = $('.youtube_link_edit').val()
-        add_data = '?&youtube_link='+youtube_link+'&topic_id='+topic_id+'&unit_id='+unit_id+'&is_new='+is_new
+        add_data = '?&youtube_link='+youtube_link+'&page_id='+page_id+'&section_id='+section_id+'&is_new='+is_new
         var formData = new FormData();
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-        file = $('.topic_video_input')[0].files[0]
+        file = $('.page_video_input')[0].files[0]
         formData.append('video' , file);
-        url = '{% url "topics:add_unit_url" %}'
+        url = '{% url "pages:add_section_url" %}'
         $.ajax({
             url: url+add_data,
             type: 'POST',
@@ -1175,7 +1175,7 @@
                 else{
                     is_new = false
                 }
-                fill_unit(data.unit_res, 0, is_new)
+                fill_section(data.section_res, 0, is_new)
             }
         })
     })
@@ -1190,18 +1190,18 @@
         $('.add_file_done').hide()
         $('.add_file_load').show()
         $('.add_file').addClass('disabled')
-        unit_id = $(this).attr('id')
+        section_id = $(this).attr('id')
         is_new = 'no'
-        if (unit_id == '-1') {
+        if (section_id == '-1') {
             is_new = 'yes'
         }
-        topic_id = $('.module_data').attr('topic_id')
-        add_data = '?topic_id='+topic_id+'&unit_id='+unit_id+'&is_new='+is_new
+        page_id = $('.module_data').attr('page_id')
+        add_data = '?page_id='+page_id+'&section_id='+section_id+'&is_new='+is_new
         var formData = new FormData();
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-        file = $('.topic_file_input')[0].files[0]
+        file = $('.page_file_input')[0].files[0]
         formData.append('file' , file);
-        url = '{% url "topics:add_unit_url" %}'
+        url = '{% url "pages:add_section_url" %}'
         $.ajax({
             url: url+add_data,
             type: 'POST',
@@ -1218,30 +1218,30 @@
                 else{
                     is_new = false
                 }
-                fill_unit(data.unit_res, 0, is_new)
+                fill_section(data.section_res, 0, is_new)
             }
         })
     })
-    function topic_add_text_open(this_){
-        $('.fill_unit_done').hide()
-        $('.fill_unit_load').hide()
+    function page_add_text_open(this_){
+        $('.fill_section_done').hide()
+        $('.fill_section_load').hide()
         id = this_.attr('id')
-        $('.topic_add_text_box').modal('show')
-        $('.topic_add_text').attr('id', id)
+        $('.page_add_text_box').modal('show')
+        $('.page_add_text').attr('id', id)
         if (id != '-1') {
-            text = this_.parent().parent().parent().find('.unit_content_text_box').html()
-            $('.topic_add_text_val').html(text)
+            text = this_.parent().parent().parent().find('.section_content_text_box').html()
+            $('.page_add_text_val').html(text)
         }
         else{
-            $('.topic_add_text_val').html('')            
+            $('.page_add_text_val').html('')            
         }
     }
-    $('.topic_add_text').click(function(e){
-        unit_id = $(this).attr('id')        
-        content = $('.topic_add_text_val').html()
+    $('.page_add_text').click(function(e){
+        section_id = $(this).attr('id')        
+        content = $('.page_add_text_val').html()
         len = content.length
-        $('.fill_unit_load').show()
-        $('.topic_add_text').addClass('disabled')
+        $('.fill_section_load').show()
+        $('.page_add_text').addClass('disabled')
         if (len > 0) {
             texts = []
             cnt = 0
@@ -1253,27 +1253,27 @@
                 content = content.substr(500)
             }
             is_new_c = false
-            if (unit_id == '-1') {
+            if (section_id == '-1') {
                 is_new_c = true
             }
             if (texts.length == 0) {texts = ['']}
-            sendTexts(0, texts, unit_id, 'no', is_new_c)
+            sendTexts(0, texts, section_id, 'no', is_new_c)
         }
     })
-    function sendTexts(i, texts, unit_id, is_several, is_new_c){
+    function sendTexts(i, texts, section_id, is_several, is_new_c){
         is_new = 'no'
-        if (unit_id == '-1') {
+        if (section_id == '-1') {
             is_new = 'yes'
         }
         content = texts[i]
-        topic_id = $('.module_data').attr('topic_id')
+        page_id = $('.module_data').attr('page_id')
         $.ajax({
-            url: '{%url "papers:add_unit_url"%}',
+            url: '{%url "papers:add_section_url"%}',
             data: {
-                'unit_id':unit_id,
+                'section_id':section_id,
                 'is_new':is_new,
                 'content':content,
-                'topic_id':topic_id,
+                'page_id':page_id,
                 'is_several':is_several,
             },
             dataType: 'json',
@@ -1283,11 +1283,11 @@
                     sendTexts(i, texts, data.id, 'yes', is_new_c)
                 }
                 else{
-                    unit = data.unit_res
-                    fill_unit(unit, task_number, is_new_c)
-                    $('.fill_unit_done').show()
-                    $('.fill_unit_load').hide()
-                    $('.topic_add_text').removeClass('disabled')
+                    section = data.section_res
+                    fill_section(section, task_number, is_new_c)
+                    $('.fill_section_done').show()
+                    $('.fill_section_load').hide()
+                    $('.page_add_text').removeClass('disabled')
                 }
             }
         });        
@@ -1345,91 +1345,91 @@
             }
         })
     })
-    $('.move_unit').click(function(){
+    $('.move_section').click(function(){
         this_ = $(this)
-        unit = this_.parent().parent().parent()
+        section = this_.parent().parent().parent()
         status = this_.attr('status')
-        id = unit.attr('id')
-        url = $('.data').attr('move_unit_url')
-        topic_id = $('.module_data').attr('topic_id')
+        id = section.attr('id')
+        url = $('.data').attr('move_section_url')
+        page_id = $('.module_data').attr('page_id')
         this_.addClass('disabled')
         $.ajax({
             url: url,
             data: {
                 'id':id,
                 'status':status,
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
                 if (data.ok) {
                     this_.removeClass('disabled')
                     if (status == 'up') {
-                        unit_prev = unit.prev()
-                        unit.insertBefore(unit_prev)
+                        section_prev = section.prev()
+                        section.insertBefore(section_prev)
                     }
                     else{
-                        unit_prev = unit.next()
-                        unit.insertAfter(unit_prev)
+                        section_prev = section.next()
+                        section.insertAfter(section_prev)
                     }
                     number_tasks()
                 }                       
             }
         })
     })
-    $('.show_topic_features').click(function(event){
+    $('.show_page_features').click(function(event){
         id = $(this).parent().prev().attr('id')
-        $('.data').attr('crnt_topic_features', id)
+        $('.data').attr('crnt_page_features', id)
         h = $(this).position().top
-        $('.topic_features').css('margin-top', h - 20)
-        $('.topic_features').show()
+        $('.page_features').css('margin-top', h - 20)
+        $('.page_features').show()
         event.stopPropagation();
     })
-    $('.move_topic').click(function(event){
+    $('.move_page').click(function(event){
         this_ = $(this)
         status = this_.attr('status')
         event.stopPropagation();
         hash = document.location.hash
         module_id = hash.split('p')[0].replace('#l', '')
-        topic_id = $('.data').attr('crnt_topic_features')
-        url = $('.data').attr('move_topic')
-        show_topic = $('.show_topic'+topic_id).parent()
+        page_id = $('.data').attr('crnt_page_features')
+        url = $('.data').attr('move_page')
+        show_page = $('.show_page'+page_id).parent()
         $.ajax({
             url: url,
             data: {
                 'module_id':module_id,
-                'topic_id':topic_id,
+                'page_id':page_id,
                 'status':status,
             },
             dataType: 'json',
             success: function (data) {
                 if (data.ok) {
-                    $('.topic_features').hide()
+                    $('.page_features').hide()
                     this_.removeClass('disabled')
                     if (status == 'up') {
-                        show_topic_prev = show_topic.prev()
-                        show_topic.insertBefore(show_topic_prev)
+                        show_page_prev = show_page.prev()
+                        show_page.insertBefore(show_page_prev)
                     }
                     else{
-                        show_topic_prev = show_topic.next()
-                        show_topic.insertAfter(show_topic_prev)
+                        show_page_prev = show_page.next()
+                        show_page.insertAfter(show_page_prev)
                     }
                 }                       
             }
         })
     })
-    $('.delete_topic').click(function(){
-        topic_id = $('.data').attr('crnt_topic_features')
-        url = $('.data').attr('delete_topic')
+    $('.delete_page').click(function(){
+        page_id = $('.data').attr('crnt_page_features')
+        url = $('.data').attr('delete_page')
         $.ajax({
             url: url,
             data: {
-                'topic_id':topic_id,
+                'page_id':page_id,
             },
             dataType: 'json',
             success: function (data) {
-                $('.topic_features').hide()
-                $('.show_topic'+topic_id).parent().hide('fast')
+                $('.page_features').hide()
+                $('.show_page'+page_id).parent().hide('fast')
                 show_module(module_id, '-1')
             }
         })

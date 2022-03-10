@@ -17,8 +17,8 @@ from accounts.models import Profile
 from tasks.models import Task
 
 def upload_location(instance, filename):
-    TopicModel = instance.__class__
-    new_id = TopicModel.objects.order_by("id").last().id + 1
+    PageModel = instance.__class__
+    new_id = PageModel.objects.order_by("id").last().id + 1
     return "%s" %(filename)
 
 class Subject(models.Model):
@@ -32,7 +32,8 @@ class Subject(models.Model):
 
 class Course(models.Model):
     subject = models.ForeignKey(Subject, null = True, on_delete = models.CASCADE, related_name='courses')
-    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='module_folders')
+    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='lesson_folders')
+    students = models.ManyToManyField(Profile, related_name='courses')
     title = models.TextField()
     slogan = models.TextField(null = True)
     shown = models.BooleanField(default=False)    
@@ -50,18 +51,18 @@ class Course(models.Model):
         return reverse("library:change_name_url")
 
 class Cache(models.Model):
-    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='module_cache')
-    object_type = models.TextField(default='module')
+    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='lesson_cache')
+    object_type = models.TextField(default='lesson')
     object_id = models.IntegerField(null = True)
     action = models.TextField(default='copy')
     previous_parent = models.IntegerField(null = True)
     timestamp = models.DateTimeField(auto_now_add=True)
     full = models.BooleanField(default = False)
 
-class Topic(models.Model):
+class Page(models.Model):
     title = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
-    done_by = models.ManyToManyField(Profile, related_name='done_topics')
+    done_by = models.ManyToManyField(Profile, related_name='done_pages')
     order = models.IntegerField(null = True)
     is_task = models.BooleanField(default = False)
     class Meta:
@@ -69,68 +70,69 @@ class Topic(models.Model):
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
-        return reverse("topics:topic_absolute_url", kwargs={"topic_id": self.id})
+        return reverse("pages:page_absolute_url", kwargs={"page_id": self.id})
     def api_url_add_group(self):
-        return reverse("topics:add-group-toggle")
-    def delete_topic_url(self):
-        return reverse("topics:delete_topic_url")
-    def add_unit_url(self):
-        return reverse("topics:add_unit_url")
-    def rename_topic_url(self):
-        return reverse("topics:rename_topic_url")
+        return reverse("pages:add-group-toggle")
+    def delete_page_url(self):
+        return reverse("pages:delete_page_url")
+    def add_section_url(self):
+        return reverse("pages:add_section_url")
+    def rename_page_url(self):
+        return reverse("pages:rename_page_url")
     @property
     def get_content_type(self):
         instance = self
         content_type = ContentType.objects.get_for_model(instance.__class__)
         return content_type
 
-class Unit(models.Model):
-    task = models.ForeignKey(Task, null = True, on_delete = models.CASCADE, related_name='units')
+class Section(models.Model):
+    task = models.ForeignKey(Task, null = True, on_delete = models.CASCADE, related_name='sections')
     content = models.TextField(default='', null = True)
-    video = models.FileField(default='')
-    file = models.FileField(default='')
+    video = models.FileField(default='', null=True)
+    file = models.FileField(default='', null=True)
     youtube_video_link = models.TextField(default='')
     order = models.IntegerField(default=0)
-    topic = models.ForeignKey(Topic, null = True, on_delete = models.CASCADE, related_name='units')
+    page = models.ForeignKey(Page, null = True, on_delete = models.CASCADE, related_name='sections')
     class Meta:
         ordering = ['order', 'id']    
     
-class Module(models.Model):
+class Lesson(models.Model):
     title = models.CharField(max_length=250)
-    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='module_author')
-    topics = models.ManyToManyField(Topic, related_name='modules')
-    timestamp = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(default='', null = True)
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='lesson_author')
+    pages = models.ManyToManyField(Page, related_name='lessons')
     rating = models.IntegerField(default = 0)
     cost = models.IntegerField(default = 0)
-    done_by = models.ManyToManyField(Profile, related_name='done_modules')
-    try_by = models.ManyToManyField(Profile, related_name='try_modules')
+    order = models.IntegerField(default=0)
+    done_by = models.ManyToManyField(Profile, related_name='done_lessons')
+    try_by = models.ManyToManyField(Profile, related_name='try_lessons')
     access_to_everyone = models.BooleanField(default=False)
-    course = models.ForeignKey(Course, null=True, on_delete=models.CASCADE, related_name='modules')
+    course = models.ForeignKey(Course, null=True, on_delete=models.CASCADE, related_name='lessons')
     img = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True,
             )    
-    def add_topic_url(self):
-        return reverse("topics:add_topic_url")
+    def add_page_url(self):
+        return reverse("pages:add_page_url")
     def change_name_url(self):
-        return reverse("topics:change_name_url")
+        return reverse("pages:change_name_url")
     def get_absolute_url(self):
-        return reverse("topics:module_absolute_url", kwargs={"module_id": self.id})
-    def delete_module_url(self):
-        return reverse("topics:delete_module_url")
-    def check_topic_url(self):
-        return reverse("topics:check_topic_url")
+        return reverse("pages:lesson_absolute_url", kwargs={"lesson_id": self.id})
+    def delete_lesson_url(self):
+        return reverse("pages:delete_lesson_url")
+    def check_page_url(self):
+        return reverse("pages:check_page_url")
     def new_comment_url(self):
-        return reverse("topics:new_comment_url")
-    def estimate_module_url(self):
-        return reverse("topics:estimate_module_url")
-    def estimate_module_page(self):
-        return reverse("topics:estimate_module_page", kwargs={"module_id": self.id})
+        return reverse("pages:new_comment_url")
+    def estimate_lesson_url(self):
+        return reverse("pages:estimate_lesson_url")
+    def estimate_lesson_page(self):
+        return reverse("pages:estimate_lesson_page", kwargs={"lesson_id": self.id})
     class Meta:
-        ordering = ['timestamp']
+        ordering = ['order', 'id']
 
 class Comment(models.Model):
-    module = models.ForeignKey(Module, null=True, on_delete = models.CASCADE, related_name='comments')
+    lesson = models.ForeignKey(Lesson, null=True, on_delete = models.CASCADE, related_name='comments')
     level = models.IntegerField(default=1)
     timestamp = models.DateTimeField(auto_now_add=True)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hiscomments')
@@ -141,12 +143,12 @@ class Comment(models.Model):
     class Meta:
         ordering = ['timestamp']
     def like_url(self):
-        return reverse("topics:like_url")
+        return reverse("pages:like_url")
     def dislike_url(self):
-        return reverse("topics:dislike_url")
+        return reverse("pages:dislike_url")
 
 class SubscribePay(models.Model):
-    module = models.ForeignKey(Module, null=True, on_delete = models.CASCADE, related_name='subscribe_payments')
+    lesson = models.ForeignKey(Lesson, null=True, on_delete = models.CASCADE, related_name='subscribe_payments')
     author = models.CharField(max_length=250)
     phone = models.CharField(max_length=250)
     transactionId = models.IntegerField(default=0)
@@ -163,4 +165,4 @@ class Skill(models.Model):
     middle_skills = ArrayField(models.IntegerField(), default = list)
     hard_skills = ArrayField(models.IntegerField(), default = list)
     pro_skills = ArrayField(models.IntegerField(), default = list)
-    interested_subjects = models.ManyToManyField(Module, default=1, related_name='interested_students')
+    interested_subjects = models.ManyToManyField(Lesson, default=1, related_name='interested_students')

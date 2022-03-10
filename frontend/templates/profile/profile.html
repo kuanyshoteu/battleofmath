@@ -33,21 +33,27 @@
                         </li>
                     </ul>
 
-                   <div class="my-4"></div>
-                   <div class="bg-white p-3 hover:shadow">
+                   <div class="my-4">
                    </div>
+                   <div class="">
+                       {% include 'profile/mycourses.html' %}
+                   </div>
+                   <!-- End Profile Card -->
                </div>
                <!-- End Left Side -->
+               <!-- Game Map -->
                <div class="w-full md:w-9/12 mx-2 h-64">
+                {% include 'profile/allCourses.html' %}
                 {% include 'profile/map.html' %}
-                <div class="hidden lesson_info">
+                <div class="hidden">
                 {% include 'profile/lesson_info.html' %}
                 </div>
+                <!-- End Game Map -->
             </div>
            </div>
        </div>
 </div>
-<span class="hidden" id="get_profile_courses" url="{% url 'accounts:profile_courses' %}"></span>
+<span class="hidden" id="urls" mycourses="{% url 'accounts:mycourses' %}" mylessons="{% url 'accounts:mylessons' %}"></span>
 {% compress js %} 
 <script src='{% static "js/map.js" %}'></script>
 {% endcompress %}

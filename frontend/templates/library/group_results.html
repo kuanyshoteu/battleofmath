@@ -1,6 +1,6 @@
 <div style="margin-top:10px; margin-bottom: 20px;">
 <h4>Результаты групп:</h4>
-{% for squad in topic.squad_list.all %}
+{% for squad in page.squad_list.all %}
 <a class="open_group_details_hmw ui segment {{ module.id }}{{ squad.0.id }}squad_results" id='{{ forloop.counter }}'
    style="padding: 10px 30px 10px; background-color: #5181b8; margin-right: 10px;color: white; outline: none;border-radius:2px;cursor: pointer;text-decoration: none;">
     {{ squad.title }}

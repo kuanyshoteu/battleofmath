@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^check_confirmation/$', check_confirmation, name='check_confirmation'),
     url(r'^(?P<user>[\w-]+)/$', account_view, name='profile'),    
     url(r'^api/save_profile/$', save_profile, name='save_profile'),
-    url(r'^api/mycourses/$', profile_courses, name='profile_courses'),
+    url(r'^api/mycourses/$', profile_courses, name='mycourses'),
+    url(r'^api/mylessons/$', mylessons, name='mylessons'),
 ]

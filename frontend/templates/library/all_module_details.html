@@ -9,52 +9,52 @@
                     </a>                    
                     <div class="dflex pl30 pr30" style="margin: 0 auto">
                         <span class="crnt_module_title textdg mr10"></span>
-                        <div class="topic_title_box">
-                            <span class="crnt_topic_title textblue mr5"></span>
+                        <div class="page_title_box">
+                            <span class="crnt_page_title textblue mr5"></span>
                             {% if not profile.is_student %}
-                            <a class="edit_topic_title"><i class="icon pen square textblue text17"></i></a>
+                            <a class="edit_page_title"><i class="icon pen square textblue text17"></i></a>
                             {% endif %}
                         </div>
                         {% if not profile.is_student %}
-                        <form style="display: none;min-width: 150px;" class="ui form mb0 topic_title_form">
+                        <form style="display: none;min-width: 150px;" class="ui form mb0 page_title_form">
                             <div class="dflex">
-                                <textarea class="dinline mr5 mb0 topic_title_val" placeholder="Название страницы"></textarea>
-                                <a style="height: 26px;margin-top: 2px" class="save_topic_title ui button mini green shadow_green pt7"><i class="icon check textw mr0"></i></a>
+                                <textarea class="dinline mr5 mb0 page_title_val" placeholder="Название страницы"></textarea>
+                                <a style="height: 26px;margin-top: 2px" class="save_page_title ui button mini green shadow_green pt7"><i class="icon check textw mr0"></i></a>
                             </div>
                         </form>
                         {% endif %}
                     </div>
-                    <a style="position: absolute;right: 10;" class="ui button white small shadow_small pr10 pl5 next_topic">
+                    <a style="position: absolute;right: 10;" class="ui button white small shadow_small pr10 pl5 next_page">
                         <i class="arrow right icon textblue"></i>
                     </a>
                 </div>
-                <div class="pl10 pr20 pt10 pb0 textddg crnt_topic_box">
+                <div class="pl10 pr20 pt10 pb0 textddg crnt_page_box">
                 </div>
                 {% if not profile.is_student %}
                 <div class="deskdflex pb15 ">
                     <div class="add_content shadow_small border1 ui segment pb30 br5 text-center" style="margin: 0 auto;">
                         <div class="text-center text15 textblue textbold mb15">Добавить</div>
-                        <a id="-1" class="ui button green small textbold mr10 change_unit" status="text">
+                        <a id="-1" class="ui button green small textbold mr10 change_section" status="text">
                             <i class="icon file alternate textw"></i> Текст
                         </a>
-                        <a id="-1" status="video" class="change_unit ui button youtube small textbold mr10">
+                        <a id="-1" status="video" class="change_section ui button youtube small textbold mr10">
                             <i class="icon play circle textw"></i> Видео
                         </a>
-                        <a id="-1" status="file" class="change_unit ui button teal small textbold mr10">
-                            <i class="icon topicclip textw"></i> Файл
+                        <a id="-1" status="file" class="change_section ui button teal small textbold mr10">
+                            <i class="icon pageclip textw"></i> Файл
                         </a>
                     </div>
                 </div>
-                <div class="ui modal small topic_add_text_box">
+                <div class="ui modal small page_add_text_box">
                     <i class="icon close"></i>
                     <div class="content">
                         <form class="ui form">
                             <div class="textdg textbold text15">Добавить текст</div>
-                            <div contenteditable="true" class="br5 borderblue pl10 pt5 pb5 pr10 mb5 mt5 topic_add_text_val" style="min-height: 70px;"></div>
+                            <div contenteditable="true" class="br5 borderblue pl10 pt5 pb5 pr10 mb5 mt5 page_add_text_val" style="min-height: 70px;"></div>
                             <div class="">
-                                <a id="-1" class="mr10 topic_add_text ui button blue shadow_blue pt7 pb7 small textbold">Добавить</a>
-                                <div style="display: none;" class="fill_unit_load ui active inline loader mini mr10"></div>
-                                <i class="icon check textgreen fill_unit_done" style="display: none;"></i>
+                                <a id="-1" class="mr10 page_add_text ui button blue shadow_blue pt7 pb7 small textbold">Добавить</a>
+                                <div style="display: none;" class="fill_section_load ui active inline loader mini mr10"></div>
+                                <i class="icon check textgreen fill_section_done" style="display: none;"></i>
                             </div>
                         </form>
                     </div>
@@ -68,8 +68,8 @@
                             <textarea class="youtube_link_edit" placeholder="Ссылка на видео"></textarea>
                             <div class="text-center textdg textbold mt5 mb15">или</div>
                             <div class="text-center">
-                                <input type="file" id="topic_video" class="topic_video_input postfile pt0">
-                                <label class="" for="topic_video">
+                                <input type="file" id="page_video" class="page_video_input postfile pt0">
+                                <label class="" for="page_video">
                                     <a class="mb50 ui button small white shadow_small border1 textbold textblue"><i class="icon film blue"></i>Выберите своё видео</a>
                                 </label>
                             </div>
@@ -87,13 +87,13 @@
                         <div class="text-center textblue textbold text17 mb15">Загрузить файл</div>
                         <form class="ui form">
                             <div class="text-center">
-                                <input type="file" id="topic_file" class="topic_file_input postfile pt0">
-                                <label class="" for="topic_file">
-                                    <a class="ui button small white shadow_small border1 textbold textblue"><i class="icon topicclip textblue"></i>Выберите файл</a>
+                                <input type="file" id="page_file" class="page_file_input postfile pt0">
+                                <label class="" for="page_file">
+                                    <a class="ui button small white shadow_small border1 textbold textblue"><i class="icon pageclip textblue"></i>Выберите файл</a>
                                 </label>
                                 <div class="mt10 text-center">
                                     <i class="icon file"></i>
-                                    <span class="textdg textbold topic_file_preview"></span>
+                                    <span class="textdg textbold page_file_preview"></span>
                                 </div>
                                 <div class="mt30">
                                     <a class="ui button small blue shadow_blue add_file"><i class="icon upload textw"></i> Загрузить</a>
@@ -122,22 +122,22 @@
                 <div class="text-center text17 textbold textdg mb5">
                     Страницы
                 </div>
-                <div style="display: none; position: absolute;width: calc(100% - 30px); z-index: 3000;" class="ui segment backdark shadow_dark no_padding topic_features course_form">
-                    <a status="up" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left move_topic">
+                <div style="display: none; position: absolute;width: calc(100% - 30px); z-index: 3000;" class="ui segment backdark shadow_dark no_padding page_features course_form">
+                    <a status="up" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left move_page">
                         <i class="icon angle up textw text11"></i> Вверх
                     </a>
-                    <a status="down" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left move_topic">
+                    <a status="down" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left move_page">
                         <i class="icon angle down textw text11"></i> Вниз
                     </a>
-                    <a  class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left delete_topic">
+                    <a  class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left delete_page">
                         <i class="icon trash textw text11"></i> Удалить
                     </a>
                 </div>
-                <div class="all_topics">
+                <div class="all_pages">
                 </div>
                 {% if not profile.is_student %}
                 <div class="text-center mt30">
-                    <a status="content" class="add_topic_module ui button small blue shadow_blue pt7 pb7 textbold">
+                    <a status="content" class="add_page_module ui button small blue shadow_blue pt7 pb7 textbold">
                         Добавить страницу
                     </a>
                 </div>
@@ -149,7 +149,7 @@
                 </div>
                 {% if not profile.is_student %}
                 <div class="text-center mt30">
-                    <a status="task" class="add_topic_module ui button small blue shadow_blue pt7 pb7 textbold">
+                    <a status="task" class="add_page_module ui button small blue shadow_blue pt7 pb7 textbold">
                         Добавить задачу
                     </a>
                 </div>
@@ -160,33 +160,33 @@
 </div>
 <div style="display: none;" class="catchmob"></div>
 <div style="display: none;" class="module_origins">
-    <div class="text15 text_content deskpl15 deskpr15 mt5 mb30 unit_content">
+    <div class="text15 text_content deskpl15 deskpr15 mt5 mb30 section_content">
         {% if not profile.is_student %}
         <div class="ui divider" style="margin: 0 0 -18px -20px;"></div>
         <div class="dflex">
-            <div class="pt5 dflex unit_btns backwhite pl10 pr10">
-                <a status="up" class="move_unit textred textbold mr10">
+            <div class="pt5 dflex section_btns backwhite pl10 pr10">
+                <a status="up" class="move_section textred textbold mr10">
                     <i class="icon angle up mr0 textblue"></i>
                 </a>            
-                <a status="down" class="move_unit textred textbold mr15">
+                <a status="down" class="move_section textred textbold mr15">
                     <i class="icon angle down mr0 textblue"></i>
                 </a>
-                <a class="text11 change_unit mr15" id="">Изменить</a>
-                <a class="textblue text12 delete_unit_open">Удалить</a>
-                <div style="position: absolute;display: none;" class="dinline delete_unit_sure text13 backwhite shadow_small br5 pt5 pr5 pb5 pl5 ml100">
+                <a class="text11 change_section mr15" id="">Изменить</a>
+                <a class="textblue text12 delete_section_open">Удалить</a>
+                <div style="position: absolute;display: none;" class="dinline delete_section_sure text13 backwhite shadow_small br5 pt5 pr5 pb5 pl5 ml100">
                     <span class="textblue textbold">Вы уверены?</span>
-                    <a class="ui button mini white shadow_small border1 pt5 pb5 ml10 textbold textblue delete_unit">Да</a>
-                    <a class="ui button mini border1 pt5 pb5" onclick="$('.delete_unit_sure').hide('fast')">Отменить</a>
+                    <a class="ui button mini white shadow_small border1 pt5 pb5 ml10 textbold textblue delete_section">Да</a>
+                    <a class="ui button mini border1 pt5 pb5" onclick="$('.delete_section_sure').hide('fast')">Отменить</a>
                 </div>
             </div>
         </div>
         {% endif %}
-        <div class="unit_content_box">
-            <div class="unit_content_text_box">
+        <div class="section_content_box">
+            <div class="section_content_text_box">
             </div>
         </div>
-        <div class="unit_youtube_box"></div>
-        <div class="unit_file_box"></div>
+        <div class="section_youtube_box"></div>
+        <div class="section_file_box"></div>
     </div>
     <div class="ui modal small student_solution mt50" style="height: 90%;">
         <i class="icon close"></i>
@@ -202,7 +202,7 @@
         {% if not profile.is_student %}
         <div class="pl30 ml10">
             <a class="text11 change_task">Изменить</a>
-            <a class="ml15 mr10 ui button mini pt5 pb5 white border1 shadow_small textbold textblue add_task_to_unit">Добавить</a>
+            <a class="ml15 mr10 ui button mini pt5 pb5 white border1 shadow_small textbold textblue add_task_to_section">Добавить</a>
             <i style="display: none;" class="add_done icon check textgreen"></i>
         </div>
         {% endif %}
@@ -279,14 +279,14 @@
           Your browser does not support the video tag.
         </video>                        
     </div>
-    <div class="module_data" topic_id=""></div>
-    <div class="full-w topic_origin mb5 dflex">
-        <a style="width: calc(100% - 15px)" class="show_topic ui button small text14 white pt7 pb7 pl5 pr5 text-left full-w textblue textbold">
-            <span class="topic_list_title"></span>
+    <div class="module_data" page_id=""></div>
+    <div class="full-w page_origin mb5 dflex">
+        <a style="width: calc(100% - 15px)" class="show_page ui button small text14 white pt7 pb7 pl5 pr5 text-left full-w textblue textbold">
+            <span class="page_list_title"></span>
         </a>
         <span style="float: right;width: 15px;">
             {% if not profile.is_student %}
-            <a class="show_topic_features">
+            <a class="show_page_features">
                 <i class="icon ellipsis horizontal textllg"></i>
             </a>
             {% else %}

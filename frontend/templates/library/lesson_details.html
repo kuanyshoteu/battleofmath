@@ -42,14 +42,14 @@
 </div> 
 <section class="">
     <div class="rounded-lg container max-w-8xl px-6 py-20 mx-auto bg-white dark:bg-gray-900">
-        <h1 id="topic_title" class="text-4xl font-semibold text-center text-gray-800 dark:text-white">{{ topic.title }}</h1>
-        <div class="mt-20 space-y-8" id="units_box">
+        <h1 id="page_title" class="text-4xl font-semibold text-center text-gray-800 dark:text-white">{{ page.title }}</h1>
+        <div class="mt-20 space-y-8" id="sections_box">
         </div>
     </div>
 </section>
 <div class="hidden">
-    <span id="urls" topic_id="{{ topic_id }}" get_topic_units="{% url 'papers:get_topic_units' %}" ></span>
-    <div id="unit_orig" class="border-gray-100 rounded-lg dark:border-gray-700">
+    <span id="urls" page_id="{{ page_id }}" get_page_sections="{% url 'papers:get_page_sections' %}" ></span>
+    <div id="section_orig" class="border-gray-100 rounded-lg dark:border-gray-700">
     </div>    
 </div>
 

@@ -79,16 +79,58 @@ def save_profile(request):
 
 def profile_courses(request):
     profile = get_profile(request)
+    course_list = []
+    new_student = False
     if profile.is_student:
-        courses = Course.objects.filter(shown=True)
+        courses = profile.courses.filter(shown=True)
+        if len(courses) == 0:
+            new_student = True
+            courses = Course.objects.filter(shown=True)
     else:
-        courses = Course.objects.all()        
-    modules = courses.first().modules.all()
-    data = []
-    for module in modules:
-        data.append([module.title, module.get_absolute_url()])
+        courses = Course.objects.all() 
+    for course in courses:
+        img = ''
+        if course.img:
+            img = course.img.url
+        course_list.append([
+            course.id,
+            course.title,
+            course.subject.title,
+            course.slogan,
+            img,
+            ])       
     data = {
-        'data':data,
+        'course_list':course_list,
+        'new_student':new_student,
+    }
+    return JsonResponse(data)
+
+def mylessons(request):
+    profile = get_profile(request)
+    if request.GET.get('courseId'):
+        course_id = request.GET.get('courseId')
+        course = Course.objects.filter(id=int(course_id))
+        if len(course) > 0:
+            course = course[0]
+    else:
+        return JsonResponse({})
+    lessons = course.lessons.all()
+    lesson_list = []
+    for lesson in lessons:
+        img = ''
+        if lesson.img:
+            img = lesson.img.url
+        lesson_list.append([
+            lesson.title, 
+            lesson.get_absolute_url(), 
+            lesson.id, 
+            lesson.description, 
+            img,
+            ])
+    last_lesson_id = profile.try_lessons.filter(course = course).last().id
+    data = {
+        'lesson_list':lesson_list,
+        'last_lesson_id':last_lesson_id,
     }
     return JsonResponse(data)
 

@@ -24,7 +24,7 @@ def course_details(request, course_id=None):
         "profile": profile,
         'course':course,
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
-        'modules':course.modules.all(),
+        'lessons':course.lessons.all(),
         "page":'library',        
     }
     return render(request, 'library/library.html', context=context)
@@ -47,7 +47,7 @@ def paste(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     cache = Cache.objects.get_or_create(author_profile = profile)[0]
-    module_res = []
+    lesson_res = []
     course_res = []
     if request.GET.get('new_course') == '-1':
         new_course = None
@@ -70,39 +70,39 @@ def paste(request):
                 parent = new_course,
                 )
             copy_course.save()
-            for module in course.modules.all():
-                new_module = copy_module(module, copy_course, 'copy', profile)
+            for lesson in course.lessons.all():
+                new_lesson = copy_lesson(lesson, copy_course, 'copy', profile)
             new_id = copy_course.id
         course_res = [
             copy_course.id, 
             copy_course.title, 
             False, 
-            len(copy_course.modules.all()),
+            len(copy_course.lessons.all()),
             ]
-    if cache.object_type == 'module':
-        module = Module.objects.get(id = cache.object_id)
-        modules_q = [copy_module(module, new_course, cache.action, profile)]
-        module_res = fill_modules(modules_q)[0]
+    if cache.object_type == 'lesson':
+        lesson = Lesson.objects.get(id = cache.object_id)
+        lessons_q = [copy_lesson(lesson, new_course, cache.action, profile)]
+        lesson_res = fill_lessons(lessons_q)[0]
     data = {
-        'module_res':module_res,
+        'lesson_res':lesson_res,
         'course_res':course_res,
     }
     return JsonResponse(data)
 
-def copy_module(module, new_course, action, profile):
+def copy_lesson(lesson, new_course, action, profile):
     if action == 'cut':
-        module.course = new_course
-        module.save()
-        return module
+        lesson.course = new_course
+        lesson.save()
+        return lesson
     else:
-        new_module = Module.objects.create(
+        new_lesson = Lesson.objects.create(
             author_profile = profile, 
-            title = module.title + ' - копия',
+            title = lesson.title + ' - копия',
             course = new_course,
             )
-        new_module.save()
-        for topic in module.topics.all():
-            new_topic = new_module.topics.create(
+        new_lesson.save()
+        for topic in lesson.topics.all():
+            new_topic = new_lesson.topics.create(
                 title=topic.title,
                 order = topic.order, 
                 )
@@ -116,7 +116,7 @@ def copy_module(module, new_course, action, profile):
                     file = unit.file,
                     order = unit.order,
                     )
-        return new_module
+        return new_lesson
 
 def create_course(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -164,7 +164,7 @@ def delete_course(request):
     if request.GET.get('id'):
         course = Course.objects.get(id = int(request.GET.get('id')))
         course.childs.all().delete()
-        course.modules.all().delete()
+        course.lessons.all().delete()
         course.delete()
         ok = True
     data = {
@@ -188,7 +188,7 @@ def get_library_teacher(request):
             folder.id,                  #0
             folder.title,               #1
             '-1',                       #2
-            len(folder.modules.all()),  #3
+            len(folder.lessons.all()),  #3
             folder.shown,               #4
             folder.slogan,              #5
             img,                        #6
@@ -200,7 +200,7 @@ def get_library_teacher(request):
         if len(folder) > 0:
             cache_title = folder[0].title
     else:
-        lesson = Module.objects.filter(id=cache.object_id)
+        lesson = Lesson.objects.filter(id=cache.object_id)
         if len(lesson) > 0:
             cache_title = lesson[0].title
     cache_res = [cache.object_type, cache_title]
@@ -227,7 +227,7 @@ def get_library(request):
             courses.append([
                 course.id,                  #0
                 course.title,               #1
-                len(course.modules.all()),  #2
+                len(course.lessons.all()),  #2
                 course.shown,               #3
                 course.slogan,              #4
                 img,                        #5
@@ -241,9 +241,9 @@ def get_library(request):
         if len(course) > 0:
             cache_title = course[0].title
     else:
-        module = Module.objects.filter(id=cache.object_id)
-        if len(module) > 0:
-            cache_title = module[0].title
+        lesson = Lesson.objects.filter(id=cache.object_id)
+        if len(lesson) > 0:
+            cache_title = lesson[0].title
     print(subjects)
     cache_res = [cache.object_type, cache_title]
     data = {
@@ -254,60 +254,60 @@ def get_library(request):
 
 def get_course_files(request):
     profile = Profile.objects.get(user = request.user.id)
-    modules = []
+    lessons = []
     if request.GET.get('id'):
         course = Course.objects.filter(id = int(request.GET.get('id')))
         if len(course) == 0:
             return JsonResponse({})
         course = course[0]
         if profile.is_student:
-            modules_q = course.modules.filter(access_to_everyone=True)
+            lessons_q = course.lessons.filter(access_to_everyone=True)
         else:
-            modules_q = course.modules.all()
-        modules = fill_modules(modules_q) 
+            lessons_q = course.lessons.all()
+        lessons = fill_lessons(lessons_q) 
     data = {
-        'modules':modules,
+        'lessons':lessons,
     }
     return JsonResponse(data)
 
-def fill_modules(modules_q):
-    modules = []
-    for module in modules_q:
-        modules.append([
-            module.id,                          #0
-            module.title,                       #1
-            module.author_profile.first_name,   #2
-            module.author_profile.get_absolute_url(),   #3
-            module.rating,                      #4
-            len(module.try_by.all()),           #5
-            len(module.done_by.all()),          #6
-            module.access_to_everyone,          #7
-            module.get_absolute_url(),          #8
+def fill_lessons(lessons_q):
+    lessons = []
+    for lesson in lessons_q:
+        lessons.append([
+            lesson.id,                          #0
+            lesson.title,                       #1
+            lesson.author_profile.first_name,   #2
+            lesson.author_profile.get_absolute_url(),   #3
+            lesson.rating,                      #4
+            len(lesson.try_by.all()),           #5
+            len(lesson.done_by.all()),          #6
+            lesson.access_to_everyone,          #7
+            lesson.get_absolute_url(),          #8
             ])    
-    return modules
+    return lessons
 
-def create_module(request):
+def create_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     ok = False
     if request.GET.get('parent') and request.GET.get('title'):
-        module = Module.objects.create(
+        lesson = Lesson.objects.create(
             title = request.GET.get('title'), 
             author_profile = profile,
             )
         if request.GET.get('parent') != '-1':
             course = Course.objects.get(id = int(request.GET.get('parent')))
-            module.course = course
-        module.save()
-        topic = module.topics.create(
+            lesson.course = course
+        lesson.save()
+        topic = lesson.topics.create(
             title="Введение",
             order = 1,
             )
         topic.save()
-        modules = fill_modules([module]) 
+        lessons = fill_lessons([lesson]) 
         ok = True
     data = {
-        'modules':modules,
+        'lessons':lessons,
     }
     return JsonResponse(data)        
 
@@ -389,22 +389,22 @@ def collect_topic(topic, profile):
         ]    
     return res
 
-def show_module(request):
+def show_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('module_id') and request.GET.get('topic_id'):
-        module = Module.objects.filter(id=int(request.GET.get('module_id')))
-        if len(module) == 0:
+    if request.GET.get('lesson_id') and request.GET.get('topic_id'):
+        lesson = Lesson.objects.filter(id=int(request.GET.get('lesson_id')))
+        if len(lesson) == 0:
             return JsonResponse({})
-        module = module[0]
+        lesson = lesson[0]
         topic_res = []
         if request.GET.get('topic_id') == '-1':
-            topic = module.topics.exclude(done_by=profile)
+            topic = lesson.topics.exclude(done_by=profile)
             if len(topic) > 0:
                 topic = topic.first()
             else:
-                topic = module.topics.first()
+                topic = lesson.topics.first()
         else:
-            topic = module.topics.filter(id=int(request.GET.get('topic_id')))
+            topic = lesson.topics.filter(id=int(request.GET.get('topic_id')))
             if len(topic) > 0:
                 topic = topic[0]
         if topic:
@@ -412,18 +412,18 @@ def show_module(request):
         else:
             topic_res = []
         all_topics = []
-        for topic in module.topics.all():
+        for topic in lesson.topics.all():
             is_done = False
             if profile.is_student:
                 is_done = profile in topic.done_by.all()
             all_topics.append([topic.id, topic.title, topic.is_task, is_done])
         data = {
             'topic_res':topic_res,
-            'title':module.title,
-            'author_profile':module.author_profile.first_name,
-            'author_profile_link':module.author_profile.get_absolute_url(),
-            'done_by':len(module.done_by.all()),
-            'try_by':len(module.try_by.all()),
+            'title':lesson.title,
+            'author_profile':lesson.author_profile.first_name,
+            'author_profile_link':lesson.author_profile.get_absolute_url(),
+            'done_by':len(lesson.done_by.all()),
+            'try_by':len(lesson.try_by.all()),
             'all_topics':all_topics,
         }
         return JsonResponse(data)        
@@ -609,21 +609,21 @@ def course_shown(request):
     }
     return JsonResponse(data)
 
-def module_shown(request):
+def lesson_shown(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     shown = False
     if request.GET.get('id'):
-        module = Module.objects.filter(id = int(request.GET.get('id')))
-        if len(module) == 0:
+        lesson = Lesson.objects.filter(id = int(request.GET.get('id')))
+        if len(lesson) == 0:
             return JsonResponse({})
-        module = module[0]
-        if module.access_to_everyone:
-            module.access_to_everyone = False
+        lesson = lesson[0]
+        if lesson.access_to_everyone:
+            lesson.access_to_everyone = False
         else:
-            module.access_to_everyone = True            
-        module.save()
-        shown = module.access_to_everyone
+            lesson.access_to_everyone = True            
+        lesson.save()
+        shown = lesson.access_to_everyone
     data = {
         "shown":shown,
     }
@@ -670,12 +670,12 @@ def move_topic(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     status = request.GET.get('status')
-    if request.GET.get('topic_id') and status and request.GET.get('module_id'):
-        module = Module.objects.filter(id = int(request.GET.get('module_id')))
-        if len(module) == 0:
+    if request.GET.get('topic_id') and status and request.GET.get('lesson_id'):
+        lesson = Lesson.objects.filter(id = int(request.GET.get('lesson_id')))
+        if len(lesson) == 0:
             return JsonResponse({})
-        module = module[0]
-        topic = module.topics.filter(id = int(request.GET.get('topic_id')))
+        lesson = lesson[0]
+        topic = lesson.topics.filter(id = int(request.GET.get('topic_id')))
         if len(topic) == 0:
             return JsonResponse({})
         topic = topic[0]
@@ -684,7 +684,7 @@ def move_topic(request):
             order2 = order - 1
         else:
             order2 = order + 1
-        topic2 = module.topics.filter(is_task=topic.is_task, order=order2)
+        topic2 = lesson.topics.filter(is_task=topic.is_task, order=order2)
         if len(topic2) == 0:
             return JsonResponse({})
         topic2 = topic2[0]

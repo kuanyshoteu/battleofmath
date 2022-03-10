@@ -1,4 +1,4 @@
-fillModule()
+fillLesson()
 function fillModule(){
     urls = document.getElementById("urls")
     url = urls.getAttribute('get_topic_units')
@@ -10,11 +10,11 @@ function fillModule(){
         },
         dataType: 'json',
         success: function (data) {
-            fillTopic(data.data)
+            fillPage(data.data)
         }
     })
 }
-function fillTopic(data){
+function fillPage(data){
     title = data[0]
     units = data[2]
     document.getElementById("topic_title").innerHTML = title

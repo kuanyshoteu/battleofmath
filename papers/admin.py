@@ -24,36 +24,36 @@ class CourseModelAdmin(admin.ModelAdmin):
         model = Course
 admin.site.register(Course, CourseModelAdmin)
 
-class TopicModelAdmin(admin.ModelAdmin):
+class PageModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
     list_display_links = ["title"]
     list_filter = ["title"]
 
     search_fields = ["content"]
     class Meta:
-        model = Topic
-admin.site.register(Topic, TopicModelAdmin)
+        model = Page
+admin.site.register(Page, PageModelAdmin)
 
-class ModuleModelAdmin(admin.ModelAdmin):
+class LessonModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
     list_display_links = ["title"]
     list_filter = ["title"]
     class Meta:
-        model = Module
-admin.site.register(Module, ModuleModelAdmin)
+        model = Lesson
+admin.site.register(Lesson, LessonModelAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ["id", "module","level","author_profile","timestamp"]
+    list_display = ["id", "lesson","level","author_profile","timestamp"]
     list_display_links = ["id"]
     list_filter = ["level"]
     class Meta:
         model = Comment
 admin.site.register(Comment, CommentAdmin)
 
-class UnitModelAdmin(admin.ModelAdmin):
+class SectionModelAdmin(admin.ModelAdmin):
     list_display = ["id"]
     list_display_links = ["id"]
     list_filter = ["id"] 
     class Meta:
-        model = Unit
-admin.site.register(Unit, UnitModelAdmin)
+        model = Section
+admin.site.register(Section, SectionModelAdmin)

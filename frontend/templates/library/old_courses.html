@@ -14,32 +14,32 @@
           <a class="ui button mini blue create_course_course" data-href='{{ profile.create_course_course_url }}'>
             Создать папку
           </a>
-          <a class="ui button mini blue create_topic" href='{{ profile.create_course_url }}'>
+          <a class="ui button mini blue create_page" href='{{ profile.create_course_url }}'>
             Создать курс
           </a>
       </div>
   </div>
   {% endif %}  
   <div style="margin-top: 0;margin-bottom: 0;">
-      <div id="topics" class="ui grid stackable" style="margin: 0">
+      <div id="pages" class="ui grid stackable" style="margin: 0">
       {% for course in courses %}
         <div class="four wide column" id="all_course{{ course.id }}" style="padding-left: 0;padding-right: 20px;">
-          <a id="{{ course.id }}" class="open_topic_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
-          <div class="ui segment topic_features{{ course.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
-              <a style="cursor: pointer;" class="file_action" object_type='topic' action='copy' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+          <a id="{{ course.id }}" class="open_page_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+          <div class="ui segment page_features{{ course.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+              <a style="cursor: pointer;" class="file_action" object_type='page' action='copy' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
               <div class="ui divider"></div>
-              <a style="cursor: pointer;" class="file_action" object_type='topic' action='cut' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <a style="cursor: pointer;" class="file_action" object_type='page' action='cut' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
               <div class="ui divider"></div>
               <a class="delete_course" id="{{ course.id }}" data-href='{{ course.delete_course_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
           </div>
           <a href="{{ course.get_absolute_url }}" style="cursor: pointer;padding: 56.2% 0 0 0;position: relative;display: block;">
               {% if course.image %}
-                  <img src="{{ course.image.url }}" id="topic_image{{ course.id }}" style="width: 100%;border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
+                  <img src="{{ course.image.url }}" id="page_image{{ course.id }}" style="width: 100%;border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
               {% else %}
-                  <img src="{% static 'images/books.png' %}" id="topic_image{{ course.id }}" style="width: 100%;height: 45%; border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
+                  <img src="{% static 'images/books.png' %}" id="page_image{{ course.id }}" style="width: 100%;height: 45%; border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
               {% endif %}
               <div class="ui segment" style="margin-top: 0;margin-bottom: 0;height: 66px;border-radius: 0">
-                  <span id="topic_title{{ course.id }}" style="color: #56565a;font-size: 13px;"><b>{{ course.title }}</b></span>
+                  <span id="page_title{{ course.id }}" style="color: #56565a;font-size: 13px;"><b>{{ course.title }}</b></span>
               </div>
               <div class="ui segment" style="margin-top: 0;margin-bottom: 0;">
                   <div class="ui grid">
@@ -87,9 +87,9 @@
                   </div>
               </div>
           </a>
-          <form class="ui form rename_topic{{ course.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-              <textarea style="padding: 0; height: 60px;" id='change_topic_name{{ course.id }}' type="text">{{ course.title }}</textarea>
-              <a class="ui button mini blue change_topic_name" id="{{ course.id }}" data-href='{{ course.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+          <form class="ui form rename_page{{ course.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+              <textarea style="padding: 0; height: 60px;" id='change_page_name{{ course.id }}' type="text">{{ course.title }}</textarea>
+              <a class="ui button mini blue change_page_name" id="{{ course.id }}" data-href='{{ course.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
           </form>
         </div>
         <div class="ui modal" id="course_details{{ course.id }}" style="padding: 14px;">

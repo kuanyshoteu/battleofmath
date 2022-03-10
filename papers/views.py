@@ -14,39 +14,39 @@ from papers.models import Comment
 from accounts.models import *
 from constants import *
 
-def module_details(request, module_id = None):
+def lesson_details(request, lesson_id = None):
     profile = get_profile(request)
-    module = Module.objects.get(id=module_id)
-    if len(module.topics.all()) == 0:
-        return redirect(module.estimate_module_page())
+    lesson = Lesson.objects.get(id=lesson_id)
+    if len(lesson.pages.all()) == 0:
+        return redirect(lesson.estimate_lesson_page())
     else:
-        for topic in module.topics.all():
-            if not profile in topic.done_by.all():
-                return redirect(topic.get_absolute_url())
+        for page in lesson.pages.all():
+            if not profile in page.done_by.all():
+                return redirect(page.get_absolute_url())
 
-def estimate_module_page(request, module_id = None):
+def estimate_lesson_page(request, lesson_id = None):
     profile = get_profile(request)
-    module = Module.objects.get(id=module_id)           
+    lesson = Lesson.objects.get(id=lesson_id)           
     context = {
         "profile": profile,
-        'module':module,
+        'lesson':lesson,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
     }
-    return render(request, template_name='library/module_details.html', context=context)
+    return render(request, template_name='library/lesson_details.html', context=context)
 
-def topic_details(request, topic_id = None):
+def page_details(request, page_id = None):
     profile = get_profile(request)
-    topic = Topic.objects.get(id=topic_id)
-    module = topic.modules.first()           
+    page = Page.objects.get(id=page_id)
+    lesson = page.lessons.first()           
  
     context = {
         "profile": profile,
-        'topic_id':topic.id,
+        'page_id':page.id,
         "page":'library',
     }
-    return render(request, "library/module_details.html", context)
+    return render(request, "library/lesson_details.html", context)
 
 
 from rest_framework.views import APIView
@@ -54,25 +54,25 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
-def get_topic_units(request):
+def get_page_sections(request):
     profile = Profile.objects.get(user = request.user.id)
     data = []
-    if request.GET.get('topic_id'):
-        topic = Topic.objects.get(id = int(request.GET.get('topic_id')))
-        module = topic.modules.first()
-        other_topics = module.topics.all()
+    if request.GET.get('page_id'):
+        page = Page.objects.get(id = int(request.GET.get('page_id')))
+        lesson = page.lessons.first()
+        other_pages = lesson.pages.all()
         done_by = []
-        for student in topic.done_by.all():
+        for student in page.done_by.all():
             img = ''
             if student.image:
                 img = student.image.url
             done_by.append([student.first_name, img])
-        units = []
-        for unit in topic.units.all():
-            units.append([unit.content])
+        sections = []
+        for section in page.sections.all():
+            sections.append([section.content])
             tasks = []
-            if unit.task:
-                task = unit.task
+            if section.task:
+                task = section.task
                 solutions = task.solver_checks.filter(author_profile=profile)
                 solved_number = solutions.filter(solver_correctness=True)
                 is_solved = False
@@ -80,110 +80,110 @@ def get_topic_units(request):
                     is_solved = True
                 tasks = [task.task_problem_ru, task.cost, is_solved]
             file = ''
-            if unit.file:
-                file = unit.file.url
-            units.append([unit.content, file, tasks])
-        data = [topic.title, done_by, units]
+            if section.file:
+                file = section.file.url
+            sections.append([section.content, file, tasks])
+        data = [page.title, done_by, sections]
     data = {
         'data':data,
     }
     return JsonResponse(data)
 
 
-def AddTopic(request):
+def AddPage(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    topic_id = -1
-    if request.GET.get('module_id') and request.GET.get('status'):
-        module = Module.objects.get(id = int(request.GET.get('module_id')))
+    page_id = -1
+    if request.GET.get('lesson_id') and request.GET.get('status'):
+        lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
         if request.GET.get('status') == 'task':
-            tasks_topic = module.topics.filter(is_task=True)
-            if len(tasks_topic) > 0:
-                if len(tasks_topic.last().units.all()) == 0:
-                    topic_id = tasks_topic.last().id
+            tasks_page = lesson.pages.filter(is_task=True)
+            if len(tasks_page) > 0:
+                if len(tasks_page.last().sections.all()) == 0:
+                    page_id = tasks_page.last().id
                     data = {
-                        'topic_id':topic_id,
+                        'page_id':page_id,
                     }
                     return JsonResponse(data)
-            topics_num = len(tasks_topic) + 1
+            pages_num = len(tasks_page) + 1
             title = 'Задача'
             is_task = True
         else:
-            topics_num = len(module.topics.filter(is_task=False)) + 1
-            title = 'Страница' + str(topics_num)
+            pages_num = len(lesson.pages.filter(is_task=False)) + 1
+            title = 'Страница' + str(pages_num)
             is_task = False
-        topic = Topic.objects.create(
+        page = Page.objects.create(
             title = title,
-            order = topics_num,
+            order = pages_num,
             is_task = is_task,
             )
-        topic.save()
-        module.topics.add(topic)
-        topic_id = topic.id
+        page.save()
+        lesson.pages.add(page)
+        page_id = page.id
     data = {
-        'topic_id':topic_id,
+        'page_id':page_id,
     }
     return JsonResponse(data)
 
-def AddUnit(request):
+def AddSection(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('topic_id'):
-        topic = Topic.objects.filter(id = int(request.GET.get('topic_id')))
-        if len(topic) == 0:
+    if request.GET.get('page_id'):
+        page = Page.objects.filter(id = int(request.GET.get('page_id')))
+        if len(page) == 0:
             return JsonResponse({})
-        topic = topic[0]
+        page = page[0]
         content = request.GET.get('content')
         file = request.FILES.get('file')
         video = request.FILES.get('video')
         if content or request.GET.get('youtube_link') or file or video:
             if request.GET.get('is_new') == 'yes':
-                order = len(topic.units.all()) + 1
-                unit = topic.units.create(
+                order = len(page.sections.all()) + 1
+                section = page.sections.create(
                     order = order,
                     )
                 if content:
-                    unit.content = content
+                    section.content = content
             else:
-                unit = topic.units.get(id=int(request.GET.get('unit_id')))
+                section = page.sections.get(id=int(request.GET.get('section_id')))
                 if request.GET.get('is_several') == 'yes':
-                    unit.content += content
+                    section.content += content
                 else:
-                    unit.content = content
+                    section.content = content
             if request.GET.get('youtube_link'):
-                unit.youtube_video_link = request.GET.get('youtube_link').replace('watch?v=', 'embed/')
+                section.youtube_video_link = request.GET.get('youtube_link').replace('watch?v=', 'embed/')
             elif file:
-                unit.file = file
+                section.file = file
             elif video:
-                unit.video = video
+                section.video = video
             file_url = ''
             file = ''
             video = ''
-            if unit.file:
-                file = str(unit.file)
-                file_url = unit.file.url
-            if unit.video:
-                video = unit.video.url
-            unit.save()
-            unit_res = [
-                unit.id,                    #0
-                unit.content,               #1
+            if section.file:
+                file = str(section.file)
+                file_url = section.file.url
+            if section.video:
+                video = section.video.url
+            section.save()
+            section_res = [
+                section.id,                    #0
+                section.content,               #1
                 file_url,                       #2
                 file,                           #3
-                unit.youtube_video_link,    #4
+                section.youtube_video_link,    #4
                 video,                          #5
                 [],                             #6
                 ]
     data = {
-        'id':unit.id,
-        'unit_res':unit_res,
+        'id':section.id,
+        'section_res':section_res,
     }
     return JsonResponse(data)
 
 def NewTask(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('text') and request.GET.get('cost') and request.GET.get('unit_id'):
+    if request.GET.get('text') and request.GET.get('cost') and request.GET.get('section_id'):
         task = Task.objects.create(author_profile=profile, text=request.GET.get('text'))
         if request.GET.get('ans') != '&':
             task.answer = request.GET.get('ans').split('&')
@@ -205,8 +205,8 @@ def NewTask(request):
                 tag = ProblemTag.objects.get_or_create(title=t)[0]
                 task.tags.add(tag)
         
-        unit = Unit.objects.get(id=int(request.GET.get('unit_id')))
-        task.units.add(unit)                    
+        section = Section.objects.get(id=int(request.GET.get('section_id')))
+        task.sections.add(section)                    
         task.cost = request.GET.get('cost')
         task.save()
     data = {
@@ -221,50 +221,50 @@ def AddTask(request):
     action = ''
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('unit_id') and request.GET.get('task_id'):
-        unit = Unit.objects.get(id = int(request.GET.get('unit_id')))
+    if request.GET.get('section_id') and request.GET.get('task_id'):
+        section = Section.objects.get(id = int(request.GET.get('section_id')))
         task = Task.objects.get(id = int(request.GET.get('task_id')))
-        if task in unit.task_list.all():
-            unit.task_list.remove(task)
+        if task in section.task_list.all():
+            section.task_list.remove(task)
             action = 'remove'
         else:
-            unit.task_list.add(task)
+            section.task_list.add(task)
             action = 'add'
     data = {
         'action': action
     }
     return JsonResponse(data)
 
-def rename_module(request):
+def rename_lesson(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     if request.GET.get('id') and request.GET.get('title'):
-        module = Module.objects.get(id = int(request.GET.get('id')))           
-        module.title = request.GET.get('title')
-        module.save()
+        lesson = Lesson.objects.get(id = int(request.GET.get('id')))           
+        lesson.title = request.GET.get('title')
+        lesson.save()
         ok = True
     data = {
         'ok':ok,
     }
     return JsonResponse(data)
 
-def delete_topic(request):
+def delete_page(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('topic_id'):
-        topic = Topic.objects.get(id = int(request.GET.get('topic_id')))
-        topic.delete()
+    if request.GET.get('page_id'):
+        page = Page.objects.get(id = int(request.GET.get('page_id')))
+        page.delete()
     data = {}
     return JsonResponse(data)
 
-def delete_module(request):
+def delete_lesson(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     if request.GET.get('id'):
-        module = Module.objects.get(id = int(request.GET.get('id')))
-        module.delete()
+        lesson = Lesson.objects.get(id = int(request.GET.get('id')))
+        lesson.delete()
         ok = True
     data = {
         'ok':ok,
@@ -283,23 +283,23 @@ def delete_course(request):
 def AddGroup(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('topic_id') and request.GET.get('squad_id') and request.GET.get('isin'):
+    if request.GET.get('page_id') and request.GET.get('squad_id') and request.GET.get('isin'):
         squad = Squad.objects.get(id = request.GET.get('squad_id')) 
-        topic = Topic.objects.get(id = request.GET.get('topic_id'))
-        if request.GET.get('isin') == 'yes' and squad in topic.squad_list.all():
-            topic.squad_list.remove(squad)
-        if request.GET.get('isin') == 'no' and not squad in topic.squad_list.all():
-            topic.squad_list.add(squad)
+        page = Page.objects.get(id = request.GET.get('page_id'))
+        if request.GET.get('isin') == 'yes' and squad in page.squad_list.all():
+            page.squad_list.remove(squad)
+        if request.GET.get('isin') == 'no' and not squad in page.squad_list.all():
+            page.squad_list.add(squad)
     data = {
     }
     return JsonResponse(data)
 
 def new_comment(request):
     profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('content') and request.GET.get('module_id') and request.GET.get('parent_id'):
+    if request.GET.get('content') and request.GET.get('lesson_id') and request.GET.get('parent_id'):
         comment = Comment.objects.create(
             content = request.GET.get('content'),
-            module = Module.objects.get(id=int(request.GET.get('module_id'))),
+            lesson = Lesson.objects.get(id=int(request.GET.get('lesson_id'))),
             author_profile = profile,
             )
         parent_id = int(request.GET.get('parent_id'))
@@ -348,23 +348,23 @@ def dislike_comment(request):
     }
     return JsonResponse(data)
 
-def estimate_module(request):
+def estimate_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('new_rating') and request.GET.get('module_id'):
-        module = Module.objects.get(id = int(request.GET.get('module_id')))
-        if not profile.id in module.estimater_ids:
-            module.estimater_ids.append(profile.id)
-            module.grades.append(1)
-        index = module.estimater_ids.index(profile.id)
-        module.grades[index] = int(request.GET.get('new_rating'))
+    if request.GET.get('new_rating') and request.GET.get('lesson_id'):
+        lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
+        if not profile.id in lesson.estimater_ids:
+            lesson.estimater_ids.append(profile.id)
+            lesson.grades.append(1)
+        index = lesson.estimater_ids.index(profile.id)
+        lesson.grades[index] = int(request.GET.get('new_rating'))
         grades_sum = 0
-        for grade in module.grades:
+        for grade in lesson.grades:
             grades_sum += grade
-        if len(module.grades) > 0:
-            module.rating = int(grades_sum/len(module.grades))
+        if len(lesson.grades) > 0:
+            lesson.rating = int(grades_sum/len(lesson.grades))
         else:
-            module.rating = 0
-        module.save()
+            lesson.rating = 0
+        lesson.save()
         
     data = {
     }
@@ -415,30 +415,30 @@ def package_courses(order_item):
         sets.append(temp_set)
     return sets
 
-def check_topic(request):
-    if request.GET.get('current_topic'):
+def check_page(request):
+    if request.GET.get('current_page'):
         profile = Profile.objects.get(user = request.user.id)
-        topic = Topic.objects.get(id = int(request.GET.get('current_topic')))
+        page = Page.objects.get(id = int(request.GET.get('current_page')))
         
         solver_correctness = True
-        for unit in topic.units.all():
-            for task in unit.task_list.all():
+        for section in page.sections.all():
+            for task in section.task_list.all():
                 solver = profile.check_tasks.get_or_create(task = task)[0]
                 if solver.solver_correctness == False:
                     solver_correctness = False
                     break
         if solver_correctness:
-            topic.done_by.add(profile)
-            module = topic.modules.first()
-            module_is_done = True
-            for ppr in module.topics.all():
+            page.done_by.add(profile)
+            lesson = page.lessons.first()
+            lesson_is_done = True
+            for ppr in lesson.pages.all():
                 if not profile in ppr.done_by.all():
-                    module_is_done = False
+                    lesson_is_done = False
                     break
-            if module_is_done:
-                module.done_by.add(profile)
+            if lesson_is_done:
+                lesson.done_by.add(profile)
         else:
-            topic.done_by.remove(profile)
+            page.done_by.remove(profile)
     data = {
         'is_solved': solver_correctness
     }

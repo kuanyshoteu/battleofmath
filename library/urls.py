@@ -4,9 +4,9 @@ from .views import *
 
 app_name = 'library'
 urlpatterns = [
-    url(r'^api/create_module/$', create_module, name='create_module'),
+    url(r'^api/create_lesson/$', create_lesson, name='create_lesson'),
     url(r'^api/get_library/$', get_library_teacher, name = 'get_library'),
-    url(r'^api/show_module/$', show_module, name = 'show_module'),
+    url(r'^api/show_lesson/$', show_lesson, name = 'show_lesson'),
     url(r'^api/get_course_files/$', get_course_files, name = 'get_course_files'),
     url(r'^api/create_course/$', create_course, name = 'create_course_url'),
     url(r'^api/rename_course/$', rename_course, name = 'rename_course'),
@@ -21,6 +21,6 @@ urlpatterns = [
     url(r'^api/move_unit_url/$', move_unit, name = 'move_unit_url'),
     url(r'^api/move_topic/$', move_topic, name = 'move_topic'),
     url(r'^api/course_shown/$', course_shown, name = 'course_shown'),
-    url(r'^api/module_shown/$', module_shown, name = 'module_shown'),
+    url(r'^api/lesson_shown/$', lesson_shown, name = 'lesson_shown'),
     url(r'^course/(?P<course_id>\d+)/$', course_details, name='get_absolute_url'),
 ]

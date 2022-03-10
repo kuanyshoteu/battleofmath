@@ -16,7 +16,7 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from constants import *
 from accounts.models import *
-from papers.models import Course, Module
+from papers.models import Course, Lesson
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -367,7 +367,7 @@ def search(request):
         profiles = Profile.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         similarity=TrigramSimilarity('title', text)
         folders = Course.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-        lessons = Module.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        lessons = Lesson.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
         for profile in profiles:
             image_url = ''

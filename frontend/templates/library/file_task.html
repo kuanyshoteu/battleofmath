@@ -3,10 +3,10 @@
 <div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
     <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
         {% if is_trener == False %}
-                <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">1.</span>
+                <span class="l{{ module.id }}p{{ page.id }}s{{ section.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">1.</span>
         {% endif %}
         {% if is_trener %}
-            <a class="" onclick="$('#modal_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="" onclick="$('#modal_l{{ module.id }}p{{ page.id }}s{{ section.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
             <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
             <br>
             <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
@@ -30,7 +30,7 @@
     <div class="sixteen wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             <input type="file" name="">        
-            <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' topic='clsw' topic_id='l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}'>Отправить</a>
+            <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' page='clsw' page_id='l{{ module.id }}p{{ page.id }}s{{ section.id }}t{{ task.id }}'>Отправить</a>
         </form>
     </div>
 </div>
@@ -38,10 +38,10 @@
 <div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
     <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
         {% if is_trener == False %}
-                <span class="l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">2.</span>
+                <span class="l{{ module.id }}p{{ page.id }}s{{ section.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">2.</span>
         {% endif %}
         {% if is_trener %}
-            <a class="" onclick="$('#modal_l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="" onclick="$('#modal_l{{ module.id }}p{{ page.id }}s{{ section.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
             <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
             <br>
             <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">2.</span>
@@ -96,7 +96,7 @@
     </div>
     <div class="sixteen wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' topic='clsw' topic_id='l{{ module.id }}p{{ topic.id }}s{{ unit.id }}t{{ task.id }}'>Отправить</a>
+            <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' page='clsw' page_id='l{{ module.id }}p{{ page.id }}s{{ section.id }}t{{ task.id }}'>Отправить</a>
         </form>
     </div>
 </div>

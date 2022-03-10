@@ -22,7 +22,7 @@
     {% block head_extra %} {% endblock head_extra %}
 </head>
 <body >
-    <div class="min-h-screen {% if profile %}bg-gradient-to-r from-cyan-300 to-purple-300{% else %}bg-white{% endif %}">
+    <div class="min-h-screen {% if profile %}bg-sky-400{% else %}bg-white{% endif %}">
     {% include 'header.html' %}
     {% block content %}{% endblock content %}
     {% include 'footer.html' %}

@@ -283,3 +283,12 @@
             });
         }
     });
+    $("#mobMenuBtn").click(function(){
+        mobMenu = $("#mobMenu")
+        if (mobMenu.hasClass("hidden")){
+            mobMenu.removeClass("hidden")
+        }
+        else{
+            mobMenu.addClass("hidden")
+        }
+    })

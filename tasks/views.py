@@ -11,7 +11,7 @@ from django.views.generic import RedirectView
 
 from .forms import TaskForm
 from .models import *
-from papers.models import Topic
+from papers.models import Page
 from accounts.models import Profile
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -55,7 +55,7 @@ def ChangeAnswer(request):
                     solved = True
                     solver_checks.solver_correctness = True
                     subthemes = task.subthemes.all()
-                    for p in Topic.objects.filter(subthemes__in = subthemes):
+                    for p in Page.objects.filter(subthemes__in = subthemes):
                         p.done_by.add(profile)
 
                     if was_solved == False:
