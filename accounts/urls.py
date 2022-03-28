@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^api/save_profile/$', save_profile, name='save_profile'),
     url(r'^api/mycourses/$', profile_courses, name='mycourses'),
     url(r'^api/mylessons/$', mylessons, name='mylessons'),
+    url(r'^api/start_course/$', start_course, name='start_course'),
 ]

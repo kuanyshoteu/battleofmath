@@ -1,5 +1,5 @@
-myCourses()
-function myCourses(){
+myCourses(0)
+function myCourses(order){
     url = document.getElementById("urls").getAttribute('mycourses')
     $.ajax({
         url: url,
@@ -7,38 +7,54 @@ function myCourses(){
         dataType: 'json',
         success: function (data) {
             course_list = data.course_list
-            if (data.new_student){
-                allCourses()
-            }
-            else{
-                courseBox = document.getElementById('courseBox')
-                myLessons(course_list[0][0])
-                for(var i = 0; i < course_list.length; i++){
-                    courseId = course_list[i][0]
-                    courseOrig = document.getElementById('courseOrigin')
-                    courseClone = courseOrig.cloneNode(true)
-                    courseClone.getElementsByClassName('courseTitle')[0].innerHTML = course_list[i][1]
-                    courseClone.getElementsByClassName('courseSlogan')[0].innerHTML = course_list[i][3]
-                    courseClone.setAttribute("id", "mycourse"+courseId)
-                    courseBox.prepend(courseClone)
-                }
+            crntCourseId = course_list[order][0]
+            fillCourses(data.new_student, crntCourseId)
+            if (data.new_student == false){
+                myLessons(crntCourseId)
             }
         }
     })
 }
 
-function startCourse(courseId){
-
+function startCourse(courseId, order){
+    url = document.getElementById("urls").getAttribute('startCourse')
+    $.ajax({
+        url: url,
+        data: {
+            'courseId':courseId
+        },
+        dataType: 'json',
+        success: function (data) {
+            courseBox = document.getElementById('allCourseBox')
+            courseBox.innerHTML = ''
+            myCourses(order)
+        }
+    })
 }
-function allCourses(){
-    courseBox = document.getElementById('allCourseBox')
+function fillCourses(isNewStudent, crntCourseId){
+    if(isNewStudent){
+        originId = 'allCourseOrigin'
+        courseBoxId = 'allCourseBox'
+    }
+    else{
+        originId = 'courseOrigin'
+        courseBoxId = 'courseBox'        
+    }
+    courseBox = document.getElementById(courseBoxId)
+    courseBox.innerHTML = ''
     for(var i = 0; i < course_list.length; i++){
         courseId = course_list[i][0]
-        courseOrig = document.getElementById('allCourseOrigin')
+        courseOrig = document.getElementById(originId)
         courseClone = courseOrig.cloneNode(true)
+        if(crntCourseId == courseId){
+            courseClone.classList.remove('bg-white');
+            courseClone.classList.add('bg-green-200');
+            courseClone.getElementsByClassName('startCourse')[0].classList.add('hidden')
+        }
         courseClone.getElementsByClassName('courseTitle')[0].innerHTML = course_list[i][1]
         courseClone.getElementsByClassName('courseSlogan')[0].innerHTML = course_list[i][3]
         courseClone.setAttribute("id", "myCourse"+courseId)
+        courseClone.getElementsByClassName('startCourse')[0].setAttribute('onclick', 'startCourse(' + courseId + ',' + i + ')')
         courseBox.prepend(courseClone)
     }
 }
@@ -54,7 +70,6 @@ function myLessons(courseId){
         success: function (data) {
             createConstants(data.lesson_list.length)
             constructMap(data.lesson_list)
-            findHeroPlace(data.last_lesson_id)
         }
     })
 }
@@ -110,6 +125,7 @@ function fillLessonCards(data){
     }
 }
 function constructMap1(data){
+    last_lesson_id = data.last_lesson_id
     for (let i = 0; i < data.length; i++) {
         const lessonCircle = lessonCircleOrig.cloneNode(true);
         const lessonCard = lessonCardOrig.cloneNode(true);
@@ -121,6 +137,10 @@ function constructMap1(data){
         h = h - (a - olda)
         
         lessonId = data[i][2]
+        if(last_lesson_id = lessonId){
+            last_lesson_href = data[i][1]
+        }
+        lessonCircle.innerHTML = i+1
         lessonCircle.style.top = h + "px"
         lessonCircle.style.left = leftM + "px"
         lessonCircle.setAttribute('href', data[i][1])
@@ -135,6 +155,8 @@ function constructMap1(data){
         map2.appendChild(lessonCircle)        
         map2.appendChild(lessonCard)        
     }
+
+    findHeroPlace(last_lesson_id, last_lesson_href)
 }
 function showLessonCard(number){
     lessonCard = document.getElementById("lessonCard"+number)
@@ -145,8 +167,19 @@ function hideLessonCard(number){
     lessonCard.classList.add('hidden');
 }
 
-function findHeroPlace(last_lesson_id){
+function findHeroPlace(last_lesson_id, href){
     crntCircle = document.getElementById("lessonCircle"+last_lesson_id)
-    crntCircle.style.left
-    crntCircle.style.top
+    hero = document.getElementById("hero")
+
+    hero.setAttribute('href', href)
+    hero.setAttribute('onmouseover', "showLessonCard("+last_lesson_id+")")
+    hero.setAttribute('onmouseleave', "hideLessonCard("+last_lesson_id+")")
+
+    leftt = crntCircle.offsetLeft + 6
+    topp = crntCircle.offsetTop - 30    
+    
+    hero.style.left = leftt
+    hero.style.top = topp
+    
+    console.log(topp, leftt)
 }

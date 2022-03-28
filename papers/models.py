@@ -69,10 +69,10 @@ class Page(models.Model):
         ordering = ['order', 'id']
     def __unicode__(self):
         return self.title
+    def get_page_sections(self):
+        return reverse("pages:get_page_sections")
     def get_absolute_url(self):
         return reverse("pages:page_absolute_url", kwargs={"page_id": self.id})
-    def api_url_add_group(self):
-        return reverse("pages:add-group-toggle")
     def delete_page_url(self):
         return reverse("pages:delete_page_url")
     def add_section_url(self):
@@ -88,11 +88,11 @@ class Page(models.Model):
 class Section(models.Model):
     task = models.ForeignKey(Task, null = True, on_delete = models.CASCADE, related_name='sections')
     content = models.TextField(default='', null = True)
-    video = models.FileField(default='', null=True)
-    file = models.FileField(default='', null=True)
+    # video = models.FileField(default='', null=True)
+    # file = models.FileField(default='', null=True)
     youtube_video_link = models.TextField(default='')
     order = models.IntegerField(default=0)
-    page = models.ForeignKey(Page, null = True, on_delete = models.CASCADE, related_name='sections')
+    pages = models.ForeignKey(Page, null = True, on_delete = models.CASCADE, related_name='sections')
     class Meta:
         ordering = ['order', 'id']    
     

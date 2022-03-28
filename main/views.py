@@ -151,6 +151,42 @@ def reset_pswrd_view(request):
     }
     return render(request, "profile/reset_pswd.html", context)
 
+
+def search_free_name(name):
+    if len(User.objects.filter(username=name)) > 0:
+        name += '1'
+        return search_free_name(name)        
+    else:
+        return name
+
+def register_user_work(name, mail, password, request):
+    if len(mail) > 0:
+        if len(Profile.objects.filter(mail=mail)) > 0:
+            return False
+    print('xxx', request)
+    if request:
+        print('2xxx', name)
+        new_name = search_free_name(name.replace(' ', ''))
+        user = User.objects.create(username=new_name, password=password)
+        if password:
+            user.set_password(password)
+        user.save()
+        if password:
+            user2 = authenticate(username = str(user.username), password=str(password))
+            try:
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            except Exception as e:
+                res = 'er'
+        profile = Profile.objects.create(user = user)
+        profile.first_name = name
+        profile.mail = mail
+        profile.confirmation_time = timezone.now()
+        profile.confirmed = False
+        profile.save()
+    else:
+        profile = False
+    return profile
+
 def create_worker(request):
     ok = False
     password = False
@@ -273,21 +309,18 @@ def register_view(request):
     mail = request.GET.get('mail')
     password1 = request.GET.get('password1')
     password2 = request.GET.get('password2')
-    course = request.GET.get('course')
+    print(name, mail, password1, password2)
     if name and mail and password1 and password2:
+        print(555)
         if password1 == password2:
+            print(666)
             res = 'ok'
             profile = register_user_work(name, mail, password1, request)
+            print(777)
             if profile == False:
                 return JsonResponse({'res':'second_user'})
             profile.is_student = True
             profile.save()
-            html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Почта: "+mail+"<br>Курс: "+course
-            try:
-                pass
-                # send_email("Клиент новый", html_content, ['aaa.academy.kz@gmail.com'])
-            except Exception as e:
-                pass                            
         else:
             res = 'not_equal_password'
     data = {

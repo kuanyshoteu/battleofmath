@@ -3,25 +3,22 @@
 
     $('.register-btn').click(function(e) {
         url = '/api/register/'
-        name = $('.new_name').val()
-        phone = $('.new_username').val()
+        username = $('.new_username').val()
         mail = $('.new_mail').val()
         new_password = $('.new_password').val()
         new_password2 = $('.new_password2').val()
-        console.log(name, phone, mail)
-        if (name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2) {        
+        if (username.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2) {        
             $.ajax({
                 url: url,
                 data: {
-                    'name':name,
-                    'phone':phone,
+                    'name':username,
                     'mail':mail,
                     'password1':new_password,
                     'password2':new_password2,
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data.res)
+                    console.log(data)
                     if (data.res == 'ok') {
                         $('.reg_wrong_phone').hide()
                         $('.reg_fill_all').hide()

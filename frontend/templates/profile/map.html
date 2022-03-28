@@ -1,7 +1,11 @@
+{% load static %}
 <div class="hidden">
-    <a id="lesson" number="0" onmouseover="showLessonCard()" class="lesson absolute rounded-full bg-white h-6 w-6 cursor-pointer"></a>
+    <a id="lesson" style="background-image: url({% static 'images/stone.png' %});background-size:100%;background-repeat:no-repeat" number="0" onmouseover="showLessonCard()" class="text-black font-semibold text-center pt-2 text-sm lesson absolute h-12 w-12 cursor-pointer"></a>
 </div>
 <div class="">
+    <a id="hero" class="cursor-pointer z-10 absolute w-10">
+        <img id="hero" class="rounded-full w-10" src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'images/mascot_circle.png' %}{% endif %}" alt="">
+    </a>
     <div id="map2" class="flex md:px-6"> 
     </div>
 </div>

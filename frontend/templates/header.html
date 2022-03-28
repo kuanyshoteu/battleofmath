@@ -1,4 +1,6 @@
 
+{% load static %}
+{% load static compress %}
 <header class="shadow flex justify-center before:absolute">
     <nav class="px-6 py-4 w-full md:w-10/12 relative">
         <div class="lg:items-center lg:justify-between lg:flex">
@@ -22,7 +24,16 @@
                 <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Premium</a>
                 <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Battles</a>
                 <a href="#" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Courses</a>
-                <a href="{% url 'main:login_page' %}" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Login</a>
+                {% if profile %}
+                    <a class="cursor-pointer px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">
+                        {{ profile.first_name }}
+                        <img style="margin-top:-3px;" class="inline-block rounded-full w-6"
+                               src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'images/mascot_circle.png' %}{% endif %}"
+                               alt="">
+                    </a>
+                {% else %}
+                    <a href="{% url 'main:login_page' %}" class="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 lg:mx-2">Login</a>
+                {% endif %}
             </div>
         </div>
     </nav>

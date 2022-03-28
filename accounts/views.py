@@ -98,7 +98,8 @@ def profile_courses(request):
             course.subject.title,
             course.slogan,
             img,
-            ])       
+            ])
+    print(profile.courses.filter(shown=True))
     data = {
         'course_list':course_list,
         'new_student':new_student,
@@ -127,10 +128,30 @@ def mylessons(request):
             lesson.description, 
             img,
             ])
-    last_lesson_id = profile.try_lessons.filter(course = course).last().id
+    if (len(profile.try_lessons.filter(course = course)) == 0):
+        last_lesson_id = course.lessons.first().id
+    else:
+        last_lesson_id = profile.try_lessons.filter(course = course).last().id
     data = {
         'lesson_list':lesson_list,
         'last_lesson_id':last_lesson_id,
+    }
+    return JsonResponse(data)
+
+def start_course(request):
+    profile = get_profile(request)
+    ok = False
+    print(1, request.GET.get('courseId'))
+    if request.GET.get('courseId'):
+        course_id = request.GET.get('courseId')
+        course = Course.objects.filter(id=int(course_id))
+        print(2, course)
+        if len(course) > 0:
+            course = course[0]
+            course.students.add(profile)
+            ok = True
+    data = {
+        'ok':ok,
     }
     return JsonResponse(data)
 

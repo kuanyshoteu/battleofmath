@@ -40,11 +40,11 @@ def page_details(request, page_id = None):
     profile = get_profile(request)
     page = Page.objects.get(id=page_id)
     lesson = page.lessons.first()           
- 
+    print(page.title)
     context = {
         "profile": profile,
-        'page_id':page.id,
-        "page":'library',
+        'page':page,
+        "w":'library',
     }
     return render(request, "library/lesson_details.html", context)
 
@@ -59,8 +59,12 @@ def get_page_sections(request):
     data = []
     if request.GET.get('page_id'):
         page = Page.objects.get(id = int(request.GET.get('page_id')))
+        section = Section.objects.first()
         lesson = page.lessons.first()
         other_pages = lesson.pages.all()
+        other_pages_links = []
+        for opage in other_pages:
+            other_pages_links.append([opage.id, opage.get_page_sections(), opage.title])
         done_by = []
         for student in page.done_by.all():
             img = ''
@@ -69,7 +73,6 @@ def get_page_sections(request):
             done_by.append([student.first_name, img])
         sections = []
         for section in page.sections.all():
-            sections.append([section.content])
             tasks = []
             if section.task:
                 task = section.task
@@ -80,10 +83,10 @@ def get_page_sections(request):
                     is_solved = True
                 tasks = [task.task_problem_ru, task.cost, is_solved]
             file = ''
-            if section.file:
-                file = section.file.url
+            # if section.file:
+            #     file = section.file.url
             sections.append([section.content, file, tasks])
-        data = [page.title, done_by, sections]
+        data = [page.title, done_by, sections, other_pages_links]
     data = {
         'data':data,
     }
