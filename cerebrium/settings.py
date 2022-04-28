@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'papers',
     'tasks',
     'library',
+    'adventures',
+    'landwars',
     'main',
-    'social_django',
     'channels',
     'compressor',
     'tailwind',
@@ -127,7 +128,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'cerebrium1',
+            'NAME': 'bofm',
             'USER': 'admin',
             'PASSWORD': '031196Kk',
             'HOST': 'localhost',
@@ -185,12 +186,11 @@ if toserver:
     AWS_IS_GZIPPED = True
     AWS_PRELOAD_METADATA = True
 
-DEFAULT_FILE_STORAGE = 'cerebrium.aws.utils.MediaRootS3BotoStorage'
-if toserver:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
+# if toserver:
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# else:
+#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 #STATIC_URL = 'https://d2keambcwaj901.cloudfront.net/'
@@ -222,10 +222,10 @@ GZIP_CONTENT_TYPES = (
     'text/javascript'
 )
 
-S3DIRECT_REGION = 'us-west-2'
-S3_URL = '//triplea-bucket.s3.amazonaws.com/'
-MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
-MEDIA_ROOT = MEDIA_URL
+# S3DIRECT_REGION = 'us-west-2'
+# S3_URL = '//triplea-bucket.s3.amazonaws.com/'
+# MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "frontend/images")
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months

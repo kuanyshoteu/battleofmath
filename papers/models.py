@@ -18,7 +18,10 @@ from tasks.models import Task
 
 def upload_location(instance, filename):
     PageModel = instance.__class__
-    new_id = PageModel.objects.order_by("id").last().id + 1
+    if PageModel.objects.order_by("id").last():
+        new_id = PageModel.objects.order_by("id").last().id + 1
+    else:
+        new_id = 0
     return "%s" %(filename)
 
 class Subject(models.Model):
@@ -30,8 +33,18 @@ class Subject(models.Model):
             blank=True,
             )
 
+class Game(models.Model):
+    title = models.TextField()
+    slogan = models.TextField(null = True)
+    shown = models.BooleanField(default=False)    
+    img = models.ImageField(upload_to=upload_location, 
+            null=True,
+            blank=True,
+            )
+
 class Course(models.Model):
     subject = models.ForeignKey(Subject, null = True, on_delete = models.CASCADE, related_name='courses')
+    game = models.ForeignKey(Game, null = True, on_delete = models.CASCADE, related_name='courses')
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='lesson_folders')
     students = models.ManyToManyField(Profile, related_name='courses')
     title = models.TextField()
@@ -70,15 +83,15 @@ class Page(models.Model):
     def __unicode__(self):
         return self.title
     def get_page_sections(self):
-        return reverse("pages:get_page_sections")
+        return reverse("papers:get_page_sections")
     def get_absolute_url(self):
-        return reverse("pages:page_absolute_url", kwargs={"page_id": self.id})
+        return reverse("papers:page_absolute_url", kwargs={"page_id": self.id})
     def delete_page_url(self):
-        return reverse("pages:delete_page_url")
+        return reverse("papers:delete_page_url")
     def add_section_url(self):
-        return reverse("pages:add_section_url")
+        return reverse("papers:add_section_url")
     def rename_page_url(self):
-        return reverse("pages:rename_page_url")
+        return reverse("papers:rename_page_url")
     @property
     def get_content_type(self):
         instance = self
@@ -95,7 +108,16 @@ class Section(models.Model):
     pages = models.ForeignKey(Page, null = True, on_delete = models.CASCADE, related_name='sections')
     class Meta:
         ordering = ['order', 'id']    
-    
+
+class Island(models.Model):
+    title = models.CharField(max_length=250)
+    img = models.ImageField(upload_to=upload_location, 
+            null=True,
+            blank=True,
+            )    
+    order = models.IntegerField(default=0)
+    course = models.ForeignKey(Course, null=True, on_delete=models.CASCADE, related_name='islands')
+
 class Lesson(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField(default='', null = True)
@@ -108,31 +130,31 @@ class Lesson(models.Model):
     try_by = models.ManyToManyField(Profile, related_name='try_lessons')
     access_to_everyone = models.BooleanField(default=False)
     course = models.ForeignKey(Course, null=True, on_delete=models.CASCADE, related_name='lessons')
+    island = models.ForeignKey(Island, null=True, on_delete=models.CASCADE, related_name='lessons')
     img = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True,
             )    
     def add_page_url(self):
-        return reverse("pages:add_page_url")
+        return reverse("papers:add_page_url")
     def change_name_url(self):
-        return reverse("pages:change_name_url")
+        return reverse("papers:change_name_url")
     def get_absolute_url(self):
-        return reverse("pages:lesson_absolute_url", kwargs={"lesson_id": self.id})
+        return reverse("papers:lesson_absolute_url", kwargs={"lesson_id": self.id})
     def delete_lesson_url(self):
-        return reverse("pages:delete_lesson_url")
+        return reverse("papers:delete_lesson_url")
     def check_page_url(self):
-        return reverse("pages:check_page_url")
+        return reverse("papers:check_page_url")
     def new_comment_url(self):
-        return reverse("pages:new_comment_url")
+        return reverse("papers:new_comment_url")
     def estimate_lesson_url(self):
-        return reverse("pages:estimate_lesson_url")
+        return reverse("papers:estimate_lesson_url")
     def estimate_lesson_page(self):
-        return reverse("pages:estimate_lesson_page", kwargs={"lesson_id": self.id})
+        return reverse("papers:estimate_lesson_page", kwargs={"lesson_id": self.id})
     class Meta:
-        ordering = ['order', 'id']
+        ordering = ['id']
 
 class Comment(models.Model):
-    lesson = models.ForeignKey(Lesson, null=True, on_delete = models.CASCADE, related_name='comments')
     level = models.IntegerField(default=1)
     timestamp = models.DateTimeField(auto_now_add=True)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hiscomments')
@@ -143,9 +165,9 @@ class Comment(models.Model):
     class Meta:
         ordering = ['timestamp']
     def like_url(self):
-        return reverse("pages:like_url")
+        return reverse("papers:like_url")
     def dislike_url(self):
-        return reverse("pages:dislike_url")
+        return reverse("papers:dislike_url")
 
 class SubscribePay(models.Model):
     lesson = models.ForeignKey(Lesson, null=True, on_delete = models.CASCADE, related_name='subscribe_payments')

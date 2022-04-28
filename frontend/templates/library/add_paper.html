@@ -1,22 +1,8 @@
-<a class="ui button blue mini" onclick="$('#l{{ module.id }}add_page_modal').modal('show')" id='{{ module.id }}' style="margin:5px 0; cursor: pointer;">
-  Добавить раздел
-</a>
 
-<div class="ui mini modal" style="width: 70%; padding: 14px; height: 100%" id="l{{ module.id }}add_page_modal">
-    <i class="close icon"></i>
-    <div class="header text-center">
-        Добавить раздел в урок {{ module.title }}
-    </div>
-    <div class="content">
-        <form class="ui form add-page" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <div class="ui grid">
-                <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0">
-                    <b>Название раздела</b>
-                    <textarea class="new_page_title_l{{ module.id }}" type="text" id='new_page_title_l{{ module.id }}' style="height: 46px; width: 100%;"></textarea>
-                </div>
-            </div>
-            <br>
-            <a class='ui blue button mini new_page' id='{{ module.id }}' page_id='l{{ module.id }}' data-href='{{ module.add_page_url }}' style="margin-top:10px;">Создать</a>
-        </form>
-    </div>
-</div>
+
+
+
+
+
+
+

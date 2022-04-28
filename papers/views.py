@@ -17,12 +17,14 @@ from constants import *
 def lesson_details(request, lesson_id = None):
     profile = get_profile(request)
     lesson = Lesson.objects.get(id=lesson_id)
+    print(lesson.pages.all())
     if len(lesson.pages.all()) == 0:
         return redirect(lesson.estimate_lesson_page())
     else:
         for page in lesson.pages.all():
             if not profile in page.done_by.all():
                 return redirect(page.get_absolute_url())
+        return redirect(lesson.estimate_lesson_page())
 
 def estimate_lesson_page(request, lesson_id = None):
     profile = get_profile(request)
@@ -30,9 +32,6 @@ def estimate_lesson_page(request, lesson_id = None):
     context = {
         "profile": profile,
         'lesson':lesson,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, template_name='library/lesson_details.html', context=context)
 

@@ -1,11 +1,26 @@
 {% load static %}
 <div class="hidden">
-    <a id="lesson" style="background-image: url({% static 'images/stone.png' %});background-size:100%;background-repeat:no-repeat" number="0" onmouseover="showLessonCard()" class="text-black font-semibold text-center pt-2 text-sm lesson absolute h-12 w-12 cursor-pointer"></a>
-</div>
-<div class="">
-    <a id="hero" class="cursor-pointer z-10 absolute w-10">
-        <img id="hero" class="rounded-full w-10" src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'images/mascot_circle.png' %}{% endif %}" alt="">
-    </a>
-    <div id="map2" class="flex md:px-6"> 
+
+    <a id="lesson" style="background-image: url({% static 'images/stone2.png' %});background-size:100%;background-repeat:no-repeat" number="0" onmouseover="showLessonCard()" class="text-white font-semibold text-center pt-2 text-sm lesson absolute h-16 w-16 cursor-pointer"></a>
+    <div id="islandBoxOrig" class="w-full md:flex">
     </div>
+    <div id="islandCircleOrig" class="w-full md:w-1/2">
+        <div class=" ">
+            <h1 class="islandTitle text-2xl"></h1>
+        </div>
+        {% if profile.is_student == False %}
+        <a class="islandAddLesson cursor-pointer px-2 py-1 text-xs font-bold text-white uppercase transition-colors duration-200 
+            transform bg-gray-800 rounded dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 
+            focus:outline-none focus:bg-gray-700 dark:focus:bg-gray-600" 
+            onclick="createLesson()">
+            Добавить урок
+            </a>
+        {% endif %}
+        <img class="islandImg w-full" src='/island2.png'>
+    </div>
+</div>
+<a id="hero" class="cursor-pointer z-10 absolute w-10">
+    <img id="hero" class="rounded-full w-10" src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'images/mascot_circle.png' %}{% endif %}" alt="">
+</a>
+<div class="h-full w-full" id="map">
 </div>

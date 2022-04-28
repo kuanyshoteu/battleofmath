@@ -14,6 +14,7 @@
     <!-- CSS -->
     {% compress css %}
         {% tailwind_css %}
+        <link href='{% static "css/map.css" %}' rel="stylesheet">
     {% endcompress %}
     <!-- JS -->
     {% compress js %}   
@@ -22,7 +23,7 @@
     {% block head_extra %} {% endblock head_extra %}
 </head>
 <body >
-    <div class="min-h-screen {% if profile %}bg-sky-400{% else %}bg-white{% endif %}">
+    <div class="{% if profile %}bg-gradient-to-b from-sky-400 via-sky-400 to-sky-900{% else %}bg-white{% endif %}">
     {% include 'header.html' %}
     {% block content %}{% endblock content %}
     {% include 'footer.html' %}

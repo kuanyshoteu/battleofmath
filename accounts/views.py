@@ -99,7 +99,6 @@ def profile_courses(request):
             course.slogan,
             img,
             ])
-    print(profile.courses.filter(shown=True))
     data = {
         'course_list':course_list,
         'new_student':new_student,
@@ -115,25 +114,29 @@ def mylessons(request):
             course = course[0]
     else:
         return JsonResponse({})
-    lessons = course.lessons.all()
-    lesson_list = []
-    for lesson in lessons:
-        img = ''
-        if lesson.img:
-            img = lesson.img.url
-        lesson_list.append([
-            lesson.title, 
-            lesson.get_absolute_url(), 
-            lesson.id, 
-            lesson.description, 
-            img,
-            ])
-    if (len(profile.try_lessons.filter(course = course)) == 0):
+    islands_list = []
+    islands = course.islands.all()
+    for island in islands:
+        lessons = island.lessons.all()
+        lesson_list = []
+        for lesson in lessons:
+            img = ''
+            if lesson.img:
+                img = lesson.img.url
+            lesson_list.append([
+                lesson.title, 
+                lesson.get_absolute_url(), 
+                lesson.id, 
+                lesson.description, 
+                img,
+                ])
+        islands_list.append([island.id, island.title, island.img.url, lesson_list])
+    if (len(profile.done_lessons.filter(course = course)) == 0):
         last_lesson_id = course.lessons.first().id
     else:
-        last_lesson_id = profile.try_lessons.filter(course = course).last().id
+        last_lesson_id = profile.done_lessons.filter(course = course).last().id
     data = {
-        'lesson_list':lesson_list,
+        'islands_list':islands_list,
         'last_lesson_id':last_lesson_id,
     }
     return JsonResponse(data)
@@ -141,14 +144,16 @@ def mylessons(request):
 def start_course(request):
     profile = get_profile(request)
     ok = False
-    print(1, request.GET.get('courseId'))
     if request.GET.get('courseId'):
-        course_id = request.GET.get('courseId')
-        course = Course.objects.filter(id=int(course_id))
-        print(2, course)
+        course_id = int(request.GET.get('courseId'))
+        course = Course.objects.filter(id=course_id)
         if len(course) > 0:
             course = course[0]
-            course.students.add(profile)
+            if not profile in course.students.all():
+                course.students.add(profile)
+            profile.crnt_course = course_id
+            profile.save()
+            print(profile.crnt_course)
             ok = True
     data = {
         'ok':ok,

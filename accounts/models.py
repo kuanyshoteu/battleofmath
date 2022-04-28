@@ -30,6 +30,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE,related_name='profile')
     first_name = models.TextField(blank = True,null = True,default='name')
     money = models.IntegerField(default=0)
+    crnt_course = models.IntegerField(default=0)
     is_student = models.BooleanField(default=True)
     coins = models.IntegerField(default=0)
     mail = models.TextField(blank = True,default = '',null = True)

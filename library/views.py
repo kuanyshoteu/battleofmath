@@ -290,24 +290,23 @@ def create_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     ok = False
-    if request.GET.get('parent') and request.GET.get('title'):
+    if request.GET.get('island'):
+        island = Island.objects.get(id = int(request.GET.get('island')))
+        course = island.course
         lesson = Lesson.objects.create(
-            title = request.GET.get('title'), 
+            title = "New Lesson", 
             author_profile = profile,
+            course = course,
+            island = island,
             )
-        if request.GET.get('parent') != '-1':
-            course = Course.objects.get(id = int(request.GET.get('parent')))
-            lesson.course = course
-        lesson.save()
-        topic = lesson.topics.create(
+        page = lesson.pages.create(
             title="Введение",
             order = 1,
             )
-        topic.save()
-        lessons = fill_lessons([lesson]) 
+        page.save()
         ok = True
     data = {
-        'lessons':lessons,
+        'ok':ok,
     }
     return JsonResponse(data)        
 

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block head_title %}
+    Land Wars | {{ block.super }}
+{% endblock head_title %}
+{% load static %}
+{% load static compress %}
+{% block content %}
+<div class="min-h-screen" id="profile">
+       <div class="container mx-auto my-5 p-5 sm:p-0">
+           <div class="md:flex no-wrap md:-mx-2 ">
+               <div class="w-full md:w-9/12 mx-2 pb-80">
+                   
+                {% include 'profile/map.html' %}
+                <div class="hidden">
+                {% include 'profile/lesson_info.html' %}
+                </div>
+                <!-- End Game Map -->
+            </div>
+           </div>
+       </div>
+</div>
+<span class="hidden" id="urls" createlesson="{% url 'library:create_lesson' %}" crntcourseid="{{ profile.crnt_course }}" startCourse="{% url 'accounts:start_course' %}" mycourses="{% url 'accounts:mycourses' %}" mylessons="{% url 'accounts:mylessons' %}"></span>
+{% compress js %} 
+<script src='{% static "js/map.js" %}'></script>
+{% endcompress %}
+{% endblock content %}

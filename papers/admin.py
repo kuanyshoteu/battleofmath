@@ -13,6 +13,25 @@ class SubjectModelAdmin(admin.ModelAdmin):
         model = Subject
 admin.site.register(Subject, SubjectModelAdmin)
 
+class GameModelAdmin(admin.ModelAdmin):
+    list_display = ["title", "id"]
+    list_display_links = ["title"]
+    list_filter = ["title"]
+
+    search_fields = ["content"]
+    class Meta:
+        model = Game
+admin.site.register(Game, GameModelAdmin)
+
+class IslandModelAdmin(admin.ModelAdmin):
+    list_display = ["title", "id"]
+    list_display_links = ["title"]
+    list_filter = ["title"]
+
+    search_fields = ["title"]
+    class Meta:
+        model = Island
+admin.site.register(Island, IslandModelAdmin)
 
 class CourseModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
@@ -43,7 +62,7 @@ class LessonModelAdmin(admin.ModelAdmin):
 admin.site.register(Lesson, LessonModelAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ["id", "lesson","level","author_profile","timestamp"]
+    list_display = ["id", "level","author_profile","timestamp"]
     list_display_links = ["id"]
     list_filter = ["level"]
     class Meta:
